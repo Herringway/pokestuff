@@ -14,7 +14,6 @@ define('TEXT_TRAINER_CLASS', 191);
 define('TEXT_MOVE_DESCRIPTIONS', 202);
 define('TEXT_MOVE_NAMES', 203);
 
-require_once 'pkmnnos.php';
 require_once 'text.php';
 require_once 'narc.php';
 function uint($i) {
@@ -27,6 +26,25 @@ $physspec = array(
 1 => 'Physical',
 2 => 'Special');
 
+$pknobw = array(
+'Deoxys (Attack)',
+'Deoxys (Defense)',
+'Deoxys (Speed)',
+'Wormadam (Sandy)',
+'Wormadam (Trash)',
+'Shaymin (Sky)',
+'Giratina (Origin)',
+'Rotom (Heat)',
+'Rotom (Wash)',
+'Rotom (Frost)',
+'Rotom (Spin)',
+'Rotom (Mow)',
+'Castform (Sunny)',
+'Castform (Rainy)',
+'Castform (Hailing)',
+'Basculin',
+'Darmanitan (Zen)',
+'Meloetta (Step)');
 
 $int_flags = array(
 0 => 'Misc',
@@ -171,16 +189,14 @@ function readPokeString($file, $line, $language,$lines = 1) {
 	else
 		$langfile = 'beng';
 	static $textfile = array();
-	if (!isset($file[$langfile]))
+	if (!isset($textfile[$langfile]))
 		$textfile[$langfile] = new gen5text('narcs/'.$langfile.'/'.TEXT_NARC);
 
-	return $textfile[$langfile]->fetchline($file, $line);
 	if ($lines <= 1)
-		return str_replace('\n', "\n",readString('narcs/'.$langfile.'/0/0/2', $file, $line));
+		return str_replace('\n', "\n",$textfile[$langfile]->fetchline($file, $line));
 	else {
-		$tmp = readString('narcs/'.$langfile.'/0/0/2', $file, $line, $lines);
-		foreach ($tmp as &$line)
-			$line = str_replace('\n', "\n", $line);
+		for ($i = 0; $i < $lines; $i++)
+			$tmp[] = str_replace('\n', "\n", $textfile[$langfile]->fetchline($file, $line));
 		return $tmp;
 	}
 }

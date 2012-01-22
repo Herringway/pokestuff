@@ -1,11 +1,15 @@
 <?php
 $bw = 1;
 require_once 'narc.php';
-require_once 'pkmnnos.php';
 require_once 'misc.php';
 
 function read_area($id) {
-	$data = getfile('narcs/bweng/1/2/6', $id);
+	if (!isset($file))
+		$tmpfile = new NARCFile('narcs/weng/1/2/6');
+	static $file;
+	if (empty($file))
+		$file = $tmpfile;
+	$data = $file->getFile($id);
 	for ($x = 0; $x < strlen($data)/232; $x++) {
 		$wild = array(); $b = 0;
 		for ($i = 0; $i < 8; $i++)

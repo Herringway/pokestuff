@@ -1,6 +1,5 @@
 <?php
 $bw = 1;
-require_once 'pkmnnos.php';
 require_once 'types.php';
 require_once 'misc.php';
 require_once 'narc.php';
@@ -8,11 +7,10 @@ require_once 'narc.php';
 function processLevelUpMoveData($data, $maxlevel = 100) {
 	$output = array();
 	for ($i = 0; $i < strlen($data)/4; $i++) {
-		$moveRAW = ord($data[$i*4]) + (ord($data[$i*4+1])<<8);
-		$level = ord($data[$i*4+2]) + (ord($data[$i*4+3])<<8);
-		if ($level > $maxlevel)
+		$d = unpack('vmove/vlearned', substr($data, $i*4, 4));
+		if ($d['learned'] > $maxlevel)
 			continue;
-		$output[] = array('learned' => $level, 'move' => $moveRAW);
+		$output[] = $d;
 	}
 	return $output;
 }
@@ -50,22 +48,17 @@ if (array_search(__FILE__,get_included_files()) == 0) {
 	require_once 'Dwoo/dwooAutoload.php';
 	$dwoo = new Dwoo();
 	$argc = (array_key_exists('PATH_INFO', $_SERVER) ? explode('/', $_SERVER['PATH_INFO']) : array('',''));
-	if ($argc[1] == null) {
+	if (!isset($argc[1])) {
 		if (!array_key_exists('eggmoves', $_GET)) {
-			$narc = new NARCfile('narcs/bweng/0/1/8');
+			$narc = new NARCfile('narcs/weng/0/1/8');
 			$i = 0;
 			$levelup = array();
-			foreach ($narc as $movedata) {
-				$moves = array();
-				$alldat = processLevelUpMoveData($movedata);
-				foreach ($alldat as $dat)
-					$moves[] = array('move' => $dat['movename'], 'learned' => $dat['learned']);
-				$levelup[] = array('pokemon' => getPokeName($i++), 'moves' => $moves);
-			}
+			foreach ($narc as $movedata)
+				$levelup[] = array('pokemon' => getPokeName($i++), 'moves' => processLevelUpMoveData($movedata));
 			$data = array('pokemondata' => $levelup);
 			$dwoo->output('poketemplates/pokemonlevelupmoves.tpl', $data);
 		} else {
-			$narc = new NARCfile('narcs/bw/1/2/3');
+			$narc = new NARCfile('narcs/weng/1/2/3');
 			$i = 0;
 			$levelup = array();
 			foreach ($narc as $eggdata) {

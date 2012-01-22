@@ -60,7 +60,6 @@ function processMoveData($id) {
 
 if (array_search(__FILE__,get_included_files()) == 0) {
 	require 'narc.php';
-	require 'pkmnnos.php';
 	require 'types.php';
 	require 'misc.php';
 	require_once 'Dwoo/dwooAutoload.php';

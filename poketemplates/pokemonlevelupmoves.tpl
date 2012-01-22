@@ -11,7 +11,7 @@
 			<tbody>
 {loop $moves}
 				<tr>
-					<td>{$move}</td>
+					<td>{getMove($move)}</td>
 					<td>{$learned}</td>
 				</tr>
 {/loop}

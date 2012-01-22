@@ -11,7 +11,7 @@ class gen5text implements Iterator {
 
 	function __construct($file) {
 		if (!file_exists($file))
-			die($file.' not found');
+			throw new Exception($file.' not found');
 		$this->narc = new NARCfile($file);
 		$d = $this->narc->getdetails();
 		$this->numfiles = $d['numfiles'];
@@ -26,7 +26,7 @@ class gen5text implements Iterator {
 		$this->sections[0]['length'] = readint_str($this->cachedfile,4);
 		if ($this->numsections > 1) {
 			$this->sections[1]['offset'] = readint_str($this->cachedfile,0x14)+0x18;
-			$this->sections[1]['length'] = readint_str($this->cachedfile, $sections[1]['offset']-4);
+			$this->sections[1]['length'] = readint_str($this->cachedfile, $this->sections[1]['offset']-4);
 		}
 	}
 	public function fetchfile($id) {
@@ -85,7 +85,7 @@ class gen5text implements Iterator {
 				$cap = 3;
 				$val = 0;
 			}
-			else if (array_key_exists($b, $specchars))
+			else if (isset($specchars[$b]))
 				$output .= $specchars[$b];
 			else if (($b >= 0xFF10) && ($b <= 0xFF1A))
 				$output .= chr($b-0xFEE0);
@@ -122,28 +122,13 @@ function readint_str(&$data, $offset) {
 	$b = unpack('V', substr($data,$offset, 4));
 	return $b[1];
 }
-function decryptTwo($data) {
-	$output = '';
-	$bytes = array();
-	foreach ($data as $byte) {
-		$bytes[] = $byte&0xFF;
-		$bytes[] = $byte>>8;
-	}
-	if (count($bytes) > 8)
-		$k = $bytes[count($bytes)-1] + ($bytes[count($bytes)-2]<<8);
-	$k = rrot($bytes[count($bytes)-1],count($bytes)-1);
-	$position = 0;
-	foreach ($bytes as $b)
-			$output .= @iconv('ASCII', 'UTF-16BE', chrprocess($b,$position++, $k));
-	return $output;
-}
 if (array_search(__FILE__,get_included_files()) == 0) {
 	$text = array();
 	$narcfile = 'narcs/weng/0/0/2';
-	if (array_key_exists('story', $_GET))
+	if (isset($_GET['story']))
 		$narcfile = 'narcs/weng/0/0/3';
 	header('Content-Type: text/plain; charset=utf-8');
-	$argc = (array_key_exists('PATH_INFO', $_SERVER) ? explode('/', $_SERVER['PATH_INFO']) : array('',''));
+	$argc = (isset($_SERVER['PATH_INFO']) ? explode('/', $_SERVER['PATH_INFO']) : array('',''));
 	set_time_limit(500);
 	$textobject = new gen5text($narcfile);
 	$t = 174;
