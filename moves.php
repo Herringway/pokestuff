@@ -32,52 +32,28 @@ function print_effect($eff_string, $data) {
 }
 
 function processMoveData($id) {
-	$flags_array = array('MAKES_CONTACT', 'POWER_HERB', 'HYPER_BEAM', 'BRIGHTPOWDER', 'MAGIC_COAT', 'IS_SNATCHABLE', 'UNKNOWN1', 'IS_PUNCH', 'IS_SOUND', 'FAILS_IN_GRAVITY', 'DETHAWS_USER', 'CAN_HIT_NON-ADJACENT', 'HEALS', 'UNKNOWN2', 'UNKNOWN3', 'UNKNOWN4');
+	static $flags_array = array('MAKES_CONTACT', 'POWER_HERB', 'HYPER_BEAM', 'BRIGHTPOWDER', 'MAGIC_COAT', 'IS_SNATCHABLE', 'UNKNOWN1', 'IS_PUNCH', 'IS_SOUND', 'FAILS_IN_GRAVITY', 'DETHAWS_USER', 'CAN_HIT_NON-ADJACENT', 'HEALS', 'UNKNOWN2', 'UNKNOWN3', 'UNKNOWN4');
 	global $typelistBWIMG,$int_flags,$physspec,$status,$effects,$stats;
 	$output = array();
-	$data = getfile('narcs/bweng/0/2/1', $id);
-	for ($i = 0; $i < strlen($data); $i++)
-		$movedata[$i] = ord($data[$i]);
+	if (!isset($file))
+		$tmpfile = new NARCFile('narcs/weng/0/2/1');
+	static $file;
+	if (empty($file))
+		$file = $tmpfile;
+	$data = $file->getFile($id);
+	$output = unpack('Ctypeid/Cinternal_category/Ccategory/Cpower/Caccuracy/Cpp/cpriority/Chits/Cstatus/Cunknown/Ceffectchance/Cunknown2/Cunknown3/Cunknown4/Ccritlevel/Cflinchchance/veffect/cdrain_percentage/cheal_percentage/Cunknown5/C3stat/c3statdelta/C3stat_chance/C2always_83/vflags/C2null', $data);
 	$output['id'] = $id;
-	$output['type'] = $typelistBWIMG[$movedata[0]];
-	$output['typeid'] = $movedata[0];
-	$output['internal_category'] = $int_flags[$movedata[1]];
-	$output['category'] = $physspec[$movedata[2]];
-	$output['power'] = $movedata[3];
-	$output['accuracy'] = $movedata[4] == 101 ? '-' : $movedata[4];
-	$output['pp'] = $movedata[5];
-	$output['priority'] = uint($movedata[6]);
-	$output['hits'] = array('min' => max(1,$movedata[7]&0xF),'max' => max(1,($movedata[7]>>4)));
-	$output['status'] = $status[$movedata[8]];
-	$output['unknown'] = $movedata[9];
-	$output['effectchance'] = $movedata[10];
-	$output['unknown2'] = $movedata[11];
-	$output['unknown3'] = $movedata[12];
-	$output['unknown4'] = $movedata[13];
-	$output['critlevel'] = $movedata[14];
-	$output['flinchchance'] = $movedata[15];
-	$output['effect'] = $movedata[16] + ($movedata[17]<<8);
-	$output['drain_percentage'] = uint($movedata[18]);
-	$output['heal_percentage'] = uint($movedata[19]);
-	$output['unknown5'] = $movedata[20];
-	$output['stat1'] = array_key_exists($movedata[21], $stats) ? $stats[$movedata[21]] : $movedata[21];
-	$output['stat2'] = array_key_exists($movedata[22], $stats) ? $stats[$movedata[22]] : $movedata[22];
-	$output['stat3'] = array_key_exists($movedata[23], $stats) ? $stats[$movedata[23]] : $movedata[23];
-	$output['stat1delta'] = uint($movedata[24]);
-	$output['stat2delta'] = uint($movedata[25]);
-	$output['stat3delta'] = uint($movedata[26]);
-	$output['stat1_chance'] = $movedata[27];
-	$output['stat2_chance'] = $movedata[28];
-	$output['stat3_chance'] = $movedata[29];
-	$output['always_83'] = $movedata[30];
-	$output['always_83_2'] = $movedata[31];
-	$output['flags'] = $movedata[32] + ($movedata[33]<<8);
+	$output['type'] = $typelistBWIMG[$output['typeid']];
+	$output['internal_category'] = $int_flags[$output['internal_category']];
+	$output['category'] = $physspec[$output['category']];
+	$output['hits'] = array('min' => max(1,$output['hits']&0xF),'max' => max(1,($output['hits']>>4)));
+	$output['status'] = $status[$output['status']];
+	for ($i = 1; $i <= 3; $i++)
+		$output['stat'.$i] = $stats[$output['stat'.$i]];
 	for ($i = 0; $i < 16; $i++)
 		$output['flags_readable'][$flags_array[$i]] = ($output['flags'] & pow(2,$i))>>$i;
-	$output['null1'] = $movedata[34];
-	$output['null2'] = $movedata[35];
+	$output['accuracy'] = $output['accuracy'] == 101 ? '-' : $output['accuracy'];
 	$output['effect_string'] = array_key_exists($output['effect'], $effects) ? print_effect($effects[$output['effect']], $output) : 'Unknown Effect '.($output['effect']);
-	
 	return $output;
 }
 
@@ -90,7 +66,7 @@ if (array_search(__FILE__,get_included_files()) == 0) {
 	require_once 'Dwoo/dwooAutoload.php';
 	$argc = (array_key_exists('PATH_INFO', $_SERVER) ? explode('/', $_SERVER['PATH_INFO']) : array('',''));
 	$dwoo = new Dwoo();
-	if ($argc[1] == null) {
+	if (!isset($argc[1])) {
 		$headers = array(
 		array('name' => 'ID', 'type' => 'i'),
 		array('name' => 'Name',  'type' => 'h'),

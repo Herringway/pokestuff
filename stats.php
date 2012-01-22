@@ -15,55 +15,29 @@ $dwoo = new Dwoo();
 function getPokemonData_raw($id) {
 	global $typelistBWIMG, $egggrp;
 	$formorig = array(650 => 386, 651 => 386, 652 => 386, 653 => 413, 654 => 413, 655 => 492, 656 => 487,657 => 479,658 => 479,659 => 479,660 => 479,661 => 479,662 => 351,663 => 351,664 => 351,665 => 550,666 => 555,667 => 648);
-	$rawdata = getfile('narcs/bweng/0/1/6', $id);
+	$narc = new NARCFile('narcs/weng/0/1/6');
+	$childnarc = new NARCFile('narcs/weng/0/2/0');
+	$rawdata = $narc->getFile($id);
+	$poke = unpack('Chp/Catk/Cdef/Cspeed/Csatk/Csdef/C2type/Ccapturerate/Cxprate/vEVs/vcomitemID/vrareitemID/vdreamitemID/Cfemalechance/Chatchsteps/Cbasehappiness/Cgrowthrate/C2egggrp/C3ability/Cunknownflags/Cformflags/Cformcount/Ccolour/vunknown/vheight/vweight', $rawdata);
 	$poke['id'] = $id;
 	$rid = $id;
-	$poke['name'] = getPokeName($id);
 	if (array_key_exists($id, $formorig))
 		$id = $formorig[$id];
 	if ($id <= 649) {
-		$child = getfile('narcs/bweng/0/2/0', $id);
+		$child = $childnarc->getFile($id);
 		$child = ord($child[0]) + (ord($child[1])<<8);
 	} else
 		$child = 0;
 	$poke['species'] = getSpeciesName($id);
 	$poke['evolutions'] = getEvolution($id);
-	for ($j = 0; $j < 40; $j++) 
-		$val[] = ord($rawdata[$j]);
-	$poke['hp'] = $val[0];
-	$poke['atk'] = $val[1];
-	$poke['def'] = $val[2];
-	$poke['speed'] = $val[3];
-	$poke['satk'] = $val[4];
-	$poke['sdef'] = $val[5];
-	$poke['type1'] = $val[6];
-	$poke['type2'] = $val[7];
-	$poke['capturerate'] = $val[8];
-	$poke['xprate'] = $val[9];
-	$poke['EVs'] = EVs($val[10] + ($val[11]<<8));
-	$poke['comitemID'] = $val[12] + ($val[13]<<8);
-	$poke['rareitemID'] = $val[14] + ($val[15]<<8);
-	$poke['dreamitemID'] = $val[16] + ($val[17]<<8);
-	$poke['femalechance'] = $val[18] == 255 ? -1 : round(100*($val[18]/254),1);
-	$poke['hatchsteps'] = $val[19];
-	$poke['basehappiness'] = $val[20];
-	$poke['growthrate'] = $val[21];
-	$poke['egggrp1'] = $egggrp[$val[22]];
-	$poke['egggrp2'] = $egggrp[$val[23]];
-	$poke['ability1'] = $val[24];
-	$poke['ability2'] = $val[25];
-	$poke['ability3'] = $val[26];
-	$poke['unknownflags'] = $val[27];
-	$poke['formflags'] = $val[28] + ($val[29]<<8) + ($val[30]<<16) + ($val[31]<<24);
-	$poke['formcount'] = $val[32];
-	$poke['colour'] = getColour($val[33]&7);
-	$poke['unknown'] = $val[34] + ($val[35]<<8);
-	$poke['height'] = ($val[36]+($val[37]<<8))/10;
-	$poke['weight'] = ($val[38]+($val[39]<<8))/10;
-	$poke['moves_g5'] = processLevelUpMoveData(getLevelUpMoveData($rid));
-	$poke['moves_g5'] = array_merge($poke['moves_g5'], processTMData($rawdata));
-	$poke['moves_g5'] = array_merge($poke['moves_g5'], tutorMoves($rawdata));
-	$poke['moves_g5'] = array_merge($poke['moves_g5'], processEggMoveData(getEggMoveData($child)));
+	$poke['name'] = getPokeName($id);
+	$poke['EVs'] = EVs($poke['EVs']);
+	$poke['femalechance'] = $poke['femalechance'] == 255 ? -1 : round(100*($poke['femalechance']/254),1);
+	$poke['egggrp1'] = $egggrp[$poke['egggrp1']];
+	$poke['egggrp2'] = $egggrp[$poke['egggrp2']];
+	$poke['height'] /= 10;
+	$poke['weight'] /= 10;
+	$poke['moves_g5'] = array_merge(processLevelUpMoveData(getLevelUpMoveData($rid)), processTMData($rawdata), tutorMoves($rawdata), processEggMoveData(getEggMoveData($child)));
 	$poke['childID'] = $child;
 	$poke['child'] = getPokeName($child);
 	$bwpokedex = getBWPokedexEntries($id);
@@ -111,7 +85,7 @@ function getDPPtPokedexEntries($i) {
 function getPokemonData($id) {
 	if (!ctype_digit($id) && !is_int($id))
 		return -1;
-	$db = new SQLite3('/var/www/pokeassets/pkmn.db');
+	$db = new SQLite3('./pkmn.db');
 	$results = @$db->query("SELECT * from POKEMON where ID=$id") or die('Database locked, is probably being updated');
 	$output = $results->fetchArray(SQLITE3_ASSOC);
 	foreach ($output as $k => $v) {
@@ -157,8 +131,14 @@ function tutorMoves($data) {
 function quotes($array) {
 	foreach ($array as $k => $v)
 		if (is_string($v))
-			$array[$k] = '\''.sqlite_escape_string($v).'\'';
+			$array[$k] = '\''.SQLite3::escapeString($v).'\'';
 	return implode(', ', $array);
+}
+function dbinsert($statement, $data) {
+	$i = 1;
+	foreach ($data as $val)
+		$statement->bindValue($i++, $val);
+	$statement->execute();
 }
 
 if (array_search(__FILE__,get_included_files()) == 0) {
@@ -188,23 +168,24 @@ if (array_search(__FILE__,get_included_files()) == 0) {
 		$columns = array();
 		foreach ($pokedata[0] as $c => $t)
 			$columns[] .= $c.' '.(is_int($t) ? 'INTEGER' : (is_float($t) ? 'FLOAT' : (is_array($t) ? 'BLOB' : 'TEXT')));
-		unlink('/var/www/pokeassets/pkmn.db');
-		$db = new SQLite3('/var/www/pokeassets/pkmn.db');
+		unlink('./pkmn.db');
+		$db = new PDO('sqlite:./pkmn.db');
 		$db->exec('CREATE TABLE pokemon ('.implode(', ', $columns).')');
+		$statement = $db->prepare('INSERT INTO pokemon VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)');
+		$db->beginTransaction();
 		foreach ($pokedata as $pokemon)
-			$db->exec("INSERT INTO pokemon VALUES (".quotes($pokemon).")");
-		$db->close();
+			dbinsert($statement, $pokemon);
+		$db->commit();
 	} else if ($args[1] == 'yaml') {
 		set_time_limit(500);
-		require_once 'spyc.php';
 		for ($i = 1; $i <= NUM_POKEMON; $i++)
-			$pokemon[] = getPokemonData_raw($i);
+			$pokemon[] = getPokemonData($i);
 		header("Content-Type: text/plain");
-		echo Spyc::YAMLDump($pokemon);
+		echo yaml_emit($pokemon);
 	}	else if ($args[1] == 'xml') {
 	
 	} else	{
-		$pokedata = getPokemonData(intval($args[1]));
+		$pokedata = getPokemonData_raw(intval($args[1]));
 		foreach ($pokedata['moves_g5'] as &$data)
 			$data['data'] = processMoveData($data['move']);
 		$stats = array('pokemon' => $pokedata);

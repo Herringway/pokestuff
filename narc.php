@@ -1,8 +1,18 @@
 <?php
-$root = '/var/www/pkmn/narcs/';
-$defFolder = '/var/www/pkmn/narcs/bweng/';
+$root = '/etc/nginx/html/pokestuff/narcs/';
+$defFolder = $root.'weng/';
 $validdirs = array('bw', 'plat', 'dp', 'bwtrans', 'hgss', 'bweng');
 
+$filetypes = array(
+'BMD0' => '3D Model',
+'BTX0' => 'Texture',
+'RGCN' => 'Image',
+'RLCN' => 'Palette',
+'RCSN' => 'Screen Resource',
+'RECN' => 'CEII Resource',
+'RGC' => 'Character Graphic Resource',
+'RNAN' => 'Animation data?',
+);
 class NARCfile implements Iterator {
 	private $fileid = 0;
 	private $files = array();
@@ -12,7 +22,9 @@ class NARCfile implements Iterator {
 
     public function __construct($file) {
         $this->fileid = 0;
-		$this->file = fopen($file, 'r');
+		$this->file = fopen($file, 'rb');
+		if (fread($this->file,4) != 'NARC')
+			throw new Exception('Not a NARC!');
 		fseek($this->file, 0x10);
 		$length = 0x10;
 		while ($length < filesize($file)) {
@@ -30,13 +42,10 @@ class NARCfile implements Iterator {
 				}
 				$this->chunks[$datatype]['numfiles'] = $numfiles;
 			} elseif ($datatype == 'FNTB') {
-				$this->chunks[$datatype]['dirs'][0xF000]['ptr'] = $this->getint();
-				$this->chunks[$datatype]['dirs'][0xF000]['unknown'] = $this->getshort();
-				$this->chunks[$datatype]['dirs'][0xF000]['parent'] = $this->getshort();
+				$fdata = fread($this->file, 8);
+				$this->chunks[$datatype]['dirs'][0xF000] = unpack('Vptr/vunknown/vparent', $fdata);
 				for ($i = 1; $i < $this->chunks[$datatype]['dirs'][0xF000]['parent']; $i++) {
-					$this->chunks[$datatype]['dirs'][0xF000+$i]['ptr'] = $this->getint();
-					$this->chunks[$datatype]['dirs'][0xF000+$i]['unknown'] = $this->getshort();
-					$this->chunks[$datatype]['dirs'][0xF000+$i]['parent'] = $this->getshort();
+					$this->chunks[$datatype]['dirs'][0xF000+$i] = unpack('Vptr/vunknown/vparent', fread($this->file, 8));
 				}
 				$v = $this->travel_directory_tree(0xF000);
 				foreach ($v as $key => $val) {
@@ -50,7 +59,7 @@ class NARCfile implements Iterator {
     }
 
 	function getDetails() {
-		return array('numfiles' => count($this->files), 'chunks' => $this->chunks);
+		return array('numfiles' => count($this->files), 'chunks' => $this->chunks, 'files' => $this->files);
 	}
 
 	private function travel_directory_tree($id, $path = '',$entries = array()) {
@@ -82,7 +91,8 @@ class NARCfile implements Iterator {
 		return array_key_exists($id, $this->chunks);
 	}
 	private function getint() {
-		return unpack('V', fread($this->file,4));
+		$b = unpack('V', fread($this->file,4));
+		return $b[1];
 	}
 	private function getshort() {
 		return unpack('v', fread($this->file,2));
@@ -90,7 +100,7 @@ class NARCfile implements Iterator {
 	private function getchar() {
 		return ord(fgetc($this->file));
 	}
-	function getFile($id) {
+	public function getFile($id) {
 		if (array_key_exists($id, $this->files)) {
 			if ($this->files[$id]['size'] == 0)
 				return '';
@@ -130,155 +140,42 @@ class NARCfile implements Iterator {
         return $this->fileid < count($this->files);
     }
 
-}
-
-function read_narc($filename, $print_files = 0) {
-	$output = array();
-	$file = fopen($filename, 'r') or die('Could not open '.$filename.'!');
-	if (fread($file, 4) != 'NARC')
-		die ($filename.' - NOT A NARC FILE');
-	fseek($file, 0x10);
-	$length = 0x10;
-	$datatypes = array(
-	'BTAF' => 'File Allocation Table',
-	'BTNF' => 'Filename Table',
-	'GMIF' => 'Data');
-	$i = 0;
-	while ($length < filesize($filename)) {
-		$datatype = fread($file, 4);
-		$output[$i] = (array_key_exists($datatype, $datatypes) ? $datatypes[$datatype] : $datatype).' - ';
-		$datasize = getint($file);
-		$length += $datasize;
-		$output[$i] .= round($datasize/1024, 3).'KB';
-		if ($datatype == 'BTAF') {
-			$entries = getint($file);
-			$output[$i] .= ' - '.$entries.' Entries';
-			if ($print_files)
-				$output[$i] .= process_file_list($file, $entries);
-		} else if ($datatype =='BTNF') {
-			$output[$i] .= process_btnf($file, $datasize);
-		}
-		fseek($file,$length);
-		$i++;
-	}
-
-	fclose($file);
-	return $output;
-}
-function analyze_narc($filename) {
-	$output = array();
-	$file = fopen($filename, 'r') or die('Analyze_narc() could not open '.$filename.'!');
-	if (fread($file, 4) != 'NARC')
-		die ($filename.' - NOT A NARC FILE');
-	fseek($file, 0x10);
-	$length = 0x10;
-	while ($length < filesize($filename)) {
-		$datatype = fread($file, 4);
-		$datasize = getint($file);
-		$length += $datasize;
-		$output[$datatype]['Size'] = $datasize;
-		if ($datatype == 'BTAF')
-			$output['Files'] = getint($file);
-		fseek($file,$length);
-	}
-
-	fclose($file);
-	return $output;
-}
-function getint($file) {
-	return ord(fgetc($file))+(ord(fgetc($file))<<8)+(ord(fgetc($file))<<16)+(ord(fgetc($file))<<24);
-}
-function getshort($file) {
-	return ord(fgetc($file))+(ord(fgetc($file))<<8);
-}
-function getchar($file) {
-	return ord(fgetc($file));
-}
-function process_file_list($file, $entries) {
-	$output = ''; $finaltype = '';
-	global $argc;
-	$filename = 'narcs/'.implode('/', array_slice($argc, 2));
-	$filetypes = array(
-	'BMD0' => '3D Model',
-	'BTX0' => 'Texture',
-	'RGCN' => 'Image',
-	'RLCN' => 'Palette',
-	'RCSN' => 'Screen Resource',
-	'RECN' => 'CEII Resource',
-	'RGC' => 'Character Graphic Resource',
-	'RNAN' => 'Animation data?',
-	);
-	for ($i = 0; $i < $entries; $i++) {
-		$output .= '<br>';
-		$filebegin = getint($file);
-		$fdata = getfile($filename,$i,8);
-		$fileend = getint($file);
-		$output .= sprintf('<a href="/pkmn/narc/download/%1$s/%2$u">%2$u - %3$u Bytes</a> <a href="/pkmn/narc/view/%1$s/%2$u">(H)</a>',implode('/', array_slice($argc, 2)),$i, $fileend-$filebegin);
-		if ($fileend-$filebegin > 4) {
-			$filetype = substr($fdata,0,4);
-			$filetype2 = substr($fdata,5,4);
-			if (substr($filetype2,0,1) == 'þ') {
-				$finaltype = $filetype;
-			} else {
-				$finaltype = $filetype2;
-			}
-			$output .= ' - '.(array_key_exists($finaltype, $filetypes) ? $finaltype.' - '.$filetypes[$finaltype] : $finaltype);
+	function __get($property) {
+        switch ($property) {
+			case 'Files': return count($this->files); break;
+			default:
+				if (isset($this->chunks[$property]))
+					return $this->chunks[$property];
 		}
 	}
-	return $output;
 }
-function process_btnf($file, $size) {
-	$output = '<br>';
-	$firstdir = getint($file);
-	$output .= getshort($file);
-}
-function getfile($filename, $filenumber, $numbytes = -1) {
-	$file = @fopen($filename, 'r') or die('getfile() could not open '.$filename.'!');
-	fseek($file, 0x1C+$filenumber*8);
-	$offset = getint($file);
-	$size = getint($file)-$offset;
-	fseek($file, 0x10);
-	$length = 0x10;
-	while (!feof($file)) {
-		$datatype = fread($file, 4);
-		if ($datatype == 'GMIF')
-			break;
-		$datasize = getint($file);
-		$length += $datasize;
-		fseek($file,$length);
-	}
-	fseek($file, $offset+4, SEEK_CUR);
-	if ($numbytes == -1) {
-		if ($size > 0)
-			return fread($file,$size);
-		return;
-	}
-	return fread($file, $numbytes);
-}
-function read_folder($dirProcess) {
-	global $root;
-	$output = '';
-	$dir = opendir($dirProcess);
+function read_folder($root, $dirProcess = '') {
+	$output = array();
+	$dir = opendir($root.$dirProcess);
 	while(($filename = readdir($dir)) != null) {
 		if (substr($filename,0,1) != '.') {
-			if (is_dir($dirProcess.$filename))
-				$output .= read_folder($dirProcess.$filename.'/');
+			if (is_dir($root.$dirProcess.$filename))
+				$output = array_merge($output, read_folder($root, $dirProcess.$filename.'/'));
 			else {
-				$dat = analyze_narc($dirProcess.$filename);
-				$output .= sprintf('<tr><td><a href="/pkmn/narc/list/%1$s">%1$s</a> <a href="/pkmn/narc/table/%1$s">(T)</a></td><td>FAT: %2$s Files</td><td>Data: %3$sKB</td><td>~%4$s</td></tr>', str_replace($root, '',$dirProcess).$filename, $dat['Files'], ceil($dat['GMIF']['Size']/1024), ceil($dat['GMIF']['Size']/$dat['Files']));
+				try {
+				$dat = new NARCFile($root.$dirProcess.$filename);
+				$output[$dirProcess.$filename] = array('Files' => $dat->Files, 'Data Size' => $dat->FIMG['size'], 'Average File Size' => ceil($dat->FIMG['size']/$dat->Files));
+				} catch (Exception $e) {} 
 			}
 		}
 	}
+	ksort($output);
 	return $output;
 }
 function viewfile($filename, $subfile) {
-	return hexview(getfile($filename, $subfile), array_key_exists('width', $_GET) ? $_GET['width'] : 16);
+	$file = new NARCFile($filename);
+	return '<pre>'.hexview($file->getFile($subfile), array_key_exists('width', $_GET) ? $_GET['width'] : 16).'</pre>';
 }
 function read_narc_as_table($filename) {
-	$details = analyze_narc($filename);
+	$narc = new NARCFile($filename);
 	echo '<table style="font-family: monospace;" border="1">';
-	for ($i = 0; $i < $details['Files']; $i++) {
-		$rawdata = getfile($filename, $i);
+	for ($i = 0; $i < $narc->Files; $i++) {
+		$rawdata = $narc->getFile($i);
 		$j = 0;
 		printf('<tr><td>%u</td>', $i);
 		while (@$rawdata[$j] != null) {
@@ -289,34 +186,54 @@ function read_narc_as_table($filename) {
 	echo '</table>';
 
 }
-
 if (array_search(__FILE__,get_included_files()) == 0) {
 	require '../hexview.php';
-	$argc = (array_key_exists('PATH_INFO', $_SERVER) ? explode('/', $_SERVER['PATH_INFO']) : array('',''));
+	$argc = explode('/', $_SERVER['PATH_INFO']);
+	array_shift($argc);
+	$argc = isset($argc[0]) ? $argc : array('');
 	if (array_key_exists(1, $argc) && in_array($argc[1], $validdirs))
 		$defFolder = $root.$argc[1].'/';
 	if (array_key_exists(2, $argc) && in_array($argc[2], $validdirs))
 		$defFolder = $root.$argc[2].'/';
-	switch($argc[1]) {
+	switch($argc[0]) {
 	case 'list':
-		$dat = read_narc($defFolder.implode('/', array_slice($argc, 3)),1);
-		foreach ($dat as $cur)
-			echo $cur.'<br>';
+		try {
+			$dat = new NARCFile($root.implode('/', array_slice($argc, 1)));
+		} catch (Exception $e) {
+			echo $e;
+		}
+		$output = $dat->getDetails();
+		printf('File Allocation Table - %01.2fKB - %d Entries<br>', $output['chunks']['FATB']['size']/1024, $output['chunks']['FATB']['numfiles']);
+		$totalsize = 0;
+		foreach ($output['files'] as $filename=>$file) {
+			$totalsize += $file['size'];
+			$filetype = preg_replace('/[^(\x20\x30-\x39\x41-\x5A\x61-\x7A)]*/','', substr($dat->getFile($filename), 0, 4));
+			$filedesc = isset($filetypes[$filetype]) ? $filetypes[$filetype] : 'Unknown';
+			$fileinfo = (strlen($filetype) == 4) ? sprintf('- %s - %s', $filetype, $filedesc) : '';
+			printf('<a href="/pokestuff/narc.php/download/%s/%s">%2$s - %d Bytes</a> <a href="/pokestuff/narc.php/view/%1$s/%2$s">(H)</a>%s<br>', implode('/', array_slice($argc, 1)), $filename, $file['size'], $fileinfo);
+		}
+		printf('Filename Table - %01.2fKB<br>', $output['chunks']['FNTB']['size']/1024);
+		printf('Data - %01.2fKB', $totalsize/1024);
 		break;
 	case 'download':
 		header('Content-type: application/octet-stream');
 		header('Content-Disposition: attachment; filename="'.implode(array_slice($argc, -1)).'"');
-		echo getfile($defFolder.implode('/', array_slice($argc, 3,-1)), implode(array_slice($argc, -1)));
+		$file = new NARCFile($defFolder.implode('/', array_slice($argc, 2,-1)));
+		echo $file->getFile(implode(array_slice($argc, -1)));
 		break;
 	case 'view':
-		echo viewfile($defFolder.implode('/', array_slice($argc, 3,-1)), implode(array_slice($argc, -1)));
+		echo viewfile($defFolder.implode('/', array_slice($argc, 2,-1)), implode(array_slice($argc, -1)));
 		break;
 	case 'table':
-		echo read_narc_as_table($defFolder.implode('/', array_slice($argc, 3)));
+		echo read_narc_as_table($root.implode('/', array_slice($argc, 1)));
 		break;
 	default:
-			echo '<table><tr><td>File</td><td>FAT size</td><td>Data size</td><td>Average file size</td></tr>';
-			echo read_folder($defFolder).'</table>'; break;
+		echo '<table><tr><td>File</td><td>FAT size</td><td>Data size</td><td>Average file size</td></tr>';
+		$tmp = read_folder($defFolder);
+		foreach ($tmp as $filename=>$entry) {
+			printf('<tr><td><a href="/pokestuff/narc.php/list/%1$s">%1$s</a> <a href="/pokestuff/narc.php/table/%1$s">(T)</a></td><td>%2$s</td><td>%3$01.1fKB</td><td>%4$s</td></tr>', str_replace($root, '', $defFolder).$filename, $entry['Files'], $entry['Data Size']/1024, $entry['Average File Size']);
+		}
+		echo '</table>'; break;
 	}
 }
 ?>

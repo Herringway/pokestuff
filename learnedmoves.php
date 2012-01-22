@@ -29,10 +29,12 @@ function processEggMoveData($data) {
 	return $output;
 }
 function getLevelUpMoveData($i) {
-	return getfile('narcs/bweng/0/1/8', $i);
+	$narcfile = new NARCFile('narcs/weng/0/1/8');
+	return $narcfile->getFile($i);
 }
 function getEggMoveData($i) {
-	return getfile('narcs/bweng/1/2/3', $i);
+	$narcfile = new NARCFile('narcs/weng/1/2/3');
+	return $narcfile->getFile($i);
 }
 function getLastFourMoves($poke, $level) {
 	$output = array();

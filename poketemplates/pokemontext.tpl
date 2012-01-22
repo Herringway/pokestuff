@@ -10,8 +10,8 @@
 				<tr>
 {loop $sections}
 					<td>
-{loop $textlines}
-					LINE #{string_format($linenumber, '%04d')}: {$text}<br/>
+{loop $}
+					LINE #{string_format($, '%04d')}: {$text}<br/>
 {/loop}
 					</td>
 {/loop}

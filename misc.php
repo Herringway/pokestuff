@@ -8,6 +8,12 @@ define('NUM_ITEMS', 626);
 define('NUM_TRAINERS', 616);
 define('NUM_AREAS', 110);
 
+define('TEXT_NARC', '0/0/2');
+define('TEXT_TRAINER_NAME', 190);
+define('TEXT_TRAINER_CLASS', 191);
+define('TEXT_MOVE_DESCRIPTIONS', 202);
+define('TEXT_MOVE_NAMES', 203);
+
 require_once 'pkmnnos.php';
 require_once 'text.php';
 require_once 'narc.php';
@@ -164,10 +170,15 @@ function readPokeString($file, $line, $language,$lines = 1) {
 		$langfile = 'weng';
 	else
 		$langfile = 'beng';
+	static $textfile = array();
+	if (!isset($file[$langfile]))
+		$textfile[$langfile] = new gen5text('narcs/'.$langfile.'/'.TEXT_NARC);
+
+	return $textfile[$langfile]->fetchline($file, $line);
 	if ($lines <= 1)
-		return str_replace('\n', "\n",readString('/var/www/pkmn/narcs/'.$langfile.'/0/0/2', $file, $line));
+		return str_replace('\n', "\n",readString('narcs/'.$langfile.'/0/0/2', $file, $line));
 	else {
-		$tmp = readString('/var/www/pkmn/narcs/'.$langfile.'/0/0/2', $file, $line, $lines);
+		$tmp = readString('narcs/'.$langfile.'/0/0/2', $file, $line, $lines);
 		foreach ($tmp as &$line)
 			$line = str_replace('\n', "\n", $line);
 		return $tmp;
@@ -183,12 +194,6 @@ function getItemDesc($num, $language = 0) {
 
 function getColour($num, $language = 0) {
 	return readPokeString(277, $num+96, $language);
-}
-function getMove($num, $language = 0) {
-	return readPokeString(203, $num, $language);
-}
-function getMoveDesc($num, $language = 0) {
-	return readPokeString(202, $num, $language);
 }
 function getAbility($num, $language = 0) {
 	return readPokeString(182, $num, $language);
@@ -231,7 +236,12 @@ function getTrainerClass($num, $language = 0) {
 function getPlaceName($num, $language = 0) {
 	return readPokeString(89, $num, $language);
 }
-
+function getMove($num, $language = 0) {
+	return readPokeString(TEXT_MOVE_NAMES, $num, $language);
+}
+function getMoveDesc($num, $language = 0) {
+	return readPokeString(TEXT_MOVE_DESCRIPTIONS, $num, $language);
+}
 $evolutiontrans = array(
 6 => 'getItem',
 8 => 'getItem',

@@ -3,13 +3,15 @@ $evostart = (float) array_sum(explode(' ',microtime()));
 $bw = 1;
 require_once('misc.php');
 function checkifevolved($num) {
-	$data = getfile('narcs/bweng/0/1/9', $num);
+	$narcfile = new NARCFile('narcs/weng/0/1/9');
+	$data = $narcfile->getFile($num);
 	if (ord($data[0]) == 0)
 		return 1;
 	return 0;
 }
 function getEvolution($num) {
-	$data = getfile('narcs/bweng/0/1/9', $num);
+	$narcfile = new NARCFile('narcs/weng/0/1/9');
+	$data = $narcfile->getFile($num);
 	$output = array();
 	for($i = 0; $i < 7; $i++) {
 		$t = ord($data[$i*6]);
