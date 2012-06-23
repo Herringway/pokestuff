@@ -5,8 +5,8 @@
 			<tr>
 			{loop $randompoke}
 				<td style="text-align: center; width: 150px; background: white;">
-					{printsprite $id $name}<br />
-					{$name}
+					{printsprite $}<br />
+					{getpokename($)}
 				</td>
 			{/loop}
 			</tr>

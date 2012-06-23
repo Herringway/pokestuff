@@ -15,8 +15,8 @@ $dwoo = new Dwoo();
 function getPokemonData_raw($id) {
 	global $typelistBWIMG, $egggrp;
 	$formorig = array(650 => 386, 651 => 386, 652 => 386, 653 => 413, 654 => 413, 655 => 492, 656 => 487,657 => 479,658 => 479,659 => 479,660 => 479,661 => 479,662 => 351,663 => 351,664 => 351,665 => 550,666 => 555,667 => 648);
-	$narc = new NARCFile('narcs/weng/0/1/6');
-	$childnarc = new NARCFile('narcs/weng/0/2/0');
+	$narc = new NARCFile('narcs/b2jpn/0/1/6');
+	$childnarc = new NARCFile('narcs/b2jpn/0/2/0');
 	$rawdata = $narc->getFile($id);
 	$poke = unpack('Chp/Catk/Cdef/Cspeed/Csatk/Csdef/C2type/Ccapturerate/Cxprate/vEVs/vcomitemID/vrareitemID/vdreamitemID/Cfemalechance/Chatchsteps/Cbasehappiness/Cgrowthrate/C2egggrp/C3ability/Cunknownflags/Cformflags/Cformcount/Ccolour/vunknown/vheight/vweight', $rawdata);
 	$poke['id'] = $id;
@@ -43,20 +43,6 @@ function getPokemonData_raw($id) {
 	$bwpokedex = getBWPokedexEntries($id);
 	$poke['pokedexENG'] = $bwpokedex['eng'];
 	$poke['pokedexJPN'] = $bwpokedex['jpn'];
-	if ($id <= 493) {
-		$poke['pokedexENG'] = array_merge(getHGSSPokedexEntries($id), $poke['pokedexENG']);
-		$poke['pokedexENG'] = array_merge(getDPPtPokedexEntries($id), $poke['pokedexENG']);
-
-		if ($id <= 386) {
-		
-			if ($id <= 251) {
-			
-				if ($id <= 151) {
-				
-				}
-			}
-		}
-	}
 	return $poke;
 }
 function getBWPokedexEntries($i) {
@@ -148,7 +134,7 @@ if (array_search(__FILE__,get_included_files()) == 0) {
 		$args = explode('/',$_SERVER['PATH_INFO']);
 	if (!array_key_exists(1, $args) || ($args[1] == null) || ($args[1] < 0) || ($args[1] > NUM_POKEMON)) {
 		for ($i = 1; $i <= NUM_POKEMON; $i++)
-			$pokemon[] = getPokemonData($i);
+			$pokemon[] = getPokemonData_raw($i);
 		$stats = array('debug' => false, 'pokemon' => $pokemon);
 		
 		$dwoo->output('poketemplates/pokemonstats.tpl', $stats);
@@ -179,7 +165,7 @@ if (array_search(__FILE__,get_included_files()) == 0) {
 	} else if ($args[1] == 'yaml') {
 		set_time_limit(500);
 		for ($i = 1; $i <= NUM_POKEMON; $i++)
-			$pokemon[] = getPokemonData($i);
+			$pokemon[] = getPokemonData_raw($i);
 		header("Content-Type: text/plain");
 		echo yaml_emit($pokemon);
 	}	else if ($args[1] == 'xml') {

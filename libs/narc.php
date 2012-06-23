@@ -1,7 +1,7 @@
 <?php
-$root = '/etc/nginx/html/pokestuff/narcs/';
-$defFolder = $root.'weng/';
-$validdirs = array('bw', 'plat', 'dp', 'bwtrans', 'hgss', 'bweng');
+$root = '../games/';
+$defFolder = $root.'b2jpn/';
+$validdirs = array('bw', 'plat', 'dp', 'bwtrans', 'hgss', 'bweng', 'b2jpn', 'weng');
 
 $filetypes = array(
 'BMD0' => '3D Model',
@@ -12,6 +12,7 @@ $filetypes = array(
 'RECN' => 'CEII Resource',
 'RGC' => 'Character Graphic Resource',
 'RNAN' => 'Animation data?',
+'RCMN' => 'Nitro Mapped Cell Resource',
 );
 class NARCfile implements Iterator {
 	private $fileid = 0;
@@ -187,7 +188,7 @@ function read_narc_as_table($filename) {
 
 }
 if (array_search(__FILE__,get_included_files()) == 0) {
-	require '../hexview.php';
+	require '../../hexview.php';
 	$argc = explode('/', $_SERVER['PATH_INFO']);
 	array_shift($argc);
 	$argc = isset($argc[0]) ? $argc : array('');
@@ -201,6 +202,7 @@ if (array_search(__FILE__,get_included_files()) == 0) {
 			$dat = new NARCFile($root.implode('/', array_slice($argc, 1)));
 		} catch (Exception $e) {
 			echo $e;
+			break;
 		}
 		$output = $dat->getDetails();
 		printf('File Allocation Table - %01.2fKB - %d Entries<br>', $output['chunks']['FATB']['size']/1024, $output['chunks']['FATB']['numfiles']);
@@ -210,7 +212,7 @@ if (array_search(__FILE__,get_included_files()) == 0) {
 			$filetype = preg_replace('/[^(\x20\x30-\x39\x41-\x5A\x61-\x7A)]*/','', substr($dat->getFile($filename), 0, 4));
 			$filedesc = isset($filetypes[$filetype]) ? $filetypes[$filetype] : 'Unknown';
 			$fileinfo = (strlen($filetype) == 4) ? sprintf('- %s - %s', $filetype, $filedesc) : '';
-			printf('<a href="/pokestuff/narc.php/download/%s/%s">%2$s - %d Bytes</a> <a href="/pokestuff/narc.php/view/%1$s/%2$s">(H)</a>%s<br>', implode('/', array_slice($argc, 1)), $filename, $file['size'], $fileinfo);
+			printf('<a href="/libs/narc.php/download/%s/%s">%2$s - %d Bytes</a> <a href="/libs/narc.php/view/%1$s/%2$s">(H)</a>%s<br>', implode('/', array_slice($argc, 1)), $filename, $file['size'], $fileinfo);
 		}
 		printf('Filename Table - %01.2fKB<br>', $output['chunks']['FNTB']['size']/1024);
 		printf('Data - %01.2fKB', $totalsize/1024);
@@ -231,7 +233,7 @@ if (array_search(__FILE__,get_included_files()) == 0) {
 		echo '<table><tr><td>File</td><td>FAT size</td><td>Data size</td><td>Average file size</td></tr>';
 		$tmp = read_folder($defFolder);
 		foreach ($tmp as $filename=>$entry) {
-			printf('<tr><td><a href="/pokestuff/narc.php/list/%1$s">%1$s</a> <a href="/pokestuff/narc.php/table/%1$s">(T)</a></td><td>%2$s</td><td>%3$01.1fKB</td><td>%4$s</td></tr>', str_replace($root, '', $defFolder).$filename, $entry['Files'], $entry['Data Size']/1024, $entry['Average File Size']);
+			printf('<tr><td><a href="/libs/narc.php/list/%1$s">%1$s</a> <a href="/libs/narc.php/table/%1$s">(T)</a></td><td>%2$s</td><td>%3$01.1fKB</td><td>%4$s</td></tr>', str_replace($root, '', $defFolder).$filename, $entry['Files'], $entry['Data Size']/1024, $entry['Average File Size']);
 		}
 		echo '</table>'; break;
 	}

@@ -1,15 +1,15 @@
 {extends barebones.tpl}
-{block "title"}#{$pokemon.id} - {$pokemon.name}{/block}
+{block "title"}#{$data.id} - {$data.name}{/block}
 {block "data"}
 {template natureprint stat}
 Negative Nature: {math("$stat*0.9", "%u")}&lt;br /&gt;
 Neutral Nature: {$stat}&lt;br /&gt;
 Positive Nature: {math("$stat*1.1", "%u")}&lt;br /&gt;
 {/template}
-<script type="text/javascript" src="http://elpenguino.net/js/jquery.js"></script>
-<script type="text/javascript" src="http://elpenguino.net/js/jquery.tools.min.js"></script>
-<script type="text/javascript" src="http://elpenguino.net/js/jquery.dataTables.min.js"></script> 
-<script type="text/javascript" src="http://elpenguino.net/js/jquery.dataTables.min.plugin.js"></script> 
+<script type="text/javascript" src="/js/jquery.js"></script>
+<script type="text/javascript" src="/js/jquery.tools.min.js"></script>
+<script type="text/javascript" src="/js/jquery.dataTables.min.js"></script> 
+<script type="text/javascript" src="/js/jquery.dataTables.min.plugin.js"></script> 
 <script type="text/javascript">
 	$(function() {
 		$("[title]").tooltip({ position: 'center right'});
@@ -22,27 +22,25 @@ Positive Nature: {math("$stat*1.1", "%u")}&lt;br /&gt;
 		} ).fnSetFilteringDelay();
 	});
 </script>
-{with $pokemon}
-<img src="/bw-sprites/{$id}.png"><img src="/bw-sprites/shiny/{$id}.png"><br />
-<img src="/bw-sprites/back/{$id}.png"><img src="/bw-sprites/back/shiny/{$id}.png"><br />
-{$name}<br />
-{$species}<br />
-{loop $pokedexENG}
-{$game}: {nl2br($entry)|whitespace}<br /><br />
-{/loop}
-<img width="32" height="16" src="http://pkmn.elpenguino.net/common/type_images/{getTypeIMG($type1)}.gif">
-<img width="32" height="16" src="http://pkmn.elpenguino.net/common/type_images/{getTypeIMG($type2)}.gif"><br />
-<a title="{nl2br(getAbilityDesc($ability1))|whitespace}">{getAbility($ability1)}</a>/<a title="{nl2br(getAbilityDesc($ability2))|whitespace}">{getAbility($ability2)}</a>/<a title="{nl2br(getAbilityDesc($ability3))|whitespace}">{getAbility($ability3)}</a><br />
-{loop $evolutions}
-Evolves into <a href="/stats/{$target}">{getPokeName($target)}</a> ({$argument})<br />
-{/loop}
-EVs: {$EVs}<br />
-{if $formnames}Forms:{/if}
-{foreach $formnames val implode=", "}{$val.name}{/foreach}
+{with $data}
 <table>
 	<thead>
 		<tr>
-			<th></th><th>HP</th><th>Attack</th><th>Defense</th><th>Special Attack</th><th>Special Defense</th><th>Speed</th><th>Total</th>
+			<th rowspan="2">
+<img src="/images/{$_root.generation}/{$_root.gameid}/{$id}.png"><img src="/images/{$_root.generation}/{$_root.gameid}/shiny/{$id}.png"><br />
+<img src="/images/{$_root.generation}/{$_root.gameid}/back/{$id}.png"><img src="/images/{$_root.generation}/{$_root.gameid}/back/shiny/{$id}.png"></th><td colspan="7">
+{$name}<br />
+<img width="32" height="16" src="/images/{$_root.generation}/types/{$type1}.png">
+<img width="32" height="16" src="/images/{$_root.generation}/types/{$type2}.png"><br />
+{$species}<br />
+{nl2br($pokedex)|whitespace}<br />
+{loop $abilities}<a title="{nl2br($desc)|whitespace}">{$name}</a>{if !$.loop.default.last}/{/if}{/loop}<br />
+{loop $evolutions}
+Evolves into <a href="/stats/{$target}">{$name}</a> ({$argument})<br />
+{/loop}
+EVs: {kimplode($EVs)}<br />
+{if $formnames}Forms:{/if}
+{foreach $formnames val implode=", "}{$val.name}{/foreach}</td></tr><tr><th>HP</th><th>Attack</th><th>Defense</th><th>Special Attack</th><th>Special Defense</th><th>Speed</th><th>Total</th>
 		</tr>
 	</thead>
 	<tbody>
@@ -80,20 +78,16 @@ EVs: {$EVs}<br />
 </table>
 <table id="movelist">
 	<thead>
-		<tr>
-			<th>Level</th>
-			<th>Name</th>
-			<th>Power</th>
-			<th>Accuracy</th>
-			<th>Priority</th>
-			<th>Type</th>
-			<th>Description</th>
-			<th>Cat.</th>
+		<tr>{loop $moves.0}{if $_key != 'id'}
+			<th>{$_key}</th>
+{/if}{/loop}
 		</tr>
 	</thead>
-	<tbody>
-{printmoves $moves_g5}
+	<tbody>{loop $moves}
+		<tr>{loop $}{if $_key != 'id'}<td>{if $_key == 'Name'}<a href="/{$_root.gameid}/moves/{$_.id}">{/if}{$}{if $_key == 'Name'}</a>{/if}</td>{/if}{/loop}</tr>
+{/loop}
 	</tbody>
 </table>
 {/with}
+{dump $}
 {/block}

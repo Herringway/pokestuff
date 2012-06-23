@@ -20,27 +20,30 @@
 		<table id="pokemoves">
 			<thead>
 				<tr>
-					{loop $headers}{if (($display != 'debug') || ($_.debug))}<th>{$name}</th>{/if}{/loop}
+					<th>ID</th>
+					<th>Name</th>
+					<th>Type</th>
+					<th>Category</th>
+					<th>Power</th>
+					<th>Accuracy</th>
+					<th>PP</th>
+					<th>Priority</th>
+					<th>Description</th>
+					<th>Flags</th>
 				</tr>
 			</thead>
 			<tbody>
-{loop $moves}
+{loop $data}
 				<tr>
 					<td>{$id}</td>
-					<td><a href="/pkmn/moves/{$id}" title="{$effect_string}">{getMove($id)}</a></td>
-					<td><img width="32" height="16" src="http://pkmn.elpenguino.net/common/type_images/{$type}.gif"></td>
-					<td>{$internal_category}</td>
+					<td><a href="/{$_root.gameid}/moves/{$id}">{$name}</a></td>
+					<td><img width="32" height="16" src="/images/{$_root.generation}/types/{$typeid}.png"></td>
 					<td>{$category}</td>
 					<td>{$power}</td>
 					<td>{$accuracy}</td>
 					<td>{$pp}</td>
 					<td>{$priority}</td>
-					<td>{$unknown}</td>
-					<td>{$unknown2}</td>
-					<td>{$unknown3}</td>
-					<td>{$unknown4}</td>
-					<td>{getMoveDesc($id)}</td>
-					<td>{$unknown5}</td>
+					<td>{$desc}</td>
 					<td><a title="{foreach $flags_readable key item}{if $item == 1}{$key}<br />{/if}{/foreach}">{string_format($flags,'%016b')}</a></td>
 				</tr>
 {/loop}

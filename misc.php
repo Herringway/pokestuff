@@ -2,7 +2,7 @@
 $bw = 1;
 
 define('NUM_MOVES', 559);
-define('NUM_POKEMON', 667);
+define('NUM_POKEMON', 708);
 define('NUM_ABILITIES', 164);
 define('NUM_ITEMS', 626);
 define('NUM_TRAINERS', 616);
@@ -26,25 +26,6 @@ $physspec = array(
 1 => 'Physical',
 2 => 'Special');
 
-$pknobw = array(
-'Deoxys (Attack)',
-'Deoxys (Defense)',
-'Deoxys (Speed)',
-'Wormadam (Sandy)',
-'Wormadam (Trash)',
-'Shaymin (Sky)',
-'Giratina (Origin)',
-'Rotom (Heat)',
-'Rotom (Wash)',
-'Rotom (Frost)',
-'Rotom (Spin)',
-'Rotom (Mow)',
-'Castform (Sunny)',
-'Castform (Rainy)',
-'Castform (Hailing)',
-'Basculin',
-'Darmanitan (Zen)',
-'Meloetta (Step)');
 
 $int_flags = array(
 0 => 'Misc',
@@ -186,8 +167,10 @@ function readPokeString($file, $line, $language,$lines = 1) {
 		$langfile = 'wjpn';
 	else if ($language === 'white')
 		$langfile = 'weng';
+	else if ($language === 'black2japan')
+		$langfile = 'b2jpn';
 	else
-		$langfile = 'beng';
+		$langfile = 'b2jpn';
 	static $textfile = array();
 	if (!isset($textfile[$langfile]))
 		$textfile[$langfile] = new gen5text('narcs/'.$langfile.'/'.TEXT_NARC);
@@ -231,11 +214,11 @@ function getBattleType($num, $language = 0) {
 }
 function getPokeName($num,$language = 0) {
 	global $pknobw;
-	if ($num > 667)
-		return 'MISSINGNO';
-	if ($num > 649)
-		return $pknobw[$num-650];
-	return readPokeString(70, $num, $language);
+	//if ($num > 667)
+	//	return 'MISSINGNO';
+	//if ($num > 649)
+	//	return $pknobw[$num-650];
+	return readPokeString(90, $num, $language);
 }
 function getFormNames($num, $lines, $language = 0) {
 	$t = readPokeString(244, $num, $language, $lines);
@@ -474,6 +457,7 @@ $effects = array(
 
 
 function EVs($num) {
+	$output = array();
 	$list = array('HP', 'Attack', 'Defense', 'Speed', 'Sp. Attack', 'Sp. Defense');
 	for ($i = 0; $i < count($list); $i++)
 		if (($num&(3<<2*$i))>>($i*2))
@@ -499,117 +483,6 @@ $egggrp = array(
 0x0F => 'N/A',
 );
 
-$TMMap = array(
-468,
-337,
-473,
-347,
-46,
-92,
-258,
-339,
-474,
-237,
-241,
-269,
-58,
-59,
-63,
-113,
-182,
-240,
-477,
-219,
-218,
-76,
-479,
-85,
-87,
-89,
-216,
-91,
-94,
-247,
-280,
-104,
-115,
-482,
-53,
-188,
-201,
-126,
-317,
-332,
-259,
-263,
-488,
-156,
-213,
-168,
-490,
-496,
-497,
-315,
-502,
-411,
-412,
-206,
-503,
-374,
-451,
-507,
-510,
-511,
-261,
-512,
-373,
-153,
-421,
-371,
-514,
-416,
-397,
-148,
-444,
-521,
-86,
-360,
-14,
-522,
-244,
-523,
-524,
-157,
-404,
-525,
-526,
-398,
-138,
-447,
-207,
-365,
-369,
-164,
-430,
-433,
-528,
-249,
-555,
-15,
-19,
-57,
-70,
-127,
-291);
-$tutormoves = array(
-0 => 520,
-1 => 519,
-2 => 518,
-3 => 338,
-4 => 307,
-5 => 308,
-6 => 434,
-);
 $places = array (
   3 => 'Dreamyard',
   4 => 'Dreamyard (???)',

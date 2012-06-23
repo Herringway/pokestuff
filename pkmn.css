@@ -1,0 +1,56 @@
+body		{background: #DDDDDD; }
+table		{border: none; empty-cells: hide; border-spacing: 0;}
+td,th		{border: 1px solid black; padding: 0px; margin:0px;}
+tr		{padding: 0px; background: #FFFFFF;}
+tr:nth-child(odd) { background: #EEEEEE; }
+#pokemon td:nth-child(4),#pokemon td:nth-child(6),#pokemon td:nth-child(8) {background: #FF90A0; }
+#pokemon td:nth-child(3),#pokemon td:nth-child(5),#pokemon td:nth-child(7) {background: #90A0FF; }
+#pokemon	{width: 100%;}
+img		{border: none; }
+a:link		{color: #000080; text-decoration: underline; }
+a:hover		{color: #D0D0D0; text-decoration: underline; }
+a:active	{color: #0000D0; text-decoration: underline; }
+a:visited	{color: #000080; text-decoration: underline; }
+.translation{border-bottom: 1px dotted black; }
+.atk		{background: #FF90A0; }
+.def		{background: #90A0FF; }
+.NE > .atk	{background: #FF7080; }
+.NE > .def	{background: #7080FF; }
+.NE > .tot	{background: #70FF70; }
+.spec		{background: #D0D0D0; }
+.images		{background: #FFFFFF; width: 80px; border: 1px solid black; }
+.FE			{background: #DDDDDD; }
+.NE			{background: #FFFFFF; }
+.row1		{background: #FFFFFF; }
+.row2		{background: #DDDDDD; }
+.Fighting, .Flying, .Poison, .Rock, .Bug, .Ghost, .Fire, .Water, .Grass, .Psychic, .Dragon, .Dark	{color: #FFFFFF; };
+.Steel, .Ice, .Normal,.Electric		{color:#000000; }
+.Normal		{background: #A8A878; }
+.Fighting	{background: #C03028; }
+.Flying		{background: #A890F0; }
+.Poison		{background: #A040A0; }
+.Ground		{background: #E0C068; }
+.Rock		{background: #B8A038; }
+.Bug		{background: #A8B820; }
+.Ghost		{background: #705898; }
+.Steel		{background: #B8B8D0; }
+.Fire		{background: #F08030; }
+.Water		{background: #6890F0; }
+.Grass		{background: #78C850; }
+.Electric	{background: #F8D030; }
+.Psychic	{background: #F85888; }
+.Ice		{background: #98D8D8; }
+.Dragon		{background: #7038F8; }
+.Dark		{background: #705848; }
+
+.dataTables_info	{background: white; border: 1px solid black; border-top: none; display: inline; border-radius: 0px 0px 5px 5px; float: left;}
+.dataTables_paginate	{background: white; border: 1px solid black; border-top: none; display: inline; border-radius: 0px 0px 5px 5px; float: right; padding: 0px 3px;}
+.dataTables_length	{background: white; border: 1px solid black; border-bottom: none; display: inline; border-radius: 5px 5px 0px 0px; float: left;  padding: 1px;}
+.dataTables_filter	{display: inline; float: right; background: white; border: 1px solid black; border-bottom: none; border-radius: 5px 5px 0px 0px; }
+.paginate_button	{background: white; text-decoration: underline; cursor: pointer; }
+.paginate_button, .paginate_active	{display: inline; margin-right: 5px; }
+.dataTables_paginate .last		{margin: 0px; }
+.sorting_asc 	{ background: url('/img/sort_asc.png')  no-repeat center right; }
+.sorting_desc 	{ background: url('/img/sort_desc.png') no-repeat center right; }
+.sorting 		{ background: url('/img/sort_both.png') no-repeat center right; }
+.tooltip { display:none; background-color:#ffa; border:1px solid #cc9; padding:3px; font-size:13px; -moz-box-shadow: 2px 2px 11px #666; box-shadow: 2px 2px 11px #666; }

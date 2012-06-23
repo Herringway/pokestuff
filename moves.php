@@ -36,7 +36,7 @@ function processMoveData($id) {
 	global $typelistBWIMG,$int_flags,$physspec,$status,$effects,$stats;
 	$output = array();
 	if (!isset($file))
-		$tmpfile = new NARCFile('narcs/weng/0/2/1');
+		$tmpfile = new NARCFile('narcs/b2jpn/0/2/1');
 	static $file;
 	if (empty($file))
 		$file = $tmpfile;
