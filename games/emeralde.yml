@@ -1,0 +1,137 @@
+﻿---
+Text Offsets:
+  Pokemon Names: 
+    Offset: 0x3185C8
+    Width: 0xB
+  Species Names:
+    Offset: 0x56B5B0
+    Width: 0x20
+    Format: '%s Pokémon'
+  Ability Names: 
+    Offset: 0x31B6DB
+    Width: 0xD
+  Move Names:
+    Offset: 0x31977C
+    Width: 0xD
+  Item Names:
+    Offset: 0x5839A0
+    Width: 0x2C
+eggmoves: 0x32ADD8
+Tables:
+  stats: 
+    Format:
+    - Chp
+    - Catk
+    - Cdef
+    - Cspeed
+    - Csatk
+    - Csdef
+    - C2type
+    - Ccapturerate
+    - CbaseEXP
+    - vEVraw
+    - v2item
+    - CgenderRatio
+    - Chatchrate
+    - Cbasehappiness
+    - Cunknown
+    - C2egggrp
+    - C2ability
+    - Crunrate
+    - Cunknown2
+    - Cunknown3
+    - Cunknown4
+    Offset: 0x3203CC
+    Entries: 412
+    Entry Size: 0x1C
+  itemdata:
+    Format: 
+      - A14Name
+      - C2unknown_
+      - vvalue
+      - C2unknown__
+      - VdescPtr
+      - C*unknown___
+    Offset: 0x5839A0
+    Entry Size: 0x2C
+    Entries: 377
+  levelupmoves:
+    Offset: 0x32937C
+    Entries: 412
+    Format:
+      - VPointer
+    Entry Size: 4
+  movedata:
+    Format:
+      - Cpower
+      - Ctypeid
+      - Caccuracy
+      - Cpp
+      - C2unknown_
+      - cpriority
+      - C*unknown__
+    Offset: 0x31C899
+    Entries: 355
+    Entry Size: 0xC
+  movedescriptiontable:
+    Format:
+      - VTextOffset
+    Offset: 0x61C520
+    Entries: 355
+    Entry Size: 0x4
+  abilitydescriptiontable:
+    Format:
+      - VTextOffset
+    Offset: 0x31BAD4
+    Entries: 79
+    Entry Size: 0x4
+  dexentries:
+    Format:
+      - vID
+    Offset: 0x31DC80
+    Entries: 412
+    Entry Size: 0x2
+  hoenndexentries:
+    Format:
+      - vHoennID
+    Offset: 0x31D94A
+    Entries: 412
+    Entry Size: 0x2
+  dexdata:
+    Format: 
+      - C12Species
+      - vHeight
+      - vWeight
+      - VTextOffset
+      - vUnknown
+      - vPokeSize
+      - vPokeOffset
+      - vTrainerSize
+      - vTrainerOffset
+      - vUnknown2
+    Offset: 0x56B5B0
+    Entries: 388
+    Entry Size: 0x20
+  evodata:
+    Format:
+      - CType
+      - CUnknown3
+      - vArgument
+      - vTarget
+      - C2Unknown
+    Offset: 0x32531C
+    Entries: 2060
+    Entry Size: 0x8
+  tmcompatibility:
+    Format: 
+      - C8tm
+    Offset: 0x31e898
+    Entries: 412
+    Entry Size: 0x8
+  tmmap:
+    Format:
+      - v
+    Offset: 0x615b94
+    Entries: 58
+    Entry Size: 2
+...

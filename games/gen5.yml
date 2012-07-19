@@ -1,0 +1,331 @@
+---
+Types:
+  - Normal
+  - Fight
+  - Flying
+  - Poison
+  - Ground
+  - Rock
+  - Bug
+  - Ghost
+  - Steel
+  - Fire
+  - Water
+  - Grass
+  - Electric
+  - Psychic
+  - Ice
+  - Dragon
+  - Dark
+Egg Groups:
+  - Null
+  - Monster
+  - Water 1
+  - Bug
+  - Flying
+  - Field
+  - Fairy
+  - Grass
+  - Humanoid
+  - Water 3
+  - Mineral
+  - Amorphous
+  - Water 2
+  - Ditto
+  - Dragon
+  - Undiscovered
+Original Forms:
+  650: 386
+  651: 386
+  652: 386
+  653: 413
+  654: 413
+  655: 492
+  656: 487
+  657: 479
+  658: 479
+  659: 479
+  660: 479
+  661: 479
+  662: 351
+  663: 351
+  664: 351
+  665: 550
+  666: 555
+  667: 648
+Ability Types:
+  - Ability 1
+  - Ability 2
+  - Dream World Ability
+Item Types:
+  - Common Item
+  - Rare Item
+  - Dream World Item
+TM Map:
+  - 468
+  - 337
+  - 473
+  - 347
+  - 46
+  - 92
+  - 258
+  - 339
+  - 474
+  - 237
+  - 241
+  - 269
+  - 58
+  - 59
+  - 63
+  - 113
+  - 182
+  - 240
+  - 477
+  - 219
+  - 218
+  - 76
+  - 479
+  - 85
+  - 87
+  - 89
+  - 216
+  - 91
+  - 94
+  - 247
+  - 280
+  - 104
+  - 115
+  - 482
+  - 53
+  - 188
+  - 201
+  - 126
+  - 317
+  - 332
+  - 259
+  - 263
+  - 488
+  - 156
+  - 213
+  - 168
+  - 490
+  - 496
+  - 497
+  - 315
+  - 502
+  - 411
+  - 412
+  - 206
+  - 503
+  - 374
+  - 451
+  - 507
+  - 510
+  - 511
+  - 261
+  - 512
+  - 373
+  - 153
+  - 421
+  - 371
+  - 514
+  - 416
+  - 397
+  - 148
+  - 444
+  - 521
+  - 86
+  - 360
+  - 14
+  - 522
+  - 244
+  - 523
+  - 524
+  - 157
+  - 404
+  - 525
+  - 526
+  - 398
+  - 138
+  - 447
+  - 207
+  - 365
+  - 369
+  - 164
+  - 430
+  - 433
+  - 528
+  - 249
+  - 555
+  - 15
+  - 19
+  - 57
+  - 70
+  - 127
+  - 291
+Tutor Map:
+  - 520
+  - 519
+  - 518
+  - 338
+  - 307
+  - 308
+  - 434
+Move Effects:
+  0: None
+  1: Inflicts sleep on target
+  2: '[EFFECTCHANCE]% chance of poisoning target'
+  3: User recovers [DRAIN_PERCENTAGE]% of damage done
+  4: '[EFFECTCHANCE]% chance to burn target'
+  5: '[EFFECTCHANCE]% chance to freeze target'
+  6: '[EFFECTCHANCE]% chance to paralyze target'
+  7: User faints
+  8: User recovers [DRAIN_PERCENTAGE]% of damage done on sleeping targets
+  9: User uses target's last move
+  10: Raises attack power
+  11: Raises defense
+  16: Raises [STAT1] [STAT1DELTA] stages
+  17: Can't Miss
+  18: Lowers target's [STAT1] [STAT1DELTA] stages
+  19: Lowers target's [STAT1] [STAT1DELTA] stages
+  20: Lowers target's [STAT1] [STAT1DELTA] stages
+  23: Lowers target's [STAT1] [STAT1DELTA] stages
+  24: Lowers target's [STAT1] [STAT1DELTA] stages
+  25: Nullifies all stat changes on everyone
+  26: User absorbs energy for 2 turns, then unleashes double damage
+  27: Attacks for 2-3 turns, then inflicts confusion on user
+  28: Forces target to switch
+  29: Hits [HITS_MIN]-[HITS_MAX] times in one turn
+  30: User changes type to one of its moves
+  31: '[FLINCHCHANCE]% chance to flinch target'
+  32: Recovers [HEAL_PERCENTAGE]% health
+  33: Inflicts deadly [STATUS] on target
+  34: User gains extra money
+  35: Lowers damage from special attacks for 5 turns
+  36: '[EFFECTCHANCE]% chance to burn, paralyze, or freeze target'
+  37: Inflicts sleep on user and recovers all HP
+  38: OHKOs target
+  39: Charges for one turn
+  40: Halves target's HP
+  41: Deals 40 damage
+  42: '[EFFECTCHANCE]% chance of trapping target'
+  43: High Critical Hit Chance
+  44: Hits twice in one turn
+  45: User takes damage if move misses
+  46: Prevents stat reductions for 5 turns
+  47: Increases user's critical hit chance
+  48: User takes [DRAIN_PERCENTAGE]% damage in recoil
+  49: Inflicts [STATUS] on target
+  50: Raises [STAT1] [STAT1DELTA] stages
+  51: Raises [STAT1] [STAT1DELTA] stages
+  52: Raises [STAT1] [STAT1DELTA] stages
+  53: Raises [STAT1] [STAT1DELTA] stages
+  54: Raises [STAT1] [STAT1DELTA] stages
+  57: User transforms into target
+  58: Lowers target's [STAT1] [STAT1DELTA] stages
+  59: Lowers target's [STAT1] [STAT1DELTA] stages
+  60: Lowers target's [STAT1] [STAT1DELTA] stages
+  62: Lowers target's [STAT1] [STAT1DELTA] stages
+  65: Lowers damage from physical attacks for 5 turns
+  66: Inflicts [STATUS] on target
+  67: Inflicts [STATUS] on target
+  68: "[STAT1_CHANCE]% chance to raise target's [STAT1] [STAT1DELTA] stages"
+  69: "[STAT1_CHANCE]% chance to raise target's [STAT1] [STAT1DELTA] stages"
+  70: "[STAT1_CHANCE]% chance to raise target's [STAT1] [STAT1DELTA] stages"
+  71: "[STAT1_CHANCE]% chance to raise target's [STAT1] [STAT1DELTA] stages"
+  72: "[STAT1_CHANCE]% chance to raise target's [STAT1] [STAT1DELTA] stages"
+  73: "[STAT1_CHANCE]% chance to raise target's [STAT1] [STAT1DELTA] stages"
+  75: Charges for one turn, [FLINCHCHANCE]% chance to flinch target, +[CRITLEVEL] critical hit level
+  76: '[EFFECTCHANCE]% chance to confuse target'
+  77: Hits [HITS_MIN]-[HITS_MAX] times in one turn, [EFFECTCHANCE]% chance of [STATUS]
+  79: User creates a substitute using some of its HP
+  80: User recharges next turn
+  81: Raises Attack if struck while move is in effect
+  82: User copies target's last move
+  83: Uses a random move
+  84: Inflicts [STATUS] on target
+  85: Nothing?
+  86: Disables target's last-used move
+  87: Deals damage equal to the user's level
+  88: Deals damage equal to 0.75x-1.25x user's level
+  89: Counters physical attacks for double damage
+  90: Target is forced to repeat last move
+  91: Splits target's HP with user
+  92: Only usable while asleep, [FLINCHCHANCE]% chance to flinch target
+  93: User's type changes to resist the last move it was hit with
+  94: User's next move guaranteed to land
+  95: Permanently copies the last move used by the target
+  97: Randomly uses one of user's moves if asleep
+  98: Target faints if user faints
+  99: Power increases as user's HP decreases
+  100: Target's last-used move loses 4PP
+  101: Leaves target with at least 1 HP
+  102: Heals status effects on all party members
+  103: User attacks first
+  105: Steals target's held item
+  106: Target cannot escape
+  108: Raises [STAT1] [STAT1DELTA] stages
+  111: User avoids damage
+  115: Creates sandstorm for five turns
+  116: User survives next hit
+  117: Power doubles with each hit
+  118: Inflicts [STATUS] on target and raises [STAT1] [STAT1DELTA] stages
+  119: Power increases if used in succession
+  120: Inflicts [STATUS] on target
+  121: Power based on user's happiness
+  122: Random power, may heal
+  123: Power based on user's unhappiness
+  124: Prevents status effects for 5 turns
+  125: Unfreezes user and [EFFECTCHANCE]% chance of causing a burn
+  126: Power varies
+  127: User switches out and passes stat changes
+  128: Double damage if target switches
+  129: Removes Spikes and Stealth Rock
+  130: Deals 20 damage
+  132: Recovers user's hp based on weather
+  135: Type and Power depend on IVs
+  136: Changes weather to rain
+  137: Changes weather to sunny
+  138: "[STAT1_CHANCE]% chance to raise user's [STAT1] [STAT1DELTA] stages"
+  139: "[STAT1_CHANCE]% chance to raise user's [STAT1] [STAT1DELTA] stages"
+  140: "[STAT1_CHANCE]% chance to raise user's [STAT1] [STAT1DELTA] stages"
+  145: Raises Defense 1 stage, charges for one turn
+  148: Attacks target two turns later
+  150: '[FLINCHCHANCE]% chance to flinch target, double damage on minimized foes'
+  151: Charges for one turn unless sunny
+  153: User flees from battle
+  156: Raises [STAT1] [STAT1DELTA] stages, doubles power of rollout
+  170: Fails if user is attacked
+  175: Target can only use offensive abilities
+  184: Allows user to reuse item
+  185: Inflicts double damage if user was hit on same turn
+  187: Inflicts [STATUS] on target
+  189: Reduces target's hp to same level as user's
+  190: Power decreases as user's hp decreases
+  193: Heals paralysis, burn, or poison on user
+  196: Deals more damage to heavier foes
+  197: Effect depends on environment
+  198: User takes [DRAIN_PERCENTAGE]% damage in recoil
+  199: Inflicts [STATUS] on all pokemon
+  202: '[EFFECTCHANCE]% chance to badly poison or flinch target'
+  204: "[STAT1_CHANCE]% chance to raise user's [STAT1] [STAT1DELTA] stages"
+  206: Raises user's [STAT1] [STAT1DELTA] stages and [STAT2] [STAT2DELTA] stages
+  208: Raises user's [STAT1] [STAT1DELTA] stages and [STAT2] [STAT2DELTA] stages
+  209: '[EFFECTCHANCE]% chance to poison target'
+  225: Increases party's speed for 3 turns
+  228: User switches after damage is dealt
+  235: Power increases as PP drops
+  239: Cancels effect of target's ability
+  254: Deals damage, user loses [HEAL_PERCENTAGE]% health
+  256: User burrows underground for one turn
+  263: Invulnerable for one turn, [EFFECTCHANCE]% chance to inflict [STATUS]
+  268: Type matches held plate
+  269: User takes [DRAIN_PERCENTAGE]% damage in recoil
+  303: Ignores target's stat changes
+  313: Forces target to switch, deals damage
+  315: Target moves last
+  316: Raises user's [STAT1] [STAT1DELTA] stages and [STAT2] [STAT2DELTA] stages
+  321: Raises [STAT1] [STAT1DELTA] stages
+  322: Raises user's [STAT1] [STAT1DELTA] stages, [STAT2] [STAT2DELTA] stages, and [STAT3] [STAT3DELTA] stages
+  332: Charges for one turn, [EFFECTCHANCE]% chance to inflict [STATUS]
+...

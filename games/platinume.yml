@@ -1,0 +1,245 @@
+---
+text:
+  File Map:
+    Gym Names: 378
+    Accessory Names: 386
+    Item Descriptions: 391
+    Item Names: 392
+    Pokemon Names: 412
+    Area Names: 433
+    Ability Names: 610
+    Capitalized Ability Names: 611
+    Ability Descriptions: 612
+    Trainer Names: 618
+    Trainer Classes: 619
+    Move Descriptions: 646
+    Move Names: 647
+    Capitalized Move Names: 648
+    Pokedex Entries: 706
+    Species Names: 718
+  Unlisted Pokemon:
+    - Unknown
+    - Unknown
+    - DEOXYS (Attack)
+    - DEOXYS (Defense)
+    - DEOXYS (Speed)
+    - WORMADAM (Sandy)
+    - WORMADAM (Trash)
+    - GIRATINA (Origin)
+    - SHAYMIN (Sky)
+    - ROTOM (Heat)
+    - ROTOM (Wash)
+    - ROTOM (Frost)
+    - ROTOM (Spin)
+    - ROTOM (Mow)
+  Unlisted Moves:
+    - ???
+    - ???
+    - ???
+  Unlisted Move Descriptions:
+    - ???
+    - ???
+    - ???
+narcs:
+  text: msgdata/pl_msg.narc
+  sprites: 0/0/4
+  mapassoc: 0/1/2
+  stats: poketool/personal/pl_personal.narc
+  levelupmovedata: poketool/personal/wotbl.narc
+  evolutiondata: poketool/personal/evo.narc
+  movedata: poketool/waza/pl_waza_tbl.narc
+  itemdata: itemtool/itemdata/pl_item_data.narc
+  trainerdata: poketool/trainer/trdata.narc
+  trainerpokemon: poketool/trainer/trpoke.narc
+  eggmoves: OVERLAYS/9/5
+  children: poketool/personal/pms.narc
+  areadata: fielddata/encountdata/pl_enc_data.narc
+  minlevels: 2/2/7
+Egg Moves Offset: 0x29222
+Area Data:
+  Format: gen4_1
+  Names: 
+  - Canalave City
+  - Eterna City
+  - Pastoria City
+  - Sunyshore City
+  - Pokemon League
+  - Oreburgh Mine (1F)
+  - Oreburgh Mine (B1F)
+  - Valley Windworks
+  - Eterna Forest
+  - Fuego Ironworks
+  - Mt. Coronet (Route 207)
+  - Mt. Coronet (2F)
+  - Mt. Coronet (3F)
+  - Mt. Coronet (snowfall)
+  - Mt. Coronet (blizzard)
+  - Mt. Coronet (4F)
+  - Mt. Coronet (5F)
+  - Mt. Coronet (6F)
+  - Mt. Coronet (7F)
+  - Mt. Coronet (cave)
+  - Mt. Coronet (Route 216)
+  - Mt. Coronet (Route 211)
+  - Mt. Coronet (B1F)
+  - Safari Zone (Area 1)
+  - Safari Zone (Area 2)
+  - Safari Zone (Area 3)
+  - Safari Zone (Area 4)
+  - Safari Zone (Area 5)
+  - Safari Zone (Area 6)
+  - Solaceon Ruins (2F)
+  - Solaceon Ruins (1F)
+  - Solaceon Ruins (B1F a)
+  - Solaceon Ruins (B1F b)
+  - Solaceon Ruins (B1F c)
+  - Solaceon Ruins (B2F a)
+  - Solaceon Ruins (B2F b)
+  - Solaceon Ruins (B2F c)
+  - Solaceon Ruins (B3F a)
+  - Solaceon Ruins (B3F b)
+  - Solaceon Ruins (B3F c)
+  - Solaceon Ruins (B3F d)
+  - Solaceon Ruins (B3F e)
+  - Solaceon Ruins (B4F a)
+  - Solaceon Ruins (B4F b)
+  - Solaceon Ruins (B4F c)
+  - Solaceon Ruins (B4F d)
+  - Solaceon Ruins (B5F)
+  - Victory Road (1F)
+  - Victory Road (2F)
+  - Victory Road (B1F)
+  - Victory Road (inside B1F)
+  - Victory Road (inside)
+  - Victory Road (inside exit)
+  - Deserted Escape Path
+  - Oreburgh Tunnel (1F)
+  - Oreburgh Tunnel (B1F)
+  - Stark Mountain
+  - Stark Mountain (entrance)
+  - Stark Mountain (inside)
+  - Spring Path
+  - Turnback Cave (a)
+  - Turnback Cave (b)
+  - Turnback Cave (c)
+  - Turnback Cave (d)
+  - Turnback Cave (e)
+  - Turnback Cave (f)
+  - Turnback Cave (g)
+  - Turnback Cave (h)
+  - Turnback Cave (i)
+  - Turnback Cave (j)
+  - Turnback Cave (k)
+  - Turnback Cave (l)
+  - Turnback Cave (m)
+  - Turnback Cave (n)
+  - Turnback Cave (o)
+  - Turnback Cave (p)
+  - Turnback Cave (q)
+  - Turnback Cave (r)
+  - Turnback Cave (s)
+  - Turnback Cave (t)
+  - Turnback Cave (u)
+  - Turnback Cave (v)
+  - Turnback Cave (w)
+  - Turnback Cave (x)
+  - Turnback Cave (y)
+  - Turnback Cave (z)
+  - Turnback Cave (alpha)
+  - Turnback Cave (beta)
+  - Turnback Cave (gamma)
+  - Turnback Cave (delta)
+  - Turnback Cave (epsilon)
+  - Turnback Cave (zeta)
+  - Turnback Cave (eta)
+  - Turnback Cave (theta)
+  - Turnback Cave (iota)
+  - Turnback Cave (kappa)
+  - Turnback Cave (lambda)
+  - Turnback Cave (mu)
+  - Turnback Cave (nu)
+  - Turnback Cave (xi)
+  - Turnback Cave (omicron)
+  - Turnback Cave (pi)
+  - Turnback Cave (rho)
+  - Turnback Cave (sigma)
+  - Turnback Cave (tau)
+  - Turnback Cave (upsilon)
+  - Snowpoint Temple (1F)
+  - Snowpoint Temple (B1F)
+  - Snowpoint Temple (B2F)
+  - Snowpoint Temple (B3F)
+  - Snowpoint Temple (B4F)
+  - Snowpoint Temple (B5F)
+  - Wayward Cave (1F)
+  - Wayward Cave (B1F)
+  - Ruins Maniac's Cave
+  - Ruins Maniac's Cave (expansion)
+  - Ruins Maniac's Tunnel
+  - Pokemon Mansion garden
+  - Iron Island
+  - Iron Island (1F)
+  - Iron Island (B1F left)
+  - Iron Island (B1F right)
+  - Iron Island (B2F right)
+  - Iron Island (B2F left)
+  - Iron Island (B3F)
+  - Old Chateau (entrance)
+  - Old Chateau (dining room)
+  - Old Chateau (2F private room)
+  - Old Chateau (2F)
+  - Old Chateau (2F leftmost room)
+  - Old Chateau (2F left room)
+  - Old Chateau (2F middle room)
+  - Old Chateau (2F right room)
+  - Old Chateau (2F rightmost room)
+  - Lake Verity (before)
+  - Lake Verity (after)
+  - Lake Valour
+  - Lake Acuity
+  - Near Lake Valour
+  - Near Lake Acuity
+  - Route 201
+  - Route 202
+  - Route 203
+  - Route 204 (Jubilife City side)
+  - Route 204 (Floaroma City side)
+  - Route 205 (Floaroma City side)
+  - Route 205 (Eterna City side)
+  - Route 206
+  - Route 207
+  - Route 208
+  - Route 209
+  - Lost Tower (1F)
+  - Lost Tower (2F)
+  - Lost Tower (3F)
+  - Lost Tower (4F)
+  - Lost Tower (5F)
+  - Route 210 (Solaceon City side)
+  - Route 210 (Celestic City side)
+  - Route 211 (Eterna City side)
+  - Route 211 (Celestic City side)
+  - Route 212 (Hearthome City side)
+  - Route 212 (Pastoria City side)
+  - Route 213
+  - Route 214
+  - Route 215
+  - Route 216
+  - Route 217
+  - Route 218
+  - Route 219
+  - Route 221
+  - Route 222
+  - Route 224
+  - Route 225
+  - Route 227
+  - Route 228
+  - Route 229
+  - Twinleaf Town
+  - Celestic City
+  - Resort Area
+  - Sea Route 220
+  - Sea Route 223
+  - Sea Route 226
+  - Sea Route 230
+...

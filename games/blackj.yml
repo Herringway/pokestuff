@@ -1,0 +1,53 @@
+﻿---
+text:
+  File Map:
+    Item Descriptions: 53
+    Item Names: 54
+    Pokemon Names: 70
+    Area Names: 89
+    Battle Types: 166
+    Ability Names: 182
+    Ability Descriptions: 183
+    Trainer Names: 190
+    Trainer Classes: 191
+    Move Descriptions: 203
+    Move Names: 204
+    Pokedex Entries: 235
+    Species Names: 257
+  Unlisted Pokemon:
+    - デオキシス (Attack)
+    - デオキシス (Defense)
+    - デオキシス (Speed)
+    - Wormadam (Sandy)
+    - Wormadam (Trash)
+    - Shaymin (Sky)
+    - Giratina (Origin)
+    - Rotom (Heat)
+    - Rotom (Wash)
+    - Rotom (Frost)
+    - Rotom (Spin)
+    - Rotom (Mow)
+    - Castform (Sunny)
+    - Castform (Rainy)
+    - Castform (Hailing)
+    - Basculin
+    - Darmanitan (Zen)
+    - Meloetta (Step)
+narcs:
+  systemtext: 0/0/2
+  storytext: 0/0/3
+  sprites: 0/0/4
+  mapassoc: 0/1/2
+  stats: 0/1/6 
+  platgrowtbl: 0/1/7
+  levelupmovedata: 0/1/8
+  evolutiondata: 0/1/9
+  baby: 0/2/0
+  movedata: 0/2/1
+  itemdata: 0/2/4
+  trainerdata: 0/9/2
+  trainerpokemon: 0/9/3
+  eggmovedata: 1/2/3
+  areadata: 1/2/6
+  minlevels: 2/2/7
+...

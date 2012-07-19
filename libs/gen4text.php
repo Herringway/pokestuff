@@ -1,6 +1,76 @@
 <?php
 
-class gen4text implements Iterator {
+class gen4text implements Iterator, ArrayAccess {
+	private $numlines;
+	private $basekey;
+	private $data;
+	
+	function __construct($data) {
+		$this->data = $data;
+		$this->chars = yaml_parse_file('gen4chars.yml');
+		
+		$tmp = unpack('ventries/vkey', substr($this->data, 0, 4));
+		$this->numlines = $tmp['entries'];
+		$this->basekey = $tmp['key'];
+	}
+	public function offsetExists($id) { return ($this->numlines > $id); }
+	public function offsetGet($id) { return $this->fetchline($id); }
+	public function offsetSet($id, $val) { throw new Exception('Read Only'); }
+	public function offsetUnset($id) { throw new Exception('Read Only'); }
+
+	public function rewind() { $this->fileid = 0; }
+	public function current() { return $this->fetchline($this->fileid); }
+	public function key() { return $this->fileid; }
+	public function next() { ++$this->fileid; }
+	public function valid() { return $this->fileid < $this->numlines;}
+	public function dump() {
+		$output = array();
+		foreach ($this as $line)
+			$output[] = $line;
+		return $output;
+	}
+	
+	private function fetchline($id) {
+		$location = unpack('Vptr/Vsize', substr($this->data, 4+$id*8, 8));
+		$tmpkey = $this->getKey($id);
+		$location['ptr'] ^= $tmpkey;
+		$location['size'] ^= $tmpkey;
+		return $this->decrypttext(array_merge(unpack('v*', substr($this->data, $location['ptr'], $location['size']*2))), (0x1BD3*($id+1))&0xffff);
+	}
+	private function getKey($id) {
+		$ktmp = ($this->basekey*0x2FD*($id+1))&0xFFFF;
+        return $ktmp | ($ktmp<<16);
+	}
+	private function decrypttext($chars, $key) {
+		foreach ($chars as &$char) {
+			$char ^= $key;
+			$key = ($key + 0x493D)&0xFFFF;
+		}
+		$output = '';
+		$cap = 0;
+		foreach ($chars as $b) {
+			if ($cap) {
+				if ($cap == 3)
+					$output .= '[';
+				$output .= sprintf('%04X', $b);
+				if ($cap == 1)
+					$output .= ']';
+				$cap--;
+				continue;
+			}
+			if ($b == 0xFFFF)
+				break;
+			else if ($b == 0xFFFE) {
+				$cap = 3;
+				continue;
+			}
+			$output .= isset($this->chars[$b]) ? $this->chars[$b] : sprintf('[%04X]', $b);
+		}
+		return $output;
+	}
+}
+
+class gen4text_old implements Iterator,ArrayAccess {
 	private $narc;
 	private $fileid = 0;
 	private $numfiles;
@@ -8,10 +78,25 @@ class gen4text implements Iterator {
 	private $cachedfile;
 	private $chars;
 	
+	public function offsetExists($id) { return ($this->numfiles > $id); }
+	public function offsetGet($id) { return $this->fetchfile($id); }
+	public function offsetSet($id, $val) { throw new Exception('Read Only'); }
+	public function offsetUnset($id) { throw new Exception('Read Only'); }
+
+	public function rewind() { $this->fileid = 0; }
+	public function current() { return $this->fetchfile($this->fileid); }
+	public function key() { return $this->fileid; }
+	public function next() { ++$this->fileid; }
+	public function valid() { return $this->fileid < $this->numfiles;}
+	
 	function __construct($file) {
-		if (!file_exists($file))
-			die($file.' not found');
-		$this->narc = new NARCfile($file);
+		if ($file instanceof NARCfile)
+			$this->narc = $file;
+		else {
+			if (!file_exists($file))
+				die($file.' not found');
+			$this->narc = new NARCfile($file);
+		}
 		$d = $this->narc->getdetails();
 		$this->numfiles = $d['numfiles'];
 		$this->chars = yaml_parse_file('gen4chars.yml');
@@ -28,7 +113,7 @@ class gen4text implements Iterator {
 	}
 	private function getline($file, $line) {
 		if ($this->cachedfilename !== $file) {
-			$this->cachedfile = $this->narc->getfile($file);
+			$this->cachedfile = $this->narc[$file];
 			$this->cachedfilename = $file;
 		}
 		$header = unpack('ventries/vkey', substr($this->cachedfile, 0, 4));
@@ -74,18 +159,5 @@ class gen4text implements Iterator {
 		}
 		return $output;
 	}
-	function rewind() { $this->fileid = 0; }
-	function current() { return $this->fetchfile($this->fileid); }
-	function key() { return $this->fileid; }
-	function next() { ++$this->fileid; }
-	function valid() { return $this->fileid < $this->numfiles;}
-}
-function readshort_str(&$data, $offset) {
-	$b = unpack('v', substr($data,$offset, 4));
-	return $b[1];
-}
-function readint_str(&$data, $offset) {
-	$b = unpack('V', substr($data,$offset, 4));
-	return $b[1];
 }
 ?>

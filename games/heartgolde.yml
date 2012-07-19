@@ -1,0 +1,61 @@
+---
+text:
+  File Map:
+    Accessory Names: 216
+    Item Descriptions: 221
+    Item Names: 222
+    Pokemon Names: 237
+    Area Names: 279
+    Ability Names: 720
+    Capitalized Ability Names: 721
+    Ability Descriptions: 722
+    Trainer Names: 729
+    Trainer Classes: 730
+    Move Descriptions: 749
+    Move Names: 750
+    Capitalized Move Names: 751
+    Pokedex Entries: 805
+    Species Names: 823
+  Unlisted Pokemon:
+    - Unknown
+    - Unknown
+    - DEOXYS (Attack)
+    - DEOXYS (Defense)
+    - DEOXYS (Speed)
+    - WORMADAM (Sandy)
+    - WORMADAM (Trash)
+    - GIRATINA (Origin)
+    - SHAYMIN (Sky)
+    - ROTOM (Heat)
+    - ROTOM (Wash)
+    - ROTOM (Frost)
+    - ROTOM (Spin)
+    - ROTOM (Mow)
+  Unlisted Moves:
+    - ???
+    - ???
+    - ???
+  Unlisted Move Descriptions:
+    - ???
+    - ???
+    - ???
+narcs:
+  text: a/0/2/7
+  sprites: a/0/0/4
+  mapassoc: 0/1/2
+  stats: a/0/0/2
+  levelupmovedata: a/0/3/3
+  evolutiondata: a/0/3/4
+  movedata: a/0/1/1
+  itemdata: a/0/1/7
+  trainerdata: a/0/5/5
+  trainerpokemon: a/0/5/6
+  eggmoves: data/kowaza.narc
+  children: poketool/personal/pms.narc
+  areadata: a/0/3/7
+  minlevels: 2/2/7
+eggmoves: narc
+Area Data:
+  Format: gen4_2
+  Names: ~
+...

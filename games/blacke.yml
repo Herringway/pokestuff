@@ -1,0 +1,187 @@
+---
+text:
+  File Map:
+    Item Descriptions: 53
+    Item Names: 54
+    Pokemon Names: 70
+    Area Names: 89
+    Battle Types: 166
+    Ability Names: 182
+    Ability Descriptions: 183
+    Trainer Names: 190
+    Trainer Classes: 191
+    Move Descriptions: 202
+    Move Names: 203
+    Pokedex Entries: 235
+    Form Names: 244
+    Species Names: 260
+  Unlisted Pokemon:
+    - Deoxys (Attack)
+    - Deoxys (Defense)
+    - Deoxys (Speed)
+    - Wormadam (Sandy)
+    - Wormadam (Trash)
+    - Shaymin (Sky)
+    - Giratina (Origin)
+    - Rotom (Heat)
+    - Rotom (Wash)
+    - Rotom (Frost)
+    - Rotom (Spin)
+    - Rotom (Mow)
+    - Castform (Sunny)
+    - Castform (Rainy)
+    - Castform (Hailing)
+    - Basculin
+    - Darmanitan (Zen)
+    - Meloetta (Step)
+narcs:
+  systemtext: 0/0/2
+  storytext: 0/0/3
+  sprites: 0/0/4
+  mapassoc: 0/1/2
+  stats: 0/1/6 
+  platgrowtbl: 0/1/7
+  levelupmovedata: 0/1/8
+  evolutiondata: 0/1/9
+  baby: 0/2/0
+  movedata: 0/2/1
+  itemdata: 0/2/4
+  trainerdata: 0/9/2
+  trainerpokemon: 0/9/3
+  eggmovedata: 1/2/3
+  areadata: 1/2/6
+  minlevels: 2/2/7
+Area Data:
+  Separators:
+    - 14
+    - 26
+    - 38
+    - 43
+    - 48
+    - 53
+  Labels:
+    - Grass
+    - Deep Grass
+    - Uncommon
+    - Surfing
+    - Deep Surfing
+    - Fishing
+    - Deep Fishing
+  Seasons:
+  - Spring
+  - Summer
+  - Autumn
+  - Winter
+  Names:
+    0: ???
+    1: ???
+    2: ???
+    3: Dreamyard
+    4: Dreamyard (Basement)
+    5: Pinwheel Forest (Outside)
+    6: Pinwheel Forest (Inside)
+    7: Desert Resort (Entrance)
+    8: Desert Resort (Desert)
+    9: Relic Castle (B1F)
+    10: Relic Castle (B2F)
+    11: Relic Castle (B3F)
+    12: Relic Castle (B4F)
+    13: Relic Castle (B5F)
+    14: Relic Castle (B6F)
+    15: Relic Castle (???)
+    16: Relic Castle (???)
+    17: Relic Castle (???)
+    18: Relic Castle (???)
+    19: Relic Castle (???)
+    20: Relic Castle (???)
+    21: Relic Castle (???)
+    22: Relic Castle (???)
+    23: Relic Castle (???)
+    24: Relic Castle (???)
+    25: Relic Castle (???)
+    26: Relic Castle (???)
+    27: Relic Castle (???)
+    28: Relic Castle (???)
+    29: Relic Castle (???)
+    30: Relic Castle (Sanctum?)
+    31: Relic Castle (Sanctum?)
+    32: Relic Castle (???)
+    33: Relic Castle (???)
+    34: Relic Castle (???)
+    35: Relic Castle (???)
+    36: Relic Castle (???)
+    37: Relic Castle (???)
+    38: Relic Castle (???)
+    39: Relic Castle (???)
+    40: Cold Storage (Outside)
+    41: Chargestone Cave (1F)
+    42: Chargestone Cave (B1F)
+    43: Chargestone Cave (B2F)
+    44: Twist Mountain (???)
+    45: Twist Mountain (???)
+    46: Twist Mountain (???)
+    47: Twist Mountain (???)
+    48: Dragonspiral Tower (Entrance)
+    49: Dragonspiral Tower (Outside)
+    50: Dragonspiral Tower (1F)
+    51: Dragonspiral Tower (2F)
+    52: Victory Road (Outside)
+    53: Victory Road (1F)
+    54: Victory Road
+    55: Victory Road
+    56: Victory Road
+    57: Victory Road
+    58: Victory Road (3F)
+    59: Victory Road
+    60: Victory Road
+    61: Victory Road
+    62: Victory Road
+    63: Victory Road
+    64: Victory Road
+    65: Victory Road
+    66: Victory Road
+    67: Victory Road
+    68: Giant Chasm (Outside)
+    69: Giant Chasm (Cave)
+    70: Giant Chasm (Plains)
+    71: Giant Chasm (Inner Cave)
+    72: Route 17
+    73: Undella Bay
+    74: Driftveil Drawbridge
+    75: Village Bridge
+    76: Marvelous Bridge
+    77: Route 1
+    78: Route 2
+    79: Route 3
+    80: Wellspring Cave (1F)
+    81: Wellspring Cave (B1F)
+    82: Route 4
+    83: Route 5
+    84: Route 6
+    85: Mistralton Cave (1F)
+    86: Mistralton Cave (2F)
+    87: Mistralton Cave (3F)
+    88: Route 7
+    89: Celestial Tower (2F)
+    90: Celestial Tower (3F)
+    91: Celestial Tower (4F)
+    92: Celestial Tower (5F)
+    93: Route 8
+    94: Route 8
+    95: Route 9
+    96: Challenger's Cave (1F)
+    97: Challenger's Cave (2F)
+    98: Challenger's Cave (3F)
+    99: Route 10
+    100: Route 10 (???)
+    101: Route 11
+    102: Route 12
+    103: Route 13
+    104: Route 14
+    105: Abundant Shrine
+    106: Route 15
+    107: Route 16
+    108: Lostlorn Forest
+    109: Route 18
+    110: Undella Town
+...

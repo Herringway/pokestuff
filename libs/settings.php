@@ -5,6 +5,10 @@ class settings implements arrayaccess {
 	private $writefile;
 	private $defaults = array(
 		'cache' => true,
+		'defaultgame' => 'blacke',
+		'defaultmod' => 'stats',
+		'debug' => false,
+		'Default Output Format' => 'twig',
 		'flushcache' => false);
 	public function __construct($filename = 'settings.yml') {
 		$this->writefile = $filename;

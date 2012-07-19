@@ -1,0 +1,102 @@
+﻿---
+text:
+  File Map:
+    Item Descriptions: 63
+    Item Names: 64
+    Pokemon Names: 90
+    Area Names: 109
+    Battle Types: 357
+    Ability Names: 374
+    Ability Descriptions: 375
+    Trainer Names: 382
+    Trainer Classes: 383
+    Move Descriptions: 402
+    Move Names: 403
+    Pokedex Entries: 442
+    Form Names: 450
+    Species Names: 464
+  Unlisted Pokemon:
+    - デオキシス (Attack)
+    - デオキシス (Defense)
+    - デオキシス (Speed)
+    - Wormadam (Sandy)
+    - Wormadam (Trash)
+    - Shaymin (Sky)
+    - Giratina (Origin)
+    - Rotom (Heat)
+    - Rotom (Wash)
+    - Rotom (Frost)
+    - Rotom (Spin)
+    - Rotom (Mow)
+    - Castform (Sunny)
+    - Castform (Rainy)
+    - Castform (Hailing)
+    - Basculin
+    - Darmanitan (Zen)
+    - Meloetta (Step)
+    - Kyurem (White)
+    - Kyurem (Black)
+    - Keldeo (Resolution)
+    - Tornadus (Therian)
+    - Thundurus (Therian)
+    - Landorus (Therian)
+narcs:
+  systemtext: 0/0/2
+  storytext: 0/0/3
+  sprites: 0/0/4
+  mapassoc: 0/1/2
+  stats: 0/1/6 
+  platgrowtbl: 0/1/7
+  levelupmovedata: 0/1/8
+  evolutiondata: 0/1/9
+  baby: 0/2/0
+  movedata: 0/2/1
+  itemdata: 0/2/4
+  trainerdata: 0/9/1
+  trainerpokemon: 0/9/2
+  eggmovedata: 1/2/4
+  areadata: 1/2/7
+  minlevels: 2/2/7
+Area Data:
+  Separators:
+    - 14
+    - 26
+    - 38
+    - 43
+    - 48
+    - 53
+  Labels:
+    - Grass
+    - Deep Grass
+    - Uncommon
+    - Surfing
+    - Deep Surfing
+    - Fishing
+    - Deep Fishing
+  Seasons:
+  - Spring
+  - Summer
+  - Autumn
+  - Winter
+  Names:
+    45: サンギぼくじょう
+Original Forms:
+  685: 386
+  686: 386
+  687: 386
+  688: 413
+  689: 413
+  690: 492
+  691: 487
+  692: 479
+  693: 479
+  694: 479
+  695: 479
+  696: 479
+  697: 351
+  698: 351
+  699: 351
+  700: 550
+  701: 555
+  702: 648
+...

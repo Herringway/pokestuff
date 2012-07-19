@@ -1,26 +1,22 @@
 <?php
 class moves {
+	const name = 'Move List';
 	function execute() {
-		global $gamemod;
+		global $gamemod, $argv, $cache;
 		$output = array();
-		$ceiling = $gamemod->getNumberMoves();
-		if (isset($GLOBALS['argv'][2])) {
-			$moveid = max(0,min($ceiling,intval($GLOBALS['argv'][2])));
-			$output = $gamemod->getMove($moveid);
-			$output['name'] = $gamemod->getMoveName($moveid);
-		} else {
-			for ($i = 0; $i < $ceiling; $i++) {
-				$tmp = $gamemod->getMove($i, false);
-				$tmp['name'] = $gamemod->getMoveName($i);
-				$output[] = $tmp;
-			}
-		}
+		$floor = 0;
+		$limit = $gamemod->getCount('movedata')-1;
+		$ceiling = $limit;
+		if (isset($argv[2]))
+			list($floor,$ceiling) = rangeStringToRange($argv[2],0,$limit);
+			
+		for ($moveid = $floor; $moveid <= $ceiling; $moveid++)
+			$output[] = $gamemod->getMoveCached($moveid);
+				
 		return $output;
 	}
 	function getMode() {
-		if (isset($GLOBALS['argv'][2]))
-			return 'move';
-		return 'movelist';
+		return 'moves';
 	}
 }
 ?>
