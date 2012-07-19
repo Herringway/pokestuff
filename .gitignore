@@ -1,0 +1,6 @@
+settings.yml
+games/*.nds
+games/*.gba
+games/*.gb
+games/*.gbc
+images/*
