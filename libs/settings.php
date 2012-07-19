@@ -8,7 +8,7 @@ class settings implements arrayaccess {
 		'defaultgame' => 'blacke',
 		'defaultmod' => 'stats',
 		'debug' => false,
-		'Default Output Format' => 'twig',
+		'Default Output Format' => 'html',
 		'flushcache' => false);
 	public function __construct($filename = 'settings.yml') {
 		$this->writefile = $filename;

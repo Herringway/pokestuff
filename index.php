@@ -28,8 +28,6 @@ if (isset($argv[0])) {
 
 	} else if ($formatdetect[count($formatdetect)-1] == 'yml')
 		$format = 'yml';
-	else if ($formatdetect[count($formatdetect)-1] == 'test')
-		$format = 'twig';
 	else if ($formatdetect[count($formatdetect)-1] == 'json')
 		$format = 'json';
 	if ($format != $settings['Default Output Format'])
@@ -85,12 +83,7 @@ if ($settings['debug']) {
 		ChromePhp::log('Execution stats: ', $gamemod->getExecutionStats());
 }
 switch($format) {
-	case 'dwoo':
-		header('Content-Type: text/html; charset=utf-8');
-		require_once 'Dwoo/dwooAutoload.php';
-		$dwoo = new Dwoo();
-		$dwoo->output('dwoo_templates/'.$datamod->getMode().'.tpl', array('game' => $game::name, 'debug' => $settings['debug'], 'mod' => $mod, 'gameid' => $game, 'games' => $games, 'mods' => $mods, 'generation' => $game::generation, 'data' => $data)); break;
-	case 'twig':
+	case 'html':
 		require_once 'Twig/Autoloader.php';
 		Twig_Autoloader::register();
 		header('Content-Type: text/html; charset=utf-8');
