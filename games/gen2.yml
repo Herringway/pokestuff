@@ -1,0 +1,130 @@
+---
+Types:
+  0: 
+    Name: Normal
+    Category: 0
+  1: 
+    Name: Fight
+    Category: 0
+  2: 
+    Name: Flying
+    Category: 0
+  3: 
+    Name: Poison
+    Category: 0
+  4: 
+    Name: Ground
+    Category: 0
+  5: 
+    Name: Rock
+    Category: 0
+  7: 
+    Name: Bug
+    Category: 0
+  8: 
+    Name: Ghost
+    Category: 0
+  9:
+    Name: Steel
+    Category: 0
+  19:
+    Name: Unknown
+    Category: 2
+  20: 
+    Name: Fire
+    Category: 1
+  21: 
+    Name: Water
+    Category: 1
+  22: 
+    Name: Grass
+    Category: 1
+  23: 
+    Name: Electric
+    Category: 1
+  24: 
+    Name: Psychic
+    Category: 1
+  25: 
+    Name: Ice
+    Category: 1
+  26: 
+    Name: Dragon
+    Category: 1
+  27:
+    Name: Dark
+    Category: 1
+Text Table:
+  0x7F: ' '
+  0x80: A
+  0x81: B
+  0x82: C
+  0x83: D
+  0x84: E
+  0x85: F
+  0x86: G
+  0x87: H
+  0x88: I
+  0x89: J
+  0x8A: K
+  0x8B: L
+  0x8C: M
+  0x8D: 'N'
+  0x8E: O
+  0x8F: P
+  0x90: Q
+  0x91: R
+  0x92: S
+  0x93: T
+  0x94: U
+  0x95: V
+  0x96: W
+  0x97: X
+  0x98: 'Y'
+  0x99: Z
+  0xA0: a
+  0xA1: b
+  0xA2: c
+  0xA3: d
+  0xA4: e
+  0xA5: f
+  0xA6: g
+  0xA7: h
+  0xA8: i
+  0xA9: j
+  0xAA: k
+  0xAB: l
+  0xAC: m
+  0xAD: 'n'
+  0xAE: o
+  0xAF: p
+  0xB0: q
+  0xB1: r
+  0xB2: s
+  0xB3: t
+  0xB4: u
+  0xB5: v
+  0xB6: w
+  0xB7: x
+  0xB8: 'y'
+  0xB9: z
+  0xBA: é
+  0xBD: "'s"
+  0xE0: "'"
+  0xE3: '-'
+  0xE6: '?'
+  0xE8: '.'
+  0xEF: ♂
+  0xF4: ','
+  0xF5: ♀
+  0xF6: 0
+  0xF7: 1
+  0xF8: 2
+  0xF9: 3
+  0xFA: 4
+  0xFB: 5
+  0xFC: 6
+  0xFD: 7
+  0xFE: 8
+  0xFF: 9
+...

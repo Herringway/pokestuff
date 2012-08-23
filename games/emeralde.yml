@@ -28,13 +28,13 @@ Tables:
     - Csdef
     - C2type
     - Ccapturerate
-    - CbaseEXP
+    - Cxprate
     - vEVraw
     - v2item
-    - CgenderRatio
-    - Chatchrate
+    - Cfemalechance
+    - Chatchsteps
     - Cbasehappiness
-    - Cunknown
+    - Cgrowthrate
     - C2egggrp
     - C2ability
     - Crunrate

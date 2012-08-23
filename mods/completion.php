@@ -95,5 +95,8 @@ class completion {
 	function getMode() {
 		return 'completion';
 	}
+	function getHTMLDependencies() {
+		return array();
+	}
 }
 ?>

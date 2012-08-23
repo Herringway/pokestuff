@@ -3,7 +3,6 @@ require_once 'libs/cache.php';
 require_once 'libs/settings.php';
 require_once 'libs/misc.php';
 require_once 'libs/chromephp/ChromePhp.php';
-
 $settings = new settings('settings.yml');
 
 $cache = new cache();
@@ -30,6 +29,12 @@ if (isset($argv[0])) {
 		$format = 'yml';
 	else if ($formatdetect[count($formatdetect)-1] == 'json')
 		$format = 'json';
+	else if ($formatdetect[count($formatdetect)-1] == 'png')
+		$format = 'png';
+	else if ($formatdetect[count($formatdetect)-1] == 'gif')
+		$format = 'gif';
+	else if ($formatdetect[count($formatdetect)-1] == 'jpg')
+		$format = 'jpg';
 	if ($format != $settings['Default Output Format'])
 		$argv[count($argv)-1] = implode('.', array_slice($formatdetect, 0, count($formatdetect)-1));
 }
@@ -62,17 +67,22 @@ if (file_exists('mods/'.$game.'.php')) {
 } else {
 	if (!file_exists('games/'.$game.'.php'))
 		throw new Exception('Game not found');
-	if (!file_exists('mods/'.$mod.'.php'))
-		throw new Exception(sprintf('Mod %s not found', $mod));
+	$argv[0] = $game;
+	$gamecfg = array();
+	if (file_exists('games/'.$game::generation.'.yml'))
+		$gamecfg = yaml_parse_file('games/'.$game::generation.'.yml');
+	if (file_exists('games/'.$game.'.yml'))
+		$gamecfg += yaml_parse_file('games/'.$game.'.yml');
+	$gamemod = new $game();
+	if (!file_exists('mods/'.$mod.'.php')) {
+		if (($nmod = $gamemod->findAppropriateMod(urldecode($mod))) !== false) {
+			$mod = $nmod;
+			array_splice($argv, 1, 0, $mod);
+		} else
+			throw new Exception(sprintf('Mod %s not found', $mod));
+	}
 }
-$argv[0] = $game;
 $argv[1] = $mod;
-$gamecfg = array();
-if (file_exists('games/'.$game::generation.'.yml'))
-	$gamecfg = yaml_parse_file('games/'.$game::generation.'.yml');
-if (file_exists('games/'.$game.'.yml'))
-	$gamecfg += yaml_parse_file('games/'.$game.'.yml');
-$gamemod = new $game();
 $datamod = new $mod();
 $data = $datamod->execute();
 if ($settings['debug']) {
@@ -86,17 +96,61 @@ switch($format) {
 	case 'html':
 		require_once 'Twig/Autoloader.php';
 		Twig_Autoloader::register();
+		require_once 'peng/twigext.php';
 		header('Content-Type: text/html; charset=utf-8');
-		$loader = new Twig_Loader_Filesystem('twig_templates');
+		$loader = new Twig_Loader_Filesystem('templates');
 		$twig = new Twig_Environment($loader, array('debug' => $settings['debug']));
 		$twig->addExtension(new Twig_Extension_Debug());
-		echo $twig->render($datamod->getMode().'.tpl', array('game' => $game::name, 'mod' => $mod, 'gameid' => $game, 'games' => $games, 'mods' => $mods, 'generation' => $game::generation, 'data' => $data)); break;
+		$twig->addExtension(new Twig_Extension_Sandbox(new Twig_Sandbox_SecurityPolicy()));
+		$twig->addExtension(new Penguin_Twig_Extensions());
+		$outputstuff = array('game' => $game::name, 'mod' => $mod, 'gameid' => $game, 'games' => $games, 'mods' => $mods, 'generation' => $game::generation, $mod => $data);
+		$wants = $datamod->getHTMLDependencies();
+		foreach ($wants as $what=>$ids)
+			foreach ($ids as $id)
+				$outputstuff[$what][$id] = $gamemod->getData($what,$id);
+		echo $twig->render($datamod->getMode().'.tpl', $outputstuff); break;
 	case 'json':
 		header('Content-Type: application/json; charset=utf-8');
 		echo json_encode($data, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE | JSON_FORCE_OBJECT); break;
 	case 'yml':
 		header('Content-Type: text/plain; charset=utf-8');
 		echo yaml_emit($data, YAML_UTF8_ENCODING, YAML_ANY_BREAK); break;
+	case 'png':
+		require 'libs/gddraw.php';
+		$outputstuff = array('game' => $game::name, 'mod' => $mod, 'gameid' => $game, 'games' => $games, 'mods' => $mods, 'generation' => $game::generation, $mod => $data);
+		$wants = $datamod->getHTMLDependencies();
+		foreach ($wants as $what=>$ids)
+			foreach ($ids as $id)
+				$outputstuff[$what][$id] = $gamemod->getData($what,$id);
+		$canvas = new GDDraw();
+		$datamod->genImage($outputstuff, $canvas);
+		header ('Content-Type: image/png');
+		$canvas->renderPNG();
+		break;
+	case 'jpg':
+		require 'libs/gddraw.php';
+		$outputstuff = array('game' => $game::name, 'mod' => $mod, 'gameid' => $game, 'games' => $games, 'mods' => $mods, 'generation' => $game::generation, $mod => $data);
+		$wants = $datamod->getHTMLDependencies();
+		foreach ($wants as $what=>$ids)
+			foreach ($ids as $id)
+				$outputstuff[$what][$id] = $gamemod->getData($what,$id);
+		$canvas = new GDDraw();
+		$datamod->genImage($outputstuff, $canvas);
+		header('Content-Type: image/jpeg');
+		$canvas->renderJPG();
+		break;
+	case 'gif':
+		require 'libs/gddraw.php';
+		$outputstuff = array('game' => $game::name, 'mod' => $mod, 'gameid' => $game, 'games' => $games, 'mods' => $mods, 'generation' => $game::generation, $mod => $data);
+		$wants = $datamod->getHTMLDependencies();
+		foreach ($wants as $what=>$ids)
+			foreach ($ids as $id)
+				$outputstuff[$what][$id] = $gamemod->getData($what,$id);
+		$canvas = new GDDraw();
+		$datamod->genImage($outputstuff, $canvas);
+		header('Content-Type: image/gif');
+		$canvas->renderGIF();
+		break;
 }
 unset($settings);
 ?>

@@ -101,21 +101,25 @@ class gen4 extends basegame {
 		$baseid = $id;
 
 		$rawdata = $this->getFile('stats', $id);
-		$poke = unpack('Chp/Catk/Cdef/Cspeed/Csatk/Csdef/C2type/Ccapturerate/Cxprate/vEVraw/v2itemID/Cfemalechance/Chatchsteps/Cbasehappiness/Cgrowthrate/C2egggrp/C2ability/Cunknownflags/Cformflags/Cformcount/Ccolour/vunknown/vheight/vweight', $rawdata);
-		for ($i = 1; $i <= 2; $i++) {
-			$poke['abilities'][$abilitytypes[$i-1]] = $poke['ability'.$i];
-			$poke['items'][$itemtypes[$i-1]] = $poke['itemID'.$i];
-		}
+		$poke = unpack('Chp/Catk/Cdef/Cspeed/Csatk/Csdef/C2type/Ccapturerate/Cxprate/vEVraw/v2itemID/Cfemalechance/Chatchsteps/Cbasehappiness/Cgrowthrate/C2egggrp/C2ability/C4unknown/C13TMs', $rawdata);
 		$poke['id'] = $id;
 		$poke['imgid'] = $id;
-		$poke['type1'] = $gamecfg['Types'][$poke['type1']];
-		$poke['type2'] = $gamecfg['Types'][$poke['type2']];
-		$poke['egggrp1'] = $gamecfg['Egg Groups'][$poke['egggrp1']];
-		$poke['egggrp2'] = $gamecfg['Egg Groups'][$poke['egggrp2']];
+		$poke['hatchsteps']++;
+		$poke['hatchsteps'] *= 255;
+		for ($i = 1; $i <= 2; $i++) {
+			$poke['abilities'][$abilitytypes[$i-1]] = $poke['ability'.$i];
+			unset($poke['ability'.$i]);
+			$poke['items'][$itemtypes[$i-1]] = $poke['itemID'.$i];
+			unset($poke['itemID'.$i]);
+			$poke['type'.$i] = $gamecfg['Types'][$poke['type'.$i]];
+			$poke['egggroups']['Egg Group '.$i] = $gamecfg['Egg Groups'][$poke['egggrp'.$i]];
+			unset($poke['egggrp'.$i]);
+		}
 		static $EVlist = array('HP', 'Attack', 'Defense', 'Speed', 'Sp. Attack', 'Sp. Defense');
 		for ($i = 0; $i < count($EVlist); $i++)
 			if (($poke['EVraw']&(3<<2*$i))>>($i*2))
 				$poke['EVs'][$EVlist[$i]] = (($poke['EVraw']&(3<<2*$i))>>($i*2));
+		unset($poke['EVraw']);
 		return $poke;
 	}
 	function getMove($id) {
@@ -241,11 +245,22 @@ class gen4 extends basegame {
 	function getMoveList($id, $level = -1) {
 		global $gamecfg;
 		$moves = array();
-		$baseid = $this->getBaseID($id);
+		//$baseid = $this->getBaseID($id);
 		$moves['Levelup'] = $this->getLevelUpMoveData($id, $level);
+		$moves['TM'] = $this->getTMMoveData($id);
 		$child = $this->getChild($id);
 		$moves['Egg'] = $this->getEggMoveData($child);
 		return $moves;
+	}
+	function getTMMoveData($id) {
+		global $gamecfg;
+		$poke = unpack('Chp/Catk/Cdef/Cspeed/Csatk/Csdef/C2type/Ccapturerate/Cxprate/vEVraw/v2itemID/Cfemalechance/Chatchsteps/Cbasehappiness/Cgrowthrate/C2egggrp/C2ability/C4unknown/C13TMs', $this->getFile('stats', $id));
+		$output = array();
+		for ($i = 0; $i < 13; $i++)
+			for ($j = 0; $j < 8; $j++)
+				if ($poke['TMs'.($i+1)] & pow(2,$j))
+					$output[] = array('Learned' => ($i*8+$j+1 > 92) ? sprintf('HM%02d',$i*8+$j-91) : sprintf('TM%02d',$i*8+$j+1), 'id' => $gamecfg['TM Map'][$i*8+$j]);
+		return $output;
 	}
 	function getItem($id) {
 		$this->loadNarc('itemdata');

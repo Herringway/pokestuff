@@ -40,5 +40,8 @@ class dumptable {
 			return 'file';
 		return 'filelist';
 	}
+	function getHTMLDependencies() {
+		return array();
+	}
 }
 ?>

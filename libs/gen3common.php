@@ -1,4 +1,4 @@
-﻿<?php
+<?php
 class gen3 extends basegame {
 	const generation = 'gen3';
 	private $file;
@@ -107,11 +107,20 @@ class gen3 extends basegame {
 		$vals = array_merge($this->getFixedDataEntry('stats', $id), $this->getFixedDataEntry('dexentries', $id), $this->getFixedDataEntry('hoenndexentries', $id));
 		$vals['id'] = $id;
 		$vals['imgid'] = $vals['ID'];
-		$vals['abilities']['Ability 1'] = $vals['ability1'];
-		$vals['abilities']['Ability 2'] = $vals['ability2'];
-		$vals['items']['Item 1'] = $vals['item1'];
-		$vals['items']['Item 2'] = $vals['item2'];
-		$vals['dexdata'] = $this->getFixedDataEntry('dexdata', $this->getBaseID($id));
+		for ($i = 1; $i <= 2; $i++) {
+			$vals['abilities']['Ability '.$i] = $vals['ability'.$i];
+			unset($vals['ability'.$i]);
+			$vals['items']['Item '.$i] = $vals['item'.$i];
+			unset($vals['item'.$i]);
+			$vals['egggroups']['Egg Group '.$i] = $gamecfg['Egg Groups'][$vals['egggrp'.$i]];
+			unset($vals['egggrp'.$i]);
+			$vals['type'.$i] = $gamecfg['Types'][$vals['type'.$i]]['Name'];
+		}
+		$dexdata = $this->getFixedDataEntry('dexdata', $this->getBaseID($id));
+		$vals['height'] = ($dexdata['Height']/10).'m';
+		$vals['weight'] = ($dexdata['Weight']/10).'kg';
+		$vals['hatchsteps']++;
+		$vals['hatchsteps'] *= 256;
 		static $EVlist = array('HP', 'Attack', 'Defense', 'Speed', 'Sp. Attack', 'Sp. Defense');
 		for ($i = 0; $i < count($EVlist); $i++)
 			if (($vals['EVraw']&(3<<2*$i))>>($i*2))

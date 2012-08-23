@@ -1,6 +1,6 @@
 {%extends "base.tpl" %}
-{% block title%}{%if data|length > 1%}Items{%else%}{{data.0.name}}{%endif%}{%endblock%}
-{% block data%}{%if data|length > 1%}
+{% block title%}{%if items|length > 1%}Items{%else%}{{items.0.name}}{%endif%}{%endblock%}
+{% block data%}{%if items|length > 1%}
 		<script type="text/javascript">
 			$(function() {
 				$("a[title]").tooltip({ position: 'center right'});
@@ -24,7 +24,7 @@
 				</tr>
 			</thead>
 			<tbody>
-{%for item in data %}
+{%for item in items %}
 				<tr>
 					<td><a href="/{{gameid}}/items/{{item.id}}">{{item.id}}</a></td>
 					<td><a href="/{{gameid}}/items/{{item.id}}">{{item.name}}</a></td>
@@ -34,5 +34,5 @@
 {%endfor%}
 		</tbody>
 		</table>{%else%}
-{{dump(data)}}{%endif%}
+{{dump(items)}}{%endif%}
 {%endblock%}

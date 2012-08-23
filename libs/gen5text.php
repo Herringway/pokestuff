@@ -42,7 +42,7 @@ class gen5text implements Iterator, ArrayAccess {
 		return $this->decrypttext(array_merge(unpack('v*', substr($this->data, $ptr, $len*2))));
 	}
 	private function decrypttext($chars) {
-		static $specchars = array(0x246D => '?', 0x246E => '?', 0x2486 => 'PK', 0x2487 => 'MN', 0xFF28 => 'H', 0xFF30 => 'P', 0xFFFE => "\n");
+		static $specchars = array(0x246D => '♂', 0x246E => '♀', 0x2486 => 'PK', 0x2487 => 'MN', 0xFF28 => 'H', 0xFF30 => 'P', 0xFFFE => "\n");
 		if ($chars == array())
 			return;
 		$chars = array_reverse($chars);

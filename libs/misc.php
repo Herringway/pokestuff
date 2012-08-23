@@ -1,5 +1,16 @@
 <?php
 class basegame {
+	public function getData($what, $id) {
+		switch ($what) {
+			case 'moves':		return $this->getMoveCached($id);
+			case 'stats':		return $this->getStatsCached($id);
+			case 'trainers':	return $this->getTrainerCached($id);
+			case 'items':		return $this->getItemCached($id);
+			case 'areas':		return $this->getAreaCached($id);
+			case 'abilities':	return $this->getAbilityCached($id);
+			default: throw new Exception('Unknown data requested');
+		}
+	}
 	public function getMoveCached($id) {
 		if (!method_exists($this, 'getMove'))
 			throw new Exception('Unsupported');
@@ -12,6 +23,17 @@ class basegame {
 			$data['name'] = $this->getTextEntry('Move Names', $id);
 			$data['description'] = $this->getTextEntry('Move Descriptions', $id);
 			$cache[sprintf('%s/moves/%d', get_class($this), $id)] = $data;
+			return $data;
+		}
+	}
+	public function getAbilityCached($id) {
+		global $cache;
+		if (isset($cache[sprintf('%s/abilities/%d', get_class($this), $id)]))
+			return $cache[sprintf('%s/abilities/%d', get_class($this), $id)];
+		else {
+			$data['name'] = $this->getTextEntry('Ability Names', $id);
+			$data['description'] = $this->getTextEntry('Ability Descriptions', $id);
+			$cache[sprintf('%s/abilities/%d', get_class($this), $id)] = $data;
 			return $data;
 		}
 	}
@@ -94,6 +116,35 @@ class basegame {
 	}
 	public function getCount($what) {
 		return 0;
+	}
+	private function _nameToID($tablename, $textfile, $name) {
+		$id = false;
+		for ($i = 0; $i < $this->getCount($tablename); $i++) {
+			$tmpnam = $this->getTextEntryCached($textfile, $i);
+			if (strtolower($tmpnam) == strtolower($name)) {
+				$id = $i;
+				break;
+			}
+		}
+		return $id;
+	}
+	public function pokemonNameToID($name) {
+		return $this->_nameToID('stats', 'Pokemon Names', $name);
+	}
+	public function moveNameToID($name) {
+		return $this->_nameToID('movedata', 'Move Names', $name);
+	}
+	public function itemNameToID($name) {
+		return $this->_nameToID('itemdata', 'Item Names', $name);
+	}
+	public function findAppropriateMod($name) {
+		if ($this->pokemonNameToID($name) !== false)
+			return 'stats';
+		if ($this->moveNameToID($name) !== false)
+			return 'moves';
+		if ($this->itemNameToID($name) !== false)
+			return 'items';
+		return false;
 	}
 }
 function kimplode($array, $glue = ': ', $separator = ', ') {

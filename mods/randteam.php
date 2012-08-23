@@ -17,5 +17,8 @@ class randteam {
 	function getMode() {
 		return 'randomteam';
 	}
+	function getHTMLDependencies() {
+		return array();
+	}
 }
 ?>

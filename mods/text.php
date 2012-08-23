@@ -8,5 +8,8 @@ class text {
 	function getMode() {
 		return 'text';
 	}
+	function getHTMLDependencies() {
+		return array();
+	}
 }
 ?>

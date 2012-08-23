@@ -181,4 +181,21 @@ Text Table:
   0xFA: '→'
   0xFE: "\n"
   0xFF: ''
+Egg Groups:
+  - Null
+  - Monster
+  - Water 1
+  - Bug
+  - Flying
+  - Field
+  - Fairy
+  - Grass
+  - Humanoid
+  - Water 3
+  - Mineral
+  - Amorphous
+  - Water 2
+  - Ditto
+  - Dragon
+  - Undiscovered
 ...
