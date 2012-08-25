@@ -6,7 +6,7 @@ class gen1 extends basegame {
 	
 	private function loadRom() {
 		if ($this->file === null)
-			$this->file = fopen('games/'.get_class($this).'.gb','r');
+			$this->file = fopen('games/'.$this->gameid.'.gb','r');
 	}
 	public function getTextEntry($what, $where) {
 		$this->loadRom();

@@ -73,7 +73,7 @@ class gen5 extends basegame {
 	}
 	function loadRom() {
 		if ($this->rom == null)
-			$this->rom = new ndsrom('games/'.get_class($this).'.nds');
+			$this->rom = new ndsrom('games/'.$this->gameid.'.nds');
 	}
 	function getBaseID($id) {
 		if (isset($GLOBALS['gamecfg']['Original Forms'][$id]))
@@ -144,7 +144,7 @@ class gen5 extends basegame {
 		for ($i = 0; $i < 7; $i++) {
 			$tmp = unpack('CType/Cunknown/vArgument/vTarget', substr($data, $i*6, 6));
 			if ($tmp['Type'] != 0) {
-				$tmp['name'] = $this->getTextEntry('Pokemon Names', $tmp['Target']);
+				$tmp['Type'] = $gamecfg['Evolution Types'][$tmp['Type']];
 				$output[] = $tmp;
 			}
 		}

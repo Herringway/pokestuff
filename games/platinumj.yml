@@ -1,6 +1,6 @@
 ---
 Title: Platinum
-Release: America
+Release: Japan
 Generation: 4
 ...
 ---
@@ -8,20 +8,19 @@ text:
   File Map:
     Gym Names: 378
     Accessory Names: 386
-    Item Descriptions: 391
-    Item Names: 392
-    Pokemon Names: 412
+    Item Descriptions: 389
+    Item Names: 390
+    Pokemon Names: 408
     Area Names: 433
-    Ability Names: 610
-    Capitalized Ability Names: 611
-    Ability Descriptions: 612
+    Ability Names: 604
+    Ability Descriptions: 604
     Trainer Names: 618
     Trainer Classes: 619
-    Move Descriptions: 646
-    Move Names: 647
+    Move Descriptions: 635
+    Move Names: 636
     Capitalized Move Names: 648
-    Pokedex Entries: 706
-    Species Names: 718
+    Pokedex Entries: 693
+    Species Names: 698
   Unlisted Pokemon:
     - Unknown
     - Unknown
@@ -47,6 +46,8 @@ text:
     - ???
 narcs:
   text: msgdata/pl_msg.narc
+  sprites: 0/0/4
+  mapassoc: 0/1/2
   stats: poketool/personal/pl_personal.narc
   levelupmovedata: poketool/personal/wotbl.narc
   evolutiondata: poketool/personal/evo.narc
@@ -57,6 +58,7 @@ narcs:
   eggmoves: OVERLAYS/9/5
   children: poketool/personal/pms.narc
   areadata: fielddata/encountdata/pl_enc_data.narc
+  minlevels: 2/2/7
 Egg Moves Offset: 0x29222
 Area Data:
   Format: gen4_1

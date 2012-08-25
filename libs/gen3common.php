@@ -5,7 +5,7 @@ class gen3 extends basegame {
 	
 	function loadRom() {
 		if ($this->file === null)
-			$this->file = fopen('games/'.get_class($this).'.gba','r');
+			$this->file = fopen('games/'.$this->gameid.'.gba','r');
 	}
 	function getCount($what) {
 		global $gamecfg;

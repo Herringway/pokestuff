@@ -388,4 +388,33 @@ Move Effects:
   321: Raises [STAT1] [STAT1DELTA] stages
   322: Raises user's [STAT1] [STAT1DELTA] stages, [STAT2] [STAT2DELTA] stages, and [STAT3] [STAT3DELTA] stages
   332: Charges for one turn, [EFFECTCHANCE]% chance to inflict [STATUS]
+Evolution Types:
+  0: 'None'
+  1: 'Happiness'
+  2: 'Daytime+Happiness'
+  3: 'Nighttime+Happiness'
+  4: 'Levelup'
+  5: 'Traded'
+  6: 'Traded+Item'
+  7: 'Traded For Specific Pokemon'
+  8: 'Item'
+  9 : 'Attack > Defense'
+  10: 'Attack = Defense'
+  11: 'Attack < Defense'
+  12: 'Levelup+Personality < 5'
+  13: 'Levelup+Personality > 4'
+  14: 'Levelup+Multiple Evolution'
+  15: 'Levelup+Space in Party'
+  16: 'Beauty'
+  17: 'Item+Male'
+  18: 'Item+Female'
+  19: 'Holding+Daytime'
+  20: 'Holding+Nighttime'
+  21: 'Move'
+  22: 'Party Contains'
+  23: 'Levelup+Male'
+  24: 'Levelup+Female'
+  25: 'Levelup+Chargestone Cave'
+  26: 'Levelup+Mossy Rock'
+  27: 'Levelup+Ice Rock'
 ...

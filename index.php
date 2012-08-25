@@ -42,10 +42,10 @@ $game = isset($argv[0]) ? $argv[0] : $settings['defaultgame'];
 $mod = isset($argv[1]) ? $argv[1] : $settings['defaultmod'];
 $gamesdir = opendir('games');
 while (false !== ($entry = readdir($gamesdir))) {
-		if ($entry != "." && $entry != ".." && (substr($entry, -3) == 'php')) {
-			include_once 'games/'.$entry;
+		if ($entry != "." && $entry != ".." && (substr($entry, -3) == 'yml')) {
+			$gameinfo = yaml_parse_file('games/'.$entry,0);
 			$modname = substr($entry,0,-4);
-			$games[] = array('id' => $modname, 'name' => $modname::name, 'locale' => $modname::locale);
+			$games[] = array('id' => $modname, 'name' => $gameinfo['Title'], 'locale' => $gameinfo['Release']);
 		}
 	}
 closedir($gamesdir);
@@ -65,15 +65,17 @@ if (file_exists('mods/'.$game.'.php')) {
 	$mod = $game;
 	$game = 'all';
 } else {
-	if (!file_exists('games/'.$game.'.php'))
-		throw new Exception('Game not found');
+	if (!file_exists('games/'.$game.'.yml'))
+		throw new Exception('Game not found ('.$game.')');
+	$gameinfo = yaml_parse_file('games/'.$game.'.yml',0);
+	require_once 'libs/gen'.$gameinfo['Generation'].'common.php';
 	$argv[0] = $game;
 	$gamecfg = array();
-	if (file_exists('games/'.$game::generation.'.yml'))
-		$gamecfg = yaml_parse_file('games/'.$game::generation.'.yml');
-	if (file_exists('games/'.$game.'.yml'))
-		$gamecfg += yaml_parse_file('games/'.$game.'.yml');
-	$gamemod = new $game();
+	if (file_exists('libs/gen'.$gameinfo['Generation'].'.yml'))
+		$gamecfg = yaml_parse_file('libs/gen'.$gameinfo['Generation'].'.yml');
+	$gamecfg += yaml_parse_file('games/'.$game.'.yml',1);
+	$mname = 'gen'.$gameinfo['Generation'];
+	$gamemod = new $mname($game);
 	if (!file_exists('mods/'.$mod.'.php')) {
 		if (($nmod = $gamemod->findAppropriateMod(urldecode($mod))) !== false) {
 			$mod = $nmod;
@@ -103,7 +105,7 @@ switch($format) {
 		$twig->addExtension(new Twig_Extension_Debug());
 		$twig->addExtension(new Twig_Extension_Sandbox(new Twig_Sandbox_SecurityPolicy()));
 		$twig->addExtension(new Penguin_Twig_Extensions());
-		$outputstuff = array('game' => $game::name, 'mod' => $mod, 'gameid' => $game, 'games' => $games, 'mods' => $mods, 'generation' => $game::generation, $mod => $data);
+		$outputstuff = array('game' => $gameinfo['Title'], 'mod' => $mod, 'gameid' => $game, 'games' => $games, 'mods' => $mods, 'generation' => 'gen'.$gameinfo['Generation'], $mod => $data);
 		$wants = $datamod->getHTMLDependencies();
 		foreach ($wants as $what=>$ids)
 			foreach ($ids as $id)

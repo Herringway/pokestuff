@@ -1,5 +1,6 @@
 <?php
 class basegame {
+	protected $gameid;
 	public function getData($what, $id) {
 		switch ($what) {
 			case 'moves':		return $this->getMoveCached($id);
@@ -145,6 +146,9 @@ class basegame {
 		if ($this->itemNameToID($name) !== false)
 			return 'items';
 		return false;
+	}
+	function __construct($id) {
+		$this->gameid = $id;
 	}
 }
 function kimplode($array, $glue = ': ', $separator = ', ') {

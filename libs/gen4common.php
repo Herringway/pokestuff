@@ -5,7 +5,6 @@ class gen4 extends basegame {
 	private $textdata;
 	private $narcs;
 	private $rom;
-	const generation = 'gen4';
 	
 	function listTables() {
 		$this->loadRom();
@@ -77,7 +76,7 @@ class gen4 extends basegame {
 	}
 	function loadRom() {
 		if ($this->rom == null)
-			$this->rom = new ndsrom('games/'.get_class($this).'.nds');
+			$this->rom = new ndsrom('games/'.$this->gameid.'.nds');
 	}
 	function loadNarc($name) {
 		global $gamecfg;
