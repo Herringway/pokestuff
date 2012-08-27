@@ -89,7 +89,7 @@
 						{{macros.typeimage(poke.type1)}}{%if poke.type1 != poke.type2%}{{macros.typeimage(poke.type2)}}{%endif%}<br />
 						{{poke.species}}<br />
 						{{poke.pokedex|replace({"\n": ' '})}}<br />
-						<audio controls="controls"><source src="/audio/cries/{{poke.id}}.ogg" /></audio><br />
+						<audio controls="controls"><source src="/audio/cries/{{poke.id}}.ogg" type="audio/ogg" /></audio><br />
 						{%for ability in poke.abilities%}{%if loop.first != true%}{%if ability%}/{%endif%}{%endif%}<a title="{{abilities[ability].description|nl2br|replace({"\n": ' '})}}">{{abilities[ability].name}}</a>{%endfor%}<br />
 {%for evo in poke.evolutions%}
 						Evolves into <a href="/{{gameid}}/stats/{{evo.Target}}">{{evo.name}}</a> ({{evo.Argument}})<br />

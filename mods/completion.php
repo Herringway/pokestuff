@@ -4,7 +4,7 @@ class completion {
 	function execute() {
 		global $gamemod;
 		try {
-			$data = $gamemod->getStatsCached(1);
+			$data = $gamemod->getData('stats',1);
 			$unknowns = 0;
 			foreach ($data as $k=>$v)
 				if (substr($k, 0, 7) == 'unknown')
@@ -23,7 +23,7 @@ class completion {
 		$output['Stats Data'] = array('status' => $status, 'mod' => 'stats');
 		$status = array();
 		try {
-			$data = $gamemod->getMoveCached(1);
+			$data = $gamemod->getData('moves',1);
 			$unknowns = 0;
 			foreach ($data as $k=>$v)
 				if (substr($k, 0, 7) == 'unknown')
@@ -38,7 +38,7 @@ class completion {
 		$output['Move Data'] = array('status' => $status, 'mod' => 'moves');
 		$status = array();
 		try {
-			$data = $gamemod->getItemCached(1);
+			$data = $gamemod->getData('items',1);
 			$unknowns = 0;
 			foreach ($data as $k=>$v)
 				if (substr($k, 0, 7) == 'unknown')
@@ -53,7 +53,7 @@ class completion {
 		$output['Item Data'] = array('status' => $status, 'mod' => 'items');
 		$status = array();
 		try {
-			$data = $gamemod->getTrainerCached(1);
+			$data = $gamemod->getData('trainers',1);
 			$unknowns = 0;
 			foreach ($data as $k=>$v)
 				if (substr($k, 0, 7) == 'unknown')
@@ -68,7 +68,7 @@ class completion {
 		$output['Trainer Data'] = array('status' => $status, 'mod' => 'trainers');
 		$status = array();
 		try {
-			$data = $gamemod->getAreaCached(1);
+			$data = $gamemod->getData('areas',1);
 			$unknowns = 0;
 			foreach ($data as $k=>$v)
 				if (substr($k, 0, 7) == 'unknown')

@@ -100,7 +100,7 @@ class gen1 extends basegame {
 	public function getItem($id) {
 		$this->loadRom();
 		$output = array();
-		//$output['value'] = $this->readShort(0x4606 + $id*4);
+		$output['value'] = $this->readByte(0x4606 + $id*2+1);
 		return $output;
 	}
 	public function getMove($id) {
@@ -109,9 +109,9 @@ class gen1 extends basegame {
 		fseek($this->file, 0x38000 + $id * 6);
 		$data = fread($this->file, 6);
 		$output = unpack('Crid/Ceffect/Cpower/Ctypeid/Caccuracy/Cpp', $data);
-		$output['type'] = $gamecfg['Types'][$output['typeid']]['Name'];
+		$output['type'] = isset($gamecfg['Types'][$output['typeid']]['Name']) ? $gamecfg['Types'][$output['typeid']]['Name'] : 'Unknown';
 		$output['accuracy'] =  intval(100 * $output['accuracy'] / 256);
-		$output['category'] = $gamecfg['Types'][$output['typeid']]['Category'];
+		$output['category'] = isset($gamecfg['Types'][$output['typeid']]['Category']) ? $gamecfg['Types'][$output['typeid']]['Category'] : 2;
 		$output['priority'] = 0;
 		return $output;
 	}
@@ -134,7 +134,7 @@ class gen1 extends basegame {
 			fseek($this->file, 0x425B);
 		//echo ftell($this->file);
 		$data = fread($this->file, 0x1C);
-		$output = unpack('Cid/Chp/Catk/Cdef/Cspeed/Csatk/C2type/Ccapturerate/Cxprate/C9unknown/Cgrowthrate', $data);
+		$output = unpack('Cid/Chp/Catk/Cdef/Cspeed/Csatk/C2type/Ccapturerate/Cxprate/Cspritedimension/vFrontSpritePtr/vBackSpritePtr/C4wildmoves/Cgrowthrate', $data);
 		for ($i = 1; $i <= 2; $i++) {
 			if (isset($gamecfg['Types'][$output['type'.$i]]['Name']))
 				$output['type'.$i] = $gamecfg['Types'][$output['type'.$i]]['Name'];
@@ -188,12 +188,17 @@ class gen1 extends basegame {
 			$output['Levelup'][] = array('Learned' => 'Level '.($move&0xFF), 'id' => ($move>>8));
 		}*/
 		if ($id != 151)
-			$o = (0x383DE + $id * 0x1C) + 20;
+			$o = (0x383DE + $id * 0x1C) + 15;
 		else
-			$o = 0x425B + 20;
-		//B/R: 13773 G: 12276 Y: 1232D 
-		for ($i = 0; $i < 7; $i++) {
+			$o = 0x425B + 15;
+		//B/R: 13773 G: 12276 Y: 1232D
+		for ($i = 0; $i < 4; $i++) {
 			$byte = $this->readByte($o+$i);
+			if ($byte != 0)
+				$output['WILD'][] = array('Learned' => 'WILD', 'id' => $byte);
+		}
+		for ($i = 0; $i < 7; $i++) {
+			$byte = $this->readByte($o+$i+5);
 			for ($j = 0; $j < 8; $j++) {
 				if ($i*8+$j > 54)
 					break;

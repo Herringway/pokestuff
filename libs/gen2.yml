@@ -18,6 +18,9 @@ Types:
   5: 
     Name: Rock
     Category: 0
+  6:
+    Name: Bird
+    Category: 2
   7: 
     Name: Bug
     Category: 0

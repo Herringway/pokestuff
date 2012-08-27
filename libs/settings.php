@@ -9,6 +9,7 @@ class settings implements arrayaccess {
 		'defaultmod' => 'stats',
 		'debug' => false,
 		'Default Output Format' => 'html',
+		'font' => 'togoshi-monago.ttf',
 		'flushcache' => false);
 	public function __construct($filename = 'settings.yml') {
 		$this->writefile = $filename;

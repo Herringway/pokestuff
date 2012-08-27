@@ -25,6 +25,7 @@ class items {
 		return array();
 	}
 	function genImage($data, &$canvas) {
+		global $settings;
 		$bgcolor = 0xE0E0E0;
 		$bordercolor = 0x000000;
 		$textcolor = 0x000000;
@@ -33,7 +34,7 @@ class items {
 		$canvas->drawRectangle(48, 48, 32, 32, $bgcolor, $bordercolor, 10);
 		$sprite = sprintf('images/items/%s.png', strtolower(str_replace(array(' ', '.', 'é'), array('-', '', 'e'), $data['items'][0]['name'])));
 		$canvas->copyImage($sprite, 64, 64, true);
-		$canvas->drawTextCentered($data['items'][0]['name'], 10, 64, 96, $textcolor, 'ARIALUNI.TTF');
+		$canvas->drawTextCentered($data['items'][0]['name'], 10, 64, 96, $textcolor, $settings['font']);
 	}
 }
 ?>
