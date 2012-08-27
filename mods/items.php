@@ -14,7 +14,7 @@ class items {
 				$floor = $ceiling = $gamemod->itemNameToID(urldecode($argv[2]));
 		}
 		for ($moveid = $floor; $moveid <= $ceiling; $moveid++)
-			$output[] = $gamemod->getItemCached($moveid);
+			$output[] = $gamemod->getData('items',$moveid);
 				
 		return $output;
 	}
@@ -29,20 +29,11 @@ class items {
 		$bordercolor = 0x000000;
 		$textcolor = 0x000000;
 		$canvas->setSize(128,128);
-		$canvas->drawRectangle(2, 2, 126, 126, $bgcolor, $bordercolor, 10);
-		$canvas->drawRectangle(48, 48, 80, 80, $bgcolor, $bordercolor, 10);
+		$canvas->drawRectangle(2, 2, 124, 124, $bgcolor, $bordercolor, 10);
+		$canvas->drawRectangle(48, 48, 32, 32, $bgcolor, $bordercolor, 10);
 		$sprite = sprintf('images/items/%s.png', strtolower(str_replace(array(' ', '.', 'é'), array('-', '', 'e'), $data['items'][0]['name'])));
 		$canvas->copyImage($sprite, 64, 64, true);
-		$canvas->drawText($data['items'][0]['name'], 96, 96, $textcolor, 'ARIALUNI.TTF');
-	}
-	function genCairo($data, $type) {
-		if ($type != 'svg')
-			$surface = new CairoImageSurface(CairoFormat::ARGB32, 128, 128);
-		else
-			$surface = new CairoSVGSurface('php://output', 128, 128);
-		$canvas = new CairoContext($s);
-		CairoRoundedRectangle($canvas, 2, 2, $canvasx-4, $canvasy-4, 10, 0);
-		return $surface;
+		$canvas->drawTextCentered($data['items'][0]['name'], 10, 64, 96, $textcolor, 'ARIALUNI.TTF');
 	}
 }
 ?>

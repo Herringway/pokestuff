@@ -12,7 +12,7 @@ class basegame {
 			default: throw new Exception('Unknown data requested');
 		}
 	}
-	public function getMoveCached($id) {
+	protected function getMoveCached($id) {
 		if (!method_exists($this, 'getMove'))
 			throw new Exception('Unsupported');
 		global $cache;
@@ -27,7 +27,7 @@ class basegame {
 			return $data;
 		}
 	}
-	public function getAbilityCached($id) {
+	protected function getAbilityCached($id) {
 		global $cache;
 		if (isset($cache[sprintf('%s/abilities/%d', get_class($this), $id)]))
 			return $cache[sprintf('%s/abilities/%d', get_class($this), $id)];
@@ -38,7 +38,7 @@ class basegame {
 			return $data;
 		}
 	}
-	public function getStatsCached($id) {
+	protected function getStatsCached($id) {
 		if (!method_exists($this, 'getStats'))
 			throw new Exception('Unsupported');
 		global $cache;
@@ -62,7 +62,7 @@ class basegame {
 			return $data;
 		}
 	}
-	public function getTrainerCached($id) {
+	protected function getTrainerCached($id) {
 		if (!method_exists($this, 'getTrainerData'))
 			throw new Exception('Unsupported');
 		global $cache;
@@ -77,7 +77,7 @@ class basegame {
 			return $data;
 		}
 	}
-	public function getItemCached($id) {
+	protected function getItemCached($id) {
 		if (!method_exists($this, 'getItem'))
 			throw new Exception('Unsupported');
 		global $cache;
@@ -92,7 +92,7 @@ class basegame {
 			return $data;
 		}
 	}
-	public function getAreaCached($id) {
+	protected function getAreaCached($id) {
 		if (!method_exists($this, 'getArea'))
 			throw new Exception('Unsupported');
 		global $cache;
@@ -105,7 +105,7 @@ class basegame {
 			return $data;
 		}
 	}
-	public function getTextEntryCached($name, $id) {
+	protected function getTextEntryCached($name, $id) {
 		global $cache;
 		if (isset($cache[sprintf('%s/text/%s/%d', get_class($this), $name, $id)]))
 			return $cache[sprintf('%s/text/%s/%d', get_class($this), $name, $id)];

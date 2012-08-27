@@ -3,7 +3,7 @@ class stats {
 	private $wants = array();
 	const name = 'Stats';
 	function execute() {
-		global $gamemod, $argv, $cache;
+		global $gamemod, $argv, $cache,$game;
 		$floor = 0;
 		$limit = $gamemod->getCount('stats')-1;
 		$ceiling = $limit;
@@ -13,8 +13,9 @@ class stats {
 			else
 				$floor = $ceiling = $gamemod->pokemonNameToID(urldecode($argv[2]));
 		}
+		$output = array();
 		for ($pkmnid = $floor; $pkmnid <= $ceiling; $pkmnid++) {
-			$tmp = $gamemod->getStatsCached($pkmnid);
+			$tmp = $gamemod->getData('stats', $pkmnid);
 			$output[] = $tmp;
 			if (isset($tmp['abilities']))
 				foreach ($tmp['abilities'] as $abil)

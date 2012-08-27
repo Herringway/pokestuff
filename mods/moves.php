@@ -14,7 +14,7 @@ class moves {
 				$floor = $ceiling = $gamemod->moveNameToID(urldecode($argv[2]));
 		}
 		for ($moveid = $floor; $moveid <= $ceiling; $moveid++)
-			$output[] = $gamemod->getMoveCached($moveid);
+			$output[] = $gamemod->getData('moves', $moveid);
 				
 		return $output;
 	}

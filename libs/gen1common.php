@@ -1,8 +1,7 @@
 <?php
 class gen1 extends basegame {
-	const generation = 'gen1';
 	private $file;
-	private $internalIDs = false;
+	private $internalIDs = true;
 	
 	private function loadRom() {
 		if ($this->file === null)
@@ -93,7 +92,7 @@ class gen1 extends basegame {
 	public function getCount($what) {
 		switch ($what) {
 			case 'movedata': return 165;
-			case 'stats': return $this->internalIDs ? 255 : 152;
+			case 'stats': return $this->internalIDs ? 256 : 152;
 			case 'itemdata': return 83;
 			case 'trainerdata': return 2;
 		}
@@ -129,7 +128,7 @@ class gen1 extends basegame {
 			$intid = $id;
 		}
 		//printf('[i:%d,c:%d]<br />', $intid, $cid);
-		if ($cid != 150)
+		if ($cid != 151)
 			fseek($this->file, 0x383DE + (($cid-1)&0xFF) * 0x1C);
 		else
 			fseek($this->file, 0x425B);

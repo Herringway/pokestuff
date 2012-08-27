@@ -1,6 +1,5 @@
 <?php
 class gen3 extends basegame {
-	const generation = 'gen3';
 	private $file;
 	
 	function loadRom() {
