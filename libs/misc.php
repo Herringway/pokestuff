@@ -2,118 +2,88 @@
 class basegame {
 	protected $gameid;
 	public function getData($what, $id) {
+		$id = intval($id);
+		global $cache;
+		if (isset($cache[sprintf('%s/%s/%d', get_class($this), $what, $id)])) {
+			debugmessage('Loading data from cache', 'info');
+			return $cache[sprintf('%s/%s/%d', get_class($this), $what, $id)];
+		}
+		static $showdebug = true;
+		if ($showdebug) {
+			debugmessage('Using uncached data', 'info');
+			$showdebug = false;
+		}
 		switch ($what) {
-			case 'moves':		return $this->getMoveCached($id);
-			case 'stats':		return $this->getStatsCached($id);
-			case 'trainers':	return $this->getTrainerCached($id);
-			case 'items':		return $this->getItemCached($id);
-			case 'areas':		return $this->getAreaCached($id);
-			case 'abilities':	return $this->getAbilityCached($id);
+			case 'moves':		$data = $this->getMoveCached($id); break;
+			case 'stats':		$data = $this->getStatsCached($id); break;
+			case 'trainers':	$data = $this->getTrainerCached($id); break;
+			case 'items':		$data = $this->getItemCached($id); break;
+			case 'areas':		$data = $this->getAreaCached($id); break;
+			case 'abilities':	$data = $this->getAbilityCached($id); break;
 			default: throw new Exception('Unknown data requested');
 		}
+		$cache[sprintf('%s/%s/%d', get_class($this), $what, $id)] = $data;
+		return $data;
 	}
 	protected function getMoveCached($id) {
 		if (!method_exists($this, 'getMove'))
 			throw new Exception('Unsupported');
-		global $cache;
-		if (isset($cache[sprintf('%s/moves/%d', get_class($this), $id)]))
-			return $cache[sprintf('%s/moves/%d', get_class($this), $id)];
-		else {
-			$data = $this->getMove($id);
-			$data['id'] = $id;
-			$data['name'] = $this->getTextEntry('Move Names', $id);
-			$data['description'] = $this->getTextEntry('Move Descriptions', $id);
-			$cache[sprintf('%s/moves/%d', get_class($this), $id)] = $data;
-			return $data;
-		}
+		$data = $this->getMove($id);
+		$data['id'] = $id;
+		$data['name'] = $this->getTextEntry('Move Names', $id);
+		$data['description'] = $this->getTextEntry('Move Descriptions', $id);
+		return $data;
 	}
 	protected function getAbilityCached($id) {
-		global $cache;
-		if (isset($cache[sprintf('%s/abilities/%d', get_class($this), $id)]))
-			return $cache[sprintf('%s/abilities/%d', get_class($this), $id)];
-		else {
-			$data['name'] = $this->getTextEntry('Ability Names', $id);
-			$data['description'] = $this->getTextEntry('Ability Descriptions', $id);
-			$cache[sprintf('%s/abilities/%d', get_class($this), $id)] = $data;
-			return $data;
-		}
+		$data['name'] = $this->getTextEntry('Ability Names', $id);
+		$data['description'] = $this->getTextEntry('Ability Descriptions', $id);
+		return $data;
 	}
 	protected function getStatsCached($id) {
 		if (!method_exists($this, 'getStats'))
 			throw new Exception('Unsupported');
-		global $cache;
-		if (isset($cache[sprintf('%s/stats/%d', get_class($this), $id)]))
-			return $cache[sprintf('%s/stats/%d', get_class($this), $id)];
-		else {
-			$data = $this->getStats($id);
-			if (method_exists($this, 'getBaseID'))
-				$baseid = $this->getBaseID($id);
-			else
-				$baseid = $id;
-			$data['id'] = $id;
-			$data['name'] = $this->getTextEntry('Pokemon Names', $id);
-			$data['pokedex'] = $this->getTextEntry('Pokedex Entries', $baseid);
-			$data['species'] = $this->getTextEntry('Species Names', $baseid);
-			if (method_exists($this, 'getMoveList'))
-				$data['moves'] = $this->getMoveList($id);
-			if (method_exists($this, 'getEvolutions'))
-				$data['evolutions'] = $this->getEvolutions($id);
-			$cache[sprintf('%s/stats/%d', get_class($this), $id)] = $data;
-			return $data;
-		}
+		$data = $this->getStats($id);
+		if (method_exists($this, 'getBaseID'))
+			$baseid = $this->getBaseID($id);
+		else
+			$baseid = $id;
+		$data['id'] = $id;
+		$data['name'] = $this->getTextEntry('Pokemon Names', $id);
+		$data['pokedex'] = $this->getTextEntry('Pokedex Entries', $baseid);
+		$data['species'] = $this->getTextEntry('Species Names', $baseid);
+		if (method_exists($this, 'getMoveList'))
+			$data['moves'] = $this->getMoveList($id);
+		if (method_exists($this, 'getEvolutions'))
+			$data['evolutions'] = $this->getEvolutions($id);
+		return $data;
 	}
 	protected function getTrainerCached($id) {
 		if (!method_exists($this, 'getTrainerData'))
 			throw new Exception('Unsupported');
-		global $cache;
-		if (isset($cache[sprintf('%s/trainers/%d', get_class($this), $id)]))
-			return $cache[sprintf('%s/trainers/%d', get_class($this), $id)];
-		else {
-			$data = $this->getTrainerData($id);
-			$data['id'] = $id;
-			$data['name'] = $this->getTextEntry('Trainer Names', $id);
-			$data['pokemon'] = $this->getTrainerPokemon($id);
-			$cache[sprintf('%s/trainers/%d', get_class($this), $id)] = $data;
-			return $data;
-		}
+		$data = $this->getTrainerData($id);
+		$data['id'] = $id;
+		$data['name'] = $this->getTextEntry('Trainer Names', $id);
+		$data['pokemon'] = $this->getTrainerPokemon($id);
+		return $data;
 	}
 	protected function getItemCached($id) {
 		if (!method_exists($this, 'getItem'))
 			throw new Exception('Unsupported');
-		global $cache;
-		if (isset($cache[sprintf('%s/trainers/%d', get_class($this), $id)]))
-			return $cache[sprintf('%s/trainers/%d', get_class($this), $id)];
-		else {
-			$data = $this->getItem($id);
-			$data['id'] = $id;
-			$data['name'] = $this->getTextEntry('Item Names', $id);
-			$data['description'] = $this->getTextEntry('Item Descriptions', $id);
-			$cache[sprintf('%s/trainers/%d', get_class($this), $id)] = $data;
-			return $data;
-		}
+		$data = $this->getItem($id);
+		$data['id'] = $id;
+		$data['name'] = $this->getTextEntry('Item Names', $id);
+		$data['description'] = $this->getTextEntry('Item Descriptions', $id);
+		return $data;
 	}
 	protected function getAreaCached($id) {
 		if (!method_exists($this, 'getArea'))
 			throw new Exception('Unsupported');
-		global $cache;
-		if (isset($cache[sprintf('%s/areas/%d', get_class($this), $id)]))
-			return $cache[sprintf('%s/areas/%d', get_class($this), $id)];
-		else {
-			$data = $this->getArea($id);
-			$data['id'] = $id;
-			$cache[sprintf('%s/areas/%d', get_class($this), $id)] = $data;
-			return $data;
-		}
+		$data = $this->getArea($id);
+		$data['id'] = $id;
+		return $data;
 	}
 	protected function getTextEntryCached($name, $id) {
-		global $cache;
-		if (isset($cache[sprintf('%s/text/%s/%d', get_class($this), $name, $id)]))
-			return $cache[sprintf('%s/text/%s/%d', get_class($this), $name, $id)];
-		else {
-			$data = $this->getTextEntry($name, $id);
-			$cache[sprintf('%s/text/%s/%d', get_class($this), $name, $id)] = $data;
-			return $data;
-		}
+		return $this->getTextEntry($name, $id);
 	}
 	public function getCount($what) {
 		return 0;
@@ -186,5 +156,21 @@ function readshort_str(&$data, $offset) {
 function readint_str(&$data, $offset) {
 	$b = unpack('V', substr($data,$offset, 4));
 	return $b[1];
+}
+function debugvar($var, $label) {
+	static $limit = 100;
+	if ($limit-- > 0)
+		ChromePhp::log($label, $var);
+}
+function debugmessage($message, $level = 'error') {
+	static $limit = 100;
+	if ($limit-- > 0) {
+		if ($level === 'error')
+			ChromePhp::error($message);
+		else if ($level === 'warn')
+			ChromePhp::warn($message);
+		else
+			ChromePhp::log($message);
+	}
 }
 ?>

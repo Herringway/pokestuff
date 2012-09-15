@@ -1,8 +1,13 @@
 <?php
 class gen1 extends basegame {
 	private $file;
-	private $internalIDs = true;
+	private $internalIDs;
 	
+	function __construct($id) {
+		global $settings;
+		$this->gameid = $id;
+		$this->internalIDs = $settings['Generation 1 Internal IDs'];
+	}
 	private function loadRom() {
 		if ($this->file === null)
 			$this->file = fopen('games/'.$this->gameid.'.gb','r');

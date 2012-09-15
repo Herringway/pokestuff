@@ -3,12 +3,15 @@ class cache implements arrayaccess {
 	private $enabled = false;
 	private $cannotenable = false;
 	private static $apcfuncs = array('apc_clear_cache', 'apc_store', 'apc_exists', 'apc_delete', 'apc_fetch', 'apc_cache_info');
-	private $mode;
-	public function __construct($mode = 'any') {
+	private $pool;
+	
+	public function __construct($pool = 'default') {
+		$this->pool = $pool;
 		foreach (self::$apcfuncs as $testfunc)
 			if (!function_exists($testfunc))
 				$this->cannotenable = true;
 		$this->enable();
+		debugmessage('Cache is '.($this->cannotenable ? 'disabled' : 'enabled'), 'info');
 	}
 	public function clear() {
 		if (!$this->enabled)
@@ -18,22 +21,22 @@ class cache implements arrayaccess {
 	public function offsetSet($name, $object) {
 		if (!$this->enabled)
 			return false;
-		return apc_store($name, $object, 0);
+		return apc_store($this->pool.'/'.$name, $object, 0);
     }
     public function offsetExists($name) {
 		if (!$this->enabled)
 			return false;
-		return apc_exists($name);
+		return apc_exists($this->pool.'/'.$name);
     }
     public function offsetUnset($name) {
 		if (!$this->enabled)
 			return false;
-		return apc_delete($name);
+		return apc_delete($this->pool.'/'.$name);
     }
     public function offsetGet($name) {
 		if (!$this->enabled)
 			return false;
-		return apc_fetch($name);
+		return apc_fetch($this->pool.'/'.$name);
     }
 	public function stats() {
 		if (!$this->enabled)

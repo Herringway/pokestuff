@@ -8,6 +8,7 @@ class settings implements arrayaccess {
 		'defaultgame' => 'blacke',
 		'defaultmod' => 'stats',
 		'debug' => false,
+		'Generation 1 Internal IDs' => true,
 		'Default Output Format' => 'html',
 		'font' => 'togoshi-monago.ttf',
 		'flushcache' => false);

@@ -8,7 +8,7 @@ class moves {
 		$limit = $gamemod->getCount('movedata')-1;
 		$ceiling = $limit;
 		if (isset($argv[2])) {
-			if (is_numeric(str_replace('.', '', $argv[2])))
+			if (is_numeric(str_replace(array('.','$'), '', $argv[2])))
 				list($floor,$ceiling) = rangeStringToRange($argv[2],0,$limit);
 			else
 				$floor = $ceiling = $gamemod->moveNameToID(urldecode($argv[2]));

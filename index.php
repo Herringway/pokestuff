@@ -5,7 +5,7 @@ require_once 'libs/misc.php';
 require_once 'libs/chromephp/ChromePhp.php';
 $settings = new settings('settings.yml');
 
-$cache = new cache();
+$cache = new cache('Pokedex');
 if (!$settings['cache'])
 	$cache->disable();
 	
