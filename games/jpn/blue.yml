@@ -1,0 +1,17 @@
+---
+Title: Blue
+Release: Japan
+Generation: 1
+...
+---
+Pokemon Name Offset: 0x1C21E
+Pokedex Data Offset: 0x4042D
+Internal Order Table Offset: 0x42784
+Move Data Table: 0x38000
+TM Table Offset: 0x13C93
+Move Name Offset: 0xB0000
+Item Name Table: 0x4A92
+Pokemon Stats Offsets:
+  default: 0x383DE
+  151: 0x425B
+...

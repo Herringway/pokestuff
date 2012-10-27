@@ -47,6 +47,30 @@ class GDDraw {
 		}
 		imagecopy($this->canvas, $fromimg, $x, $y, 0, 0, $fromx, $fromy);
 	}
+	public function copyImageScaled($filename, $x, $y, $scale, $centered = false) {
+		if ($scale === 1) {
+			$this->copyImage($filename,$x,$y,$centered);
+			return;
+		}
+		if (file_exists($filename)) {
+			$exp = explode('.', $filename);
+			switch($exp[count($exp)-1]) {
+				case 'gif': $fromimg = imagecreatefromgif($filename); break;
+				case 'jpeg':
+				case 'jpg': $fromimg = imagecreatefromjpg($filename); break;
+				case 'png': $fromimg = imagecreatefrompng($filename); break;
+				default: $fromimg = imagecreatefrompng('images/missing.png');
+			}
+		} else
+			$fromimg = imagecreatefrompng('images/missing.png');
+		$fromx = imagesx($fromimg);
+		$fromy = imagesy($fromimg);
+		if ($centered) {
+			$x -= ($fromx*$scale)/2;
+			$y -= ($fromy*$scale)/2;
+		}
+		imagecopyresized($this->canvas, $fromimg, $x, $y, 0, 0, $fromx*$scale, $fromy*$scale, $fromx, $fromy);
+	}
 	public function drawRectangle($x1, $y1, $w, $h, $color, $bordercolor = -1, $radius = 0) {
 		$color = $this->getColor($color);
 		$bordercolor = $this->getColor($bordercolor);
@@ -102,7 +126,7 @@ class GDDraw {
 	public function renderPNG($filename = 'php://output') {
 		if (!isset($this->canvas))
 			throw new Exception('You must set canvas size first!');
-		imagepng($this->canvas, $filename);
+		imagepng($this->canvas, $filename, 9);
 	}
 	public function renderGIF($filename = 'php://output') {
 		if (!isset($this->canvas))
@@ -112,7 +136,7 @@ class GDDraw {
 	public function renderJPG($filename = 'php://output') {
 		if (!isset($this->canvas))
 			throw new Exception('You must set canvas size first!');
-		imagejpeg($this->canvas, $filename);
+		imagejpeg($this->canvas, $filename, 100);
 	}
 	private function getColor($color) {
 		if (($id = imagecolorexactalpha($this->canvas, ($color&0xFF0000)>>16, ($color&0xFF00)>>8, $color&0xFF, ($color&0x7F000000)>>24)) != -1)

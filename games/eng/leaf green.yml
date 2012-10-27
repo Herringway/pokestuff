@@ -1,26 +1,27 @@
 ﻿---
-Title: Ruby
+Title: Leaf Green
 Release: America
 Generation: 3
 ...
 ---
 Text Offsets:
   Pokemon Names: 
-    Offset: 0x1F716C
+    Offset: 0x245EBC
     Width: 0xB
   Species Names:
-    Offset: 0x3B1858
+    Offset: 0x44e270
     Width: 0x24
     Format: '%s Pokémon'
   Ability Names: 
-    Offset: 0x1FA248
+    Offset: 0x24fc1c
     Width: 0xD
   Move Names:
-    Offset: 0x1F8320
+    Offset: 0x247070
     Width: 0xD
   Item Names:
-    Offset: 0x3C5564
+    Offset: 0x3DAE64
     Width: 0x2C
+eggmoves: 0x25EEEC
 Tables:
   stats: 
     Format:
@@ -32,39 +33,41 @@ Tables:
     - Csdef
     - C2type
     - Ccapturerate
-    - CbaseEXP
+    - Cxprate
     - vEVraw
     - v2item
-    - CgenderRatio
-    - Chatchrate
+    - Cfemalechance
+    - Chatchsteps
     - Cbasehappiness
-    - Cunknown
+    - Cgrowthrate
     - C2egggrp
     - C2ability
     - Crunrate
     - Cunknown2
     - Cunknown3
     - Cunknown4
-    Offset: 0x1FEC18
+    Offset: 0x254760
     Entries: 412
     Entry Size: 0x1C
   itemdata:
     Format: 
-      - C14Name
+      - A14Name
       - C2unknown_
       - vvalue
       - C2unknown__
       - VdescPtr
       - C*unknown___
-    Offset: 0x3C5564
+    Offset: 0x3DAE64
     Entry Size: 0x2C
     Entries: 348
   levelupmoves:
-    Offset: 0x207bc8
+    Offset: 0x25d794
     Entries: 412
     Format:
       - VPointer
     Entry Size: 4
+  eggmoves:
+    Offset: 0x32ADD8
   movedata:
     Format:
       - Cpower
@@ -74,31 +77,31 @@ Tables:
       - C2unknown_
       - cpriority
       - C*unknown__
-    Offset: 0x1FB12D
+    Offset: 0x250BE1
     Entries: 355
     Entry Size: 0xC
   movedescriptiontable:
     Format:
       - VTextOffset
-    Offset: 0x3C09D4
-    Entries: 0x100
+    Offset: 0x487FC0
+    Entries: 355
     Entry Size: 0x4
   abilitydescriptiontable:
     Format:
       - VTextOffset
-    Offset: 0x1FA110
+    Offset: 0x24FAE4
     Entries: 79
     Entry Size: 0x4
   dexentries:
     Format:
       - vID
-    Offset: 0x1fc514
+    Offset: 0x251fc8
     Entries: 412
     Entry Size: 0x2
   hoenndexentries:
     Format:
       - vHoennID
-    Offset: 0x1fc1dE
+    Offset: 0x251cb6
     Entries: 412
     Entry Size: 0x2
   dexdata:
@@ -113,7 +116,7 @@ Tables:
       - vTrainerSize
       - vTrainerOffset
       - C*Unknown
-    Offset: 0x3B1858
+    Offset: 0x44e270
     Entries: 388
     Entry Size: 0x24
   evodata:
@@ -123,19 +126,19 @@ Tables:
       - vArgument
       - vTarget
       - C2Unknown
-    Offset: 0x203b68
+    Offset: 0x259734
     Entries: 2060
     Entry Size: 0x8
   tmcompatibility:
     Format: 
       - C8tm
-    Offset: 0x1fd0f0
+    Offset: 0x252ba4
     Entries: 412
     Entry Size: 0x8
   tmmap:
     Format:
       - v
-    Offset: 0x376504
+    Offset: 0x459fc4
     Entries: 58
     Entry Size: 2
 ...

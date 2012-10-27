@@ -16,10 +16,10 @@
 		<div class="menubar">
 			<select onchange="top.location.href = '/' + this.options[this.selectedIndex].value + '/{{mod}}'">
 {% for game in games%}
-				<option value="{{game.id}}"{% if gameid == game.id %} selected="yes"{%endif%}>Pokemon {{ game.name }} ({{game.locale}})</option>
+				<option value="{{game.id}}{%if game.lang != deflang%}:{{game.lang}}{%endif%}"{% if gameid == game.id %} selected="yes"{%endif%}>Pokemon {{ game.name }} ({{game.locale}})</option>
 {%endfor%}
 			</select>
-			<select onchange="top.location.href = '/{{gameid}}/' + this.options[this.selectedIndex].value">
+			<select onchange="top.location.href = '/{{gameid}}{%if gamelang != deflang%}:{{gamelang}}{%endif%}/' + this.options[this.selectedIndex].value">
 {% for module in mods %}
 				<option value="{{module.id}}"{%if mod == module.id%} selected="yes"{%endif%}>{{module.name}}</option>
 {%endfor%}

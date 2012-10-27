@@ -4,7 +4,7 @@ class gen2 extends basegame {
 	
 	function loadRom() {
 		if ($this->file === null)
-			$this->file = fopen('games/'.$this->gameid.'.gbc','r');
+			$this->file = fopen('games/'.$this->lang.'/'.$this->gameid.'.gbc','r');
 	}
 	public function getCount($what) {
 		switch ($what) {
@@ -55,9 +55,9 @@ class gen2 extends basegame {
 	public function getTextEntry($what, $where) {
 		global $gamecfg;
 		if ($what == 'Move Names') {
-			return $this->readTextT(0x1B1574, $where);
+			return $this->readTextT($gamecfg['Move Name Offset'], $where);
 		} else if ($what == 'Pokemon Names') {
-			return $this->readText(0x1B0B6A+$where*10,10);
+			return $this->readText($gamecfg['Pokemon Name Offset']+$where*10,10);
 		}
 		return sprintf('PLACEHOLDER[%s][%d]', $what, $where);
 	}
@@ -75,7 +75,7 @@ class gen2 extends basegame {
 	public function getMove($id) {
 		global $gamecfg;
 		$this->loadRom();
-		fseek($this->file, 0x41AFE + $id * 7);
+		fseek($this->file, $gamecfg['Move Data Offset'] + $id * 7);
 		$data = fread($this->file, 7);
 		$output = unpack('Crid/Ceffect/Cpower/Ctypeid/Caccuracy/Cpp/C*unknown', $data);
 		$output['type'] = $gamecfg['Types'][$output['typeid']]['Name'];
@@ -87,7 +87,7 @@ class gen2 extends basegame {
 	public function getStats($id) {
 		global $gamecfg;
 		$this->loadRom();
-		fseek($this->file, 0x51AEB + $id*32);
+		fseek($this->file, $gamecfg['Pokemon Stats Offset'] + $id*32);
 		$data = unpack('Cid/Chp/Catk/Cdef/Cspeed/Csatk/Csdef/C2type/Ccapturerate/Cxprate/C13unknown', fread($this->file, 0x20));
 		for ($i = 1; $i <= 2; $i++) {
 			if (isset($gamecfg['Types'][$data['type'.$i]]['Name']))
@@ -121,7 +121,7 @@ class gen2 extends basegame {
 				if ($i*8+$j > 54)
 					break;
 				if ($byte & pow(2,$j))
-					$output['TM'][] = array('Learned' => ($i*8+$j > 49) ? sprintf('HM%02d',$i*8+$j-49) : sprintf('TM%02d',$i*8+$j+1), 'id' => $this->readByte(0x11A66 + $i*8+$j)-1);
+					$output['TM'][] = array('Learned' => ($i*8+$j > 49) ? sprintf('HM%02d',$i*8+$j-49) : sprintf('TM%02d',$i*8+$j+1), 'id' => $this->readByte($gamecfg['TM Table Offset'] + $i*8+$j)-1);
 			}
 		}
 		return $output;

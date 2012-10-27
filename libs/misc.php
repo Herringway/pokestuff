@@ -1,17 +1,13 @@
 <?php
 class basegame {
 	protected $gameid;
+	protected $lang;
 	public function getData($what, $id) {
 		$id = intval($id);
-		global $cache;
-		if (isset($cache[sprintf('%s/%s/%d', get_class($this), $what, $id)])) {
-			debugmessage('Loading data from cache', 'info');
-			return $cache[sprintf('%s/%s/%d', get_class($this), $what, $id)];
-		}
-		static $showdebug = true;
-		if ($showdebug) {
-			debugmessage('Using uncached data', 'info');
-			$showdebug = false;
+		global $cache,$cachehits,$cachemisses;
+		if (isset($cache[sprintf('%s (%s)/%s/%d', $this->gameid, $this->lang, $what, $id)])) {
+			$cachehits++;
+			return $cache[sprintf('%s (%s)/%s/%d', $this->gameid, $this->lang, $what, $id)];
 		}
 		switch ($what) {
 			case 'moves':		$data = $this->getMoveCached($id); break;
@@ -22,7 +18,8 @@ class basegame {
 			case 'abilities':	$data = $this->getAbilityCached($id); break;
 			default: throw new Exception('Unknown data requested');
 		}
-		$cache[sprintf('%s/%s/%d', get_class($this), $what, $id)] = $data;
+		$cache[sprintf('%s (%s)/%s/%d', $this->gameid, $this->lang, $what, $id)] = $data;
+		$cachemisses++;
 		return $data;
 	}
 	protected function getMoveCached($id) {
@@ -99,6 +96,9 @@ class basegame {
 		}
 		return $id;
 	}
+	public function getOptions() {
+		return null;
+	}
 	public function pokemonNameToID($name) {
 		return $this->_nameToID('stats', 'Pokemon Names', $name);
 	}
@@ -117,8 +117,9 @@ class basegame {
 			return 'items';
 		return false;
 	}
-	function __construct($id) {
+	function __construct($id,$lang) {
 		$this->gameid = $id;
+		$this->lang = $lang;
 	}
 }
 function kimplode($array, $glue = ': ', $separator = ', ') {
@@ -163,14 +164,23 @@ function debugvar($var, $label) {
 		ChromePhp::log($label, $var);
 }
 function debugmessage($message, $level = 'error') {
+	global $settings;
 	static $limit = 100;
 	if ($limit-- > 0) {
 		if ($level === 'error')
 			ChromePhp::error($message);
-		else if ($level === 'warn')
+		else if ($settings['debug'] && ($level === 'devfatal')) {
+			ChromePhp::error($message);
+			die($message);
+		} else if ($level === 'warn')
 			ChromePhp::warn($message);
 		else
 			ChromePhp::log($message);
 	}
+}
+function deprecated() {
+	$d = debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS, 3);
+	var_dump($d);
+	debugmessage(sprintf('Deprecated function %s called (%s:%d)', (isset($d[1]['class']) ? $d[1]['class'].$d[1]['type'] : '').$d[1]['function'], str_replace(str_replace('libs', '', dirname(__FILE__)), '', $d[0]['file']), $d[0]['line']), 'devfatal');
 }
 ?>

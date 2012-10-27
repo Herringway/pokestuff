@@ -4,7 +4,7 @@ class gen3 extends basegame {
 	
 	function loadRom() {
 		if ($this->file === null)
-			$this->file = fopen('games/'.$this->gameid.'.gba','r');
+			$this->file = fopen('games/'.$this->lang.'/'.$this->gameid.'.gba','r');
 	}
 	function getCount($what) {
 		global $gamecfg;
@@ -140,6 +140,7 @@ class gen3 extends basegame {
 		$output = $this->getFixedDataEntry('movedata', $id);
 		$output['category'] = $gamecfg['Types'][$output['typeid']]['Category'];
 		$output['id'] = $id;
+		$output['type'] = $gamecfg['Types'][$output['typeid']]['Name'];
 		
 		return $output;
 	}

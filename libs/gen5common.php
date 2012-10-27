@@ -73,7 +73,7 @@ class gen5 extends basegame {
 	}
 	function loadRom() {
 		if ($this->rom == null)
-			$this->rom = new ndsrom('games/'.$this->gameid.'.nds');
+			$this->rom = new ndsrom('games/'.$this->lang.'/'.$this->gameid.'.nds');
 	}
 	function getBaseID($id) {
 		if (isset($GLOBALS['gamecfg']['Original Forms'][$id]))
@@ -108,7 +108,7 @@ class gen5 extends basegame {
 		$baseid = $this->getBaseID($id);
 
 		$rawdata = $this->getFile('stats', $id);
-		$poke = unpack('Chp/Catk/Cdef/Cspeed/Csatk/Csdef/C2type/Ccapturerate/Cxprate/vEVraw/v3itemID/Cfemalechance/Chatchsteps/Cbasehappiness/Cgrowthrate/C2egggrp/C3ability/Cunknownflags/Cformflags/Cformcount/Ccolour/C5unknown/vheight/vweight/C*unknown_', $rawdata);
+		$poke = unpack('Chp/Catk/Cdef/Cspeed/Csatk/Csdef/C2type/Ccapturerate/Cxprate/vEVraw/v3itemID/Cfemalechance/Chatchsteps/Cbasehappiness/Cgrowthrate/C2egggrp/C3ability/Cunknownflags/Cformflags/Cformcount/Ccolour/C5unknown/vheight/vweight', $rawdata);
 		$poke['height'] /= 10;
 		$poke['weight'] /= 10;
 		if ($baseid <= $this->getCount('baby')) {
@@ -228,22 +228,22 @@ class gen5 extends basegame {
 		$datatype = ord($trdata[0]);
 		$numpokes = ord($trdata[3]);
 		$length = 8 + ($datatype & 1)*8 + ($datatype&2);
+		$entries = array('vUnknown', 'vLevel', 'vID', 'vUnknown2');
+		if ($datatype&2)
+			$entries[] = 'vItem';
+		if ($datatype&1)
+			$entries[] = 'v4Move';
 		for ($i = 0; $i < $numpokes; $i++) {
-			$id = ord($trpoke[$i*$length+4]) + (ord($trpoke[$i*$length+5])<<8);
-			$level = ord($trpoke[$i*$length+2]);
-			$item = '';
-			$moves = array();
-			if ($datatype & 2)
-				$item = ord($trpoke[$i*$length+8])+(ord($trpoke[$i*$length+9])<<8);
+			$data = unpack(implode('/', $entries), substr($trpoke, $i*$length, $length));
 			if ($datatype & 1)
-				for ($j = 0; $j < 4; $j++)
-					$moves[] = ord($trpoke[$i*$length+8+$j*2])+(ord($trpoke[$i*$length+9+$j*2])<<8);
-			else {
-				$movelist = $this->getMoveList($id, $level);
-				foreach ($movelist as $m)
-					$moves[] = $m['id'];
-			}
-			$output[] = array('level' => $level, 'id' => $id, 'move' => $moves, 'item' => $item);
+				for ($j = 0; $j < 4; $j++) {
+					$data['Moves'][] = $data['Move'.($j+1)];
+					unset($data['Move'.($j+1)]);
+				}
+			else
+				foreach ($this->getMoveList($data['ID'], $data['Level']) as $m)
+					$data['Moves'][] = $m['id'];
+			$output[] = $data;
 		}
 		return $output;
 	}

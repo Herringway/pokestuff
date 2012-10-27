@@ -1,6 +1,8 @@
 settings.yml
-games/*.nds
-games/*.gba
-games/*.gb
-games/*.gbc
+*.nds
+*.gba
+*.gb
+*.gbc
+favicon.ico
 images/*
+cache/*

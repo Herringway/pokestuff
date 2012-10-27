@@ -7,7 +7,7 @@
 			<tr>
 				<td><a href="/{{gameid}}/trainers/{{trainer.id}}">{{trainer.class}} {{trainer.name}}</a><br />{%if trainer.battletype%}{{trainer.battletype}}<br />{%endif%}{%for item in trainer.items%}{{items[item].name}}<br />{%endfor%}</td>
 {%for poke in trainer.pokemon%}
-				<td><a href="/{{gameid}}/stats/{{poke.id}}">{{macros.pokemonsprite(generation,gameid,poke.id,stats[poke.id].name)}}<br/>L{{poke.level}} {{stats[poke.id].name}}</a></td>
+				<td><a href="/{{gameid}}/stats/{{poke.ID}}">{{macros.pokemonsprite(generation,gameid,poke.ID,stats[poke.ID].name)}}<br/>L{{poke.Level}} {{stats[poke.ID].name}}</a></td>
 {%endfor%}
 			</tr>
 {%endfor%}
@@ -18,11 +18,11 @@
 			<tr>
 {%for poke in trainers.0.pokemon%}
 				<td style="background: white; width: 150px;">
-					<a href="/{{gameid}}/stats/{{poke.id}}">{{macros.pokemonsprite(generation,gameid,poke.id)}}<br />
-					{{stats[poke.id].name}}<br /></a>
-					Level {{poke.level}}<br />
-					Holding: {{items[poke.item].name|default('Nothing')}}<br />
-{%for move in poke.move%}
+					<a href="/{{gameid}}/stats/{{poke.ID}}">{{macros.pokemonsprite(generation,gameid,poke.ID)}}<br />
+					{{stats[poke.ID].name}}<br /></a>
+					Level {{poke.Level}}<br />
+					Holding: {{items[poke.Item].name|default('Nothing')}}<br />
+{%for move in poke.Moves%}
 					{{moves[move].name}}<br />
 {%endfor%}
 				</td>

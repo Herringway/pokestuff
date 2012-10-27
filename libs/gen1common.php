@@ -3,41 +3,42 @@ class gen1 extends basegame {
 	private $file;
 	private $internalIDs;
 	
-	function __construct($id) {
+	function __construct($id, $lang) {
 		global $settings;
 		$this->gameid = $id;
+		$this->lang = $lang;
 		$this->internalIDs = $settings['Generation 1 Internal IDs'];
 	}
 	private function loadRom() {
 		if ($this->file === null)
-			$this->file = fopen('games/'.$this->gameid.'.gb','r');
+			$this->file = fopen('games/'.$this->lang.'/'.$this->gameid.'.gb','r');
 	}
 	public function getTextEntry($what, $where) {
 		$this->loadRom();
 		global $gamecfg;
 		if ($what == 'Move Names') {
-			return $this->readTextT(0xB0000, $where);
+			return $this->readTextT($gamecfg['Move Name Offset'], $where);
 		} else if ($what == 'Pokemon Names') {
 			if ($this->internalIDs)
-				return $this->readText(0x1C21E+$where*10,10);
-			return $this->readText(0x1C21E+$this->getIntID($where-1)*10,10);
+				return $this->readText($gamecfg['Pokemon Name Offset']+$where*10,10);
+			return $this->readText($gamecfg['Pokemon Name Offset']+$this->getIntID($where-1)*10,10);
 		} else if ($what == 'Species Names') {
 			if ($this->internalIDs)
-				$ptr = $this->readShort(0x4047E + $where*2) - 0x4000 + 0x40000;
+				$ptr = $this->readShort($gamecfg['Pokedex Data Offset'] + $where*2) - 0x4000 + ($gamecfg['Pokedex Data Offset']&0xFF0000);
 			else
-				$ptr = $this->readShort(0x4047E + $this->getIntID($where-1)*2) - 0x4000 + 0x40000;
+				$ptr = $this->readShort($gamecfg['Pokedex Data Offset'] + $this->getIntID($where-1)*2) - 0x4000 + ($gamecfg['Pokedex Data Offset']&0xFF0000);
 			return $this->readText($ptr).' Pokemon';
 		} else if ($what == 'Pokedex Entries') {
 			if ($this->internalIDs)
-				$ptr = $this->readShort(0x4047E + $where*2) - 0x4000 + 0x40000;
+				$ptr = $this->readShort($gamecfg['Pokedex Data Offset'] + $where*2) - 0x4000 + ($gamecfg['Pokedex Data Offset']&0xFF0000);
 			else
-				$ptr = $this->readShort(0x4047E + $this->getIntID($where-1)*2) - 0x4000 + 0x40000;
+				$ptr = $this->readShort($gamecfg['Pokedex Data Offset'] + $this->getIntID($where-1)*2) - 0x4000 + ($gamecfg['Pokedex Data Offset']&0xFF0000);
 			$this->readText($ptr);
 			fseek($this->file, 5, SEEK_CUR);
 			$ptr = $this->readShort()-0x4000 + ($this->readByte()<<14);
 			return $this->readText($ptr);
 		} else if ($what == 'Item Names') {
-			return $this->readTextT(0x472B, $where);
+			return $this->readTextT($gamecfg['Item Name Table'], $where);
 		} else if ($what == 'Move Descriptions') {
 			return '';
 		} else if ($what == 'Item Descriptions') {
@@ -75,6 +76,7 @@ class gen1 extends basegame {
 		return $output;
 	}
 	private function readTextT($offset, $count) {
+		//return;
 		$this->loadRom();
 		global $gamecfg;
 		$size = 0x1000;
@@ -111,7 +113,7 @@ class gen1 extends basegame {
 	public function getMove($id) {
 		global $gamecfg;
 		$this->loadRom();
-		fseek($this->file, 0x38000 + $id * 6);
+		fseek($this->file, $gamecfg['Move Data Table'] + $id * 6);
 		$data = fread($this->file, 6);
 		$output = unpack('Crid/Ceffect/Cpower/Ctypeid/Caccuracy/Cpp', $data);
 		$output['type'] = isset($gamecfg['Types'][$output['typeid']]['Name']) ? $gamecfg['Types'][$output['typeid']]['Name'] : 'Unknown';
@@ -133,10 +135,10 @@ class gen1 extends basegame {
 			$intid = $id;
 		}
 		//printf('[i:%d,c:%d]<br />', $intid, $cid);
-		if ($cid != 151)
-			fseek($this->file, 0x383DE + (($cid-1)&0xFF) * 0x1C);
+		if (isset($gamecfg['Pokemon Stats Offsets'][$cid]))
+			fseek($this->file, $gamecfg['Pokemon Stats Offsets'][$cid]);
 		else
-			fseek($this->file, 0x425B);
+			fseek($this->file, $gamecfg['Pokemon Stats Offsets']['default'] + (($cid-1)&0xFF) * 0x1C);
 		//echo ftell($this->file);
 		$data = fread($this->file, 0x1C);
 		$output = unpack('Cid/Chp/Catk/Cdef/Cspeed/Csatk/C2type/Ccapturerate/Cxprate/Cspritedimension/vFrontSpritePtr/vBackSpritePtr/C4wildmoves/Cgrowthrate', $data);
@@ -159,14 +161,16 @@ class gen1 extends basegame {
 		return $output;
 	}
 	function getIntID($cid) {
+		global $gamecfg;
 		for ($i = 0; $i < 255; $i++)
-			if ($this->readByte(0x41024+$i) == $cid+1)
+			if ($this->readByte($gamecfg['Internal Order Table Offset']+$i) == $cid+1)
 				return $i;
 		//$flip = array_flip($gamecfg['Normal to Internal']);
 		//return $flip[$id];
 	}
 	function internalToCanonical($intid) {
-		return $this->readByte(0x41024+$intid);
+		global $gamecfg;
+		return $this->readByte($gamecfg['Internal Order Table Offset']+$intid);
 	}
 	function getTrainerData($id) {
 		$output = array();
@@ -192,10 +196,10 @@ class gen1 extends basegame {
 			$lvlupptr += 2;
 			$output['Levelup'][] = array('Learned' => 'Level '.($move&0xFF), 'id' => ($move>>8));
 		}*/
-		if ($id != 151)
-			$o = (0x383DE + $id * 0x1C) + 15;
+		if (isset($gamecfg['Pokemon Stats Offsets'][$id]))
+			$o = $gamecfg['Pokemon Stats Offsets'][$id] + 15;
 		else
-			$o = 0x425B + 15;
+			$o = $gamecfg['Pokemon Stats Offsets']['default'] + (($id-1)&0xFF) * 0x1C + 15;
 		//B/R: 13773 G: 12276 Y: 1232D
 		for ($i = 0; $i < 4; $i++) {
 			$byte = $this->readByte($o+$i);
@@ -208,7 +212,7 @@ class gen1 extends basegame {
 				if ($i*8+$j > 54)
 					break;
 				if ($byte & pow(2,$j))
-					$output['TM'][] = array('Learned' => ($i*8+$j > 49) ? sprintf('HM%02d',$i*8+$j-49) : sprintf('TM%02d',$i*8+$j+1), 'id' => $this->readByte(0x13773 + $i*8+$j)-1);
+					$output['TM'][] = array('Learned' => ($i*8+$j > 49) ? sprintf('HM%02d',$i*8+$j-49) : sprintf('TM%02d',$i*8+$j+1), 'id' => $this->readByte($gamecfg['TM Table Offset'] + $i*8+$j)-1);
 			}
 		}
 		return $output;

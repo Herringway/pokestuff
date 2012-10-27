@@ -1,47 +1,66 @@
 <?php
-class cache implements arrayaccess {
+interface cache_interface extends arrayaccess {
+	public static function getTier();
+	public function clear();
+	public function stats();
+	public function enable();
+	public function disable();
+	public function status();
+	public function mode();
+}
+class cache implements cache_interface {
 	private $enabled = false;
 	private $cannotenable = false;
-	private static $apcfuncs = array('apc_clear_cache', 'apc_store', 'apc_exists', 'apc_delete', 'apc_fetch', 'apc_cache_info');
-	private $pool;
+	private $cachetypes = array();
+	private $cache;
 	
+	public static function getTier() { return -1; }
 	public function __construct($pool = 'default') {
-		$this->pool = $pool;
-		foreach (self::$apcfuncs as $testfunc)
-			if (!function_exists($testfunc))
-				$this->cannotenable = true;
-		$this->enable();
-		debugmessage('Cache is '.($this->cannotenable ? 'disabled' : 'enabled'), 'info');
+		foreach (get_declared_classes() as $v)
+			if (is_subclass_of($v, 'cache_interface') && ($v != get_class($this)))
+				$this->cachetypes[] = $v;
+		usort($this->cachetypes, array($this,'cacheSort'));
+		foreach (array_reverse($this->cachetypes) as $type) {
+			$this->cache = new $type($pool);
+			if ($this->cache->status()) {
+				$this->enable();
+				return;
+			}
+		}
+		$this->cannotenable = true;
+	}
+	private function cacheSort($a, $b) {
+		return ($a::getTier() > $b::getTier()) ? 1 : -1;
 	}
 	public function clear() {
 		if (!$this->enabled)
 			return false;
-		return apc_clear_cache() && apc_clear_cache('user');
+		return $this->cache->clear();
 	}
 	public function offsetSet($name, $object) {
 		if (!$this->enabled)
 			return false;
-		return apc_store($this->pool.'/'.$name, $object, 0);
+		return $this->cache->offsetSet($name, $object);
     }
     public function offsetExists($name) {
 		if (!$this->enabled)
 			return false;
-		return apc_exists($this->pool.'/'.$name);
+		return $this->cache->offsetExists($name);
     }
     public function offsetUnset($name) {
 		if (!$this->enabled)
 			return false;
-		return apc_delete($this->pool.'/'.$name);
+		return $this->cache->offsetUnset($name);
     }
     public function offsetGet($name) {
 		if (!$this->enabled)
 			return false;
-		return apc_fetch($this->pool.'/'.$name);
+		return $this->cache->offsetGet($name);
     }
 	public function stats() {
 		if (!$this->enabled)
 			return null;
-		return apc_cache_info();
+		return $this->cache->stats();
 	}
 	public function disable() {
 		$this->enabled = false;
@@ -50,5 +69,13 @@ class cache implements arrayaccess {
 		if (!$this->cannotenable)
 			$this->enabled = true;
 	}
+	public function status() {
+		return $this->enabled;
+	}
+	public function mode() {
+		return $this->cache->mode();
+	}
 }
+require 'apccache.php';
+require 'filecache.php';
 ?>

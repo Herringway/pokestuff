@@ -1,0 +1,17 @@
+---
+Title: Blue
+Release: America
+Generation: 1
+...
+---
+Pokemon Name Offset: 0x1C21E
+Pokedex Data Offset: 0x4047E
+Internal Order Table Offset: 0x41024
+Move Data Table: 0x38000
+TM Table Offset: 0x13773
+Move Name Offset: 0xB0000
+Item Name Table: 0x472B
+Pokemon Stats Offsets:
+  default: 0x383DE
+  151: 0x425B
+...

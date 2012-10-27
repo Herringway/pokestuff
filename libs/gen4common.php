@@ -76,7 +76,7 @@ class gen4 extends basegame {
 	}
 	function loadRom() {
 		if ($this->rom == null)
-			$this->rom = new ndsrom('games/'.$this->gameid.'.nds');
+			$this->rom = new ndsrom('games/'.$this->lang.'/'.$this->gameid.'.nds');
 	}
 	function loadNarc($name) {
 		global $gamecfg;

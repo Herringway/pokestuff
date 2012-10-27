@@ -42,7 +42,7 @@
 {%for poke in stats%}
 				<tr>
 					<td>{{poke.id}}</td>
-					<td><a href="/{{gameid}}/stats/{{poke.id}}">{{poke.name}}</a></td>
+					<td><a href="/{{gameid}}:{{gamelang}}/stats/{{poke.name}}">{{poke.name}}</a></td>
 					<td>{{poke.hp}}</td>
 					<td>{{poke.atk}}</td>
 					<td>{{poke.def}}</td>
@@ -80,7 +80,7 @@
 		<table>
 			<thead>
 				<tr>
-					<th rowspan="2" width="192" class="{{poke.type1}}">
+					<th rowspan="2" height="256" width="192" class="{{poke.type1}}">
 						{{macros.pokemonsprite(generation,gameid,poke.imgid, poke.name,false,false)}}{%if generation != 'gen1'%}{{macros.pokemonsprite(generation,gameid,poke.imgid, poke.name,false,true)}}{%endif%}<br />
 						{{macros.pokemonsprite(generation,gameid,poke.imgid, poke.name,true,false)}}{%if generation != 'gen1'%}{{macros.pokemonsprite(generation,gameid,poke.imgid, poke.name,true,true)}}{%endif%}
 					</th>
@@ -88,11 +88,11 @@
 						{{poke.name}}<br />
 						{{macros.typeimage(poke.type1)}}{%if poke.type1 != poke.type2%}{{macros.typeimage(poke.type2)}}{%endif%}<br />
 						{{poke.species}}<br />
-						{{poke.pokedex|replace({"\n": ' '})}}<br />
+						{{poke.pokedex|nl2br}}<br />
 						<audio controls="controls"><source src="/audio/cries/{{poke.id}}.ogg" type="audio/ogg" /></audio><br />
 						{%for ability in poke.abilities%}{%if loop.first != true%}{%if ability%}/{%endif%}{%endif%}<a title="{{abilities[ability].description|nl2br|replace({"\n": ' '})}}">{{abilities[ability].name}}</a>{%endfor%}<br />
 {%for evo in poke.evolutions%}
-						Evolves into <a href="/{{gameid}}/stats/{{evo.Target}}">{{evo.name}}</a> ({{evo.Argument}})<br />
+						Evolves into <a href="/{{gameid}}:{{gamelang}}/stats/{{evo.Target}}">{{evo.name}}</a> ({{evo.Argument}})<br />
 {%endfor%}
 						{%if poke.EVs%}EVs: {% for key, val in poke.EVs%}{{key}}: {{val}}{%if loop.last != true%}, {%endif%}{%endfor%}<br />{%endif%}
 						{%if poke.formnames%}Forms:{%endif%}
@@ -150,7 +150,7 @@
 			
 				<tr>
 					<td><span title="{{counter}}">{{move.Learned}}</span></td>
-					<td><a href="/{{gameid}}/moves/{{move.id}}">{{moves[move.id].name}}</a></td>
+					<td><a href="/{{gameid}}:{{gamelang}}/moves/{{moves[move.id].name}}">{{moves[move.id].name}}</a></td>
 					<td>{%if moves[move.id].power == 0%}-{%else%}{{moves[move.id].power}}{%endif%}</td>
 					<td>{%if moves[move.id].accuracy == 101%}-{%else%}{{moves[move.id].accuracy}}%{%endif%}</td>
 					<td>{{moves[move.id].priority}}</td>

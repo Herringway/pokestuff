@@ -1,0 +1,13 @@
+---
+Title: Silver
+Release: America
+Generation: 2
+...
+---
+Cry Table Offset: 0xF2741
+Pokemon Name Offset: 0x1B0B6A
+Pokemon Stats Offset: 0x51AEB
+TM Table Offset: 0x11A66
+Move Data Offset: 0x41AFE
+Move Name Offset: 0x1B1574
+...

@@ -3,17 +3,10 @@ class settings implements arrayaccess {
 	private $settings;
 	private $needswrite = false;
 	private $writefile;
-	private $defaults = array(
-		'cache' => true,
-		'defaultgame' => 'blacke',
-		'defaultmod' => 'stats',
-		'debug' => false,
-		'Generation 1 Internal IDs' => true,
-		'Default Output Format' => 'html',
-		'font' => 'togoshi-monago.ttf',
-		'flushcache' => false);
-	public function __construct($filename = 'settings.yml') {
+	private $defaults;
+	public function __construct($defaults, $filename = 'settings.yml') {
 		$this->writefile = $filename;
+		$this->defaults = $defaults;
 		if (!file_exists($filename)) {
 			$this->needswrite = true;
 			$this->settings = $this->defaults;
@@ -23,6 +16,11 @@ class settings implements arrayaccess {
 	function __destruct() {
 		if ($this->needswrite) 
 			file_put_contents($this->writefile, yaml_emit($this->settings));
+	}
+	public function addSetting($key, $value) {
+		if (isset($this->defaults[$key]))
+			throw new Exception(sprintf('Setting already exists: %s', $key));
+		$this->defaults[$key] = $value;
 	}
 	public function offsetSet($key, $value) {
 		if (!isset($this->defaults[$key]))
