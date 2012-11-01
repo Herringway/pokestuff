@@ -80,8 +80,8 @@
 			<thead>
 				<tr>
 					<th rowspan="2" height="256" width="192" class="{{poke.type1}}">
-						{{macros.pokemonsprite(generation,gameid,poke.imgid, poke.name,false,false)}}{%if generation != 'gen1'%}{{macros.pokemonsprite(generation,gameid,poke.imgid, poke.name,false,true)}}{%endif%}<br />
-						{{macros.pokemonsprite(generation,gameid,poke.imgid, poke.name,true,false)}}{%if generation != 'gen1'%}{{macros.pokemonsprite(generation,gameid,poke.imgid, poke.name,true,true)}}{%endif%}
+						{{macros.pokemonsprite(generation,spriteseries,poke.imgid, poke.name,false,false)}}{%if generation != 'gen1'%}{{macros.pokemonsprite(generation,spriteseries,poke.imgid, poke.name,false,true)}}{%endif%}<br />
+						{{macros.pokemonsprite(generation,spriteseries,poke.imgid, poke.name,true,false)}}{%if generation != 'gen1'%}{{macros.pokemonsprite(generation,spriteseries,poke.imgid, poke.name,true,true)}}{%endif%}
 					</th>
 					<td colspan="7" class="{{poke.type1}}">
 						{{poke.name}}<br />

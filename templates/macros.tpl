@@ -1,4 +1,4 @@
-{%macro pokemonsprite(generation, gameid, id, name, back, shiny) %}<img src="/static/images/{{generation}}/{{gameid}}/pokemon/{%if back%}back/{%endif%}{%if shiny%}shiny/{%endif%}{{id}}.png" alt="{{name}}" title="{{name}}" />{%endmacro%}
+{%macro pokemonsprite(generation, spriteseries, id, name, back, shiny) %}<img src="/static/images/{{generation}}/{{spriteseries}}/pokemon/{%if back%}back/{%endif%}{%if shiny%}shiny/{%endif%}{{id}}.png" alt="{{name}}" title="{{name}}" />{%endmacro%}
 {%macro typeimage(id) %}<img alt="{{id}}" title="{{id}}" width="32" height="16" src="/static/images/types/{{id}}.png" />{%endmacro%}
 {%macro categoryimage(id) %}<img alt="" width="32" height="16" src="/static/images/categories/{{id}}.png" />{%endmacro%}
 {%macro natureprint(stat)%}Negative Nature: {{"%u"|format(stat * 0.9)}}&lt;br /&gt;Neutral Nature: {{stat}}&lt;br /&gt;Positive Nature: {{"%u"|format(stat * 1.1)}}&lt;br /&gt;{%endmacro%}

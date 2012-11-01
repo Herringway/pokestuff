@@ -182,7 +182,7 @@ if (file_exists('otherpages/'.$game.'.php')) {
 	debugmessage(sprintf('Memory used: %1.2fMB', memory_get_peak_usage()/1024/1024), 'info');
 	switch($format) {
 		case 'html':
-			$outputstuff = array('game' => $gameinfo['Title'], 'mod' => $mod, 'gameid' => $game, 'gamelang' => $lang, 'games' => $games, 'mods' => $mods, 'deflang' => $settings['Default Language'], 'showmenu' => $settings['Show Game Menu'] && (count($games) > 1), 'generation' => 'gen'.$gameinfo['Generation'], $mod => $data);
+			$outputstuff = array('game' => $gameinfo['Title'], 'spriteseries' => $gameinfo['Sprite Series'], 'mod' => $mod, 'gameid' => $game, 'gamelang' => $lang, 'games' => $games, 'mods' => $mods, 'deflang' => $settings['Default Language'], 'showmenu' => $settings['Show Game Menu'] && (count($games) > 1), 'generation' => 'gen'.$gameinfo['Generation'], $mod => $data);
 			$wants = $datamod->getHTMLDependencies();
 			foreach ($wants as $what=>$ids)
 				foreach ($ids as $id)
