@@ -125,8 +125,9 @@ if (file_exists('otherpages/'.$game.'.php')) {
 	if (!file_exists('games/'.$lang.'/'.$game.'.yml'))
 		throw new Exception('Game not found ('.$game.')');
 	$gameinfo = yaml_parse_file('games/'.$lang.'/'.$game.'.yml',0);
-	if (!$settings['Debug'] && (!isset($gameinfo['Enabled']) || ($gameinfo['Enabled'] !== false))) {
+	if (!$settings['Debug'] && (!isset($gameinfo['Enabled']) || ($gameinfo['Enabled'] == false))) {
 		$game = $settings['Default Game'];
+		debugmessage('Changing from disabled game to '.$game);
 		$gameinfo = yaml_parse_file('games/'.$lang.'/'.$game.'.yml',0);
 		if (!isset($gameinfo['Enabled']) || ($gameinfo['Enabled'] === false))
 			throw new Exception('Default module is disabled!');
@@ -197,7 +198,7 @@ if (file_exists('otherpages/'.$game.'.php')) {
 		case 'png':
 			ob_start();
 			require 'libs/gddraw.php';
-			$outputstuff = array('game' => $gameinfo['Title'], 'mod' => $mod, 'gameid' => $game, 'games' => $games, 'mods' => $mods, 'generation' => 'gen'.$gameinfo['Generation'], $mod => $data);
+			$outputstuff = array('game' => $gameinfo['Title'], 'spriteseries' => $gameinfo['Sprite Series'], 'mod' => $mod, 'gameid' => $game, 'games' => $games, 'mods' => $mods, 'generation' => 'gen'.$gameinfo['Generation'], $mod => $data);
 			$wants = $datamod->getHTMLDependencies();
 			foreach ($wants as $what=>$ids)
 				foreach ($ids as $id)
@@ -211,7 +212,7 @@ if (file_exists('otherpages/'.$game.'.php')) {
 		case 'devimg':
 			header('Content-Type: text/html');
 			require 'libs/gddraw.php';
-			$outputstuff = array('game' => $gameinfo['Title'], 'mod' => $mod, 'gameid' => $game, 'games' => $games, 'mods' => $mods, 'generation' => 'gen'.$gameinfo['Generation'], $mod => $data);
+			$outputstuff = array('game' => $gameinfo['Title'], 'spriteseries' => $gameinfo['Sprite Series'], 'mod' => $mod, 'gameid' => $game, 'games' => $games, 'mods' => $mods, 'generation' => 'gen'.$gameinfo['Generation'], $mod => $data);
 			$wants = $datamod->getHTMLDependencies();
 			foreach ($wants as $what=>$ids)
 				foreach ($ids as $id)
@@ -222,7 +223,7 @@ if (file_exists('otherpages/'.$game.'.php')) {
 		case 'jpg':
 			ob_start();
 			require 'libs/gddraw.php';
-			$outputstuff = array('game' => $gameinfo['Title'], 'mod' => $mod, 'gameid' => $game, 'games' => $games, 'mods' => $mods, 'generation' => 'gen'.$gameinfo['Generation'], $mod => $data);
+			$outputstuff = array('game' => $gameinfo['Title'], 'spriteseries' => $gameinfo['Sprite Series'], 'mod' => $mod, 'gameid' => $game, 'games' => $games, 'mods' => $mods, 'generation' => 'gen'.$gameinfo['Generation'], $mod => $data);
 			$wants = $datamod->getHTMLDependencies();
 			foreach ($wants as $what=>$ids)
 				foreach ($ids as $id)
@@ -236,7 +237,7 @@ if (file_exists('otherpages/'.$game.'.php')) {
 		case 'gif':
 			ob_start();
 			require 'libs/gddraw.php';
-			$outputstuff = array('game' => $gameinfo['Title'], 'mod' => $mod, 'gameid' => $game, 'games' => $games, 'mods' => $mods, 'generation' => 'gen'.$gameinfo['Generation'], $mod => $data);
+			$outputstuff = array('game' => $gameinfo['Title'], 'spriteseries' => $gameinfo['Sprite Series'], 'mod' => $mod, 'gameid' => $game, 'games' => $games, 'mods' => $mods, 'generation' => 'gen'.$gameinfo['Generation'], $mod => $data);
 			$wants = $datamod->getHTMLDependencies();
 			foreach ($wants as $what=>$ids)
 				foreach ($ids as $id)

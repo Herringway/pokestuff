@@ -57,7 +57,8 @@ class stats extends datamod {
 		$borderpadding = min($canvas->getX(),$canvas->getY())/100;
 		$canvas->drawRectangle($borderpadding, $borderpadding, $canvas->getX()-$borderpadding*2, $canvas->getY()-$borderpadding*2, $settings['Type Colours'][$data['stats'][0]['type1']], $settings['stats']['Image Border Colour'], 10);
 		$canvas->drawRectangle($hbound/2 - $imagesize/2, 8, $imagesize, $imagesize, $settings['Type Colours'][$data['stats'][0]['type1']], $settings['stats']['Image Border Colour'], 10);
-		$sprite = sprintf('%s/%s/%s/pokemon/%d.png', $settings['Base Image Path'], $data['generation'], $data['gameid'], $data['stats'][0]['imgid']);
+		$sprite = sprintf('%s/%s/%s/pokemon/%d.png', $settings['Base Image Path'], $data['generation'], $data['spriteseries'], $data['stats'][0]['imgid']);
+		echo $sprite.'<br />'.PHP_EOL;
 		$canvas->copyImageScaled($sprite, $hbound/2, $imagesize/2+8, $imagesize/96, true);
 		$canvas->drawTextCenteredShadowed($data['stats'][0]['name'], $fontsize, 64, $imagesize+$fontsize*1.6+8, $textcolor, $textshadowcolor, $settings['stats']['Font']);
 		if ($data['stats'][0]['type1'] == $data['stats'][0]['type2']) {
