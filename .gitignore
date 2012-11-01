@@ -4,5 +4,5 @@ settings.yml
 *.gb
 *.gbc
 favicon.ico
-images/*
+static/images/*
 cache/*
