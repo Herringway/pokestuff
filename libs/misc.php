@@ -25,7 +25,7 @@ class basegame {
 	}
 	protected function getMoveCached($id) {
 		if (!method_exists($this, 'getMove'))
-			throw new Exception('Unsupported');
+			throw new Exception('Move Data Unsupported');
 		$data = $this->getMove($id);
 		$data['id'] = $id;
 		$data['name'] = $this->getTextEntry('Move Names', $id);
@@ -39,7 +39,7 @@ class basegame {
 	}
 	protected function getStatsCached($id) {
 		if (!method_exists($this, 'getStats'))
-			throw new Exception('Unsupported');
+			throw new Exception('Stats Unsupported');
 		$data = $this->getStats($id);
 		if (method_exists($this, 'getBaseID'))
 			$baseid = $this->getBaseID($id);
@@ -57,7 +57,7 @@ class basegame {
 	}
 	protected function getTrainerCached($id) {
 		if (!method_exists($this, 'getTrainerData'))
-			throw new Exception('Unsupported');
+			throw new Exception('Trainer Data Unsupported');
 		$data = $this->getTrainerData($id);
 		$data['id'] = $id;
 		$data['name'] = $this->getTextEntry('Trainer Names', $id);
@@ -66,7 +66,7 @@ class basegame {
 	}
 	protected function getItemCached($id) {
 		if (!method_exists($this, 'getItem'))
-			throw new Exception('Unsupported');
+			throw new Exception('Item Data Unsupported');
 		$data = $this->getItem($id);
 		$data['id'] = $id;
 		$data['name'] = $this->getTextEntry('Item Names', $id);
@@ -75,7 +75,7 @@ class basegame {
 	}
 	protected function getAreaCached($id) {
 		if (!method_exists($this, 'getArea'))
-			throw new Exception('Unsupported');
+			throw new Exception('Area Data Unsupported');
 		$data = $this->getArea($id);
 		$data['id'] = $id;
 		return $data;
@@ -185,8 +185,22 @@ function debugmessage($message, $level = 'error') {
 	}
 }
 function deprecated() {
-	$d = debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS, 3);
-	var_dump($d);
-	debugmessage(sprintf('Deprecated function %s called (%s:%d)', (isset($d[1]['class']) ? $d[1]['class'].$d[1]['type'] : '').$d[1]['function'], str_replace(str_replace('libs', '', dirname(__FILE__)), '', $d[0]['file']), $d[0]['line']), 'devfatal');
+	global $settings;
+	if ($settings['Debug']) {
+		var_dump(debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS, 3));
+		debugmessage(sprintf('Deprecated function %s called (%s:%d)', (isset($d[1]['class']) ? $d[1]['class'].$d[1]['type'] : '').$d[1]['function'], str_replace(str_replace('libs', '', dirname(__FILE__)), '', $d[0]['file']), $d[0]['line']), 'devfatal');
+	}
+}
+function error_handler($errno, $errstr, $errfile, $errline, $errcontext) {
+	global $settings;
+	echo render_html('error', array('error' => $errstr));
+	if (!$settings['Debug'])
+		die();
+}
+function exception_handler($exception) {
+	global $games, $mods, $settings;
+	echo render_html('error', array('mods' => $mods, 'games' => $games, 'error' => $exception->getMessage()));
+	if (!$settings['Debug'])
+		die();
 }
 ?>

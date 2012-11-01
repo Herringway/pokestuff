@@ -1,9 +1,24 @@
 <?php
+function render_html($template, $outputstuff) {
+	global $settings;
+	require_once 'Twig/Autoloader.php';
+	Twig_Autoloader::register();
+	require_once 'libs/twigext.php';
+	header('Content-Type: text/html; charset=utf-8');
+	$loader = new Twig_Loader_Filesystem('templates');
+	$twig = new Twig_Environment($loader, array('debug' => $settings['Debug'] > 1));
+	$twig->addExtension(new Twig_Extension_Debug());
+	$twig->addExtension(new Twig_Extension_Sandbox(new Twig_Sandbox_SecurityPolicy()));
+	$twig->addExtension(new Penguin_Twig_Extensions());
+	return $twig->render($template.'.tpl', $outputstuff);
+}
 $init = microtime(true);
 require_once 'libs/cache.php';
 require_once 'libs/settings.php';
 require_once 'libs/misc.php';
 require_once 'libs/chromephp/ChromePhp.php';
+set_error_handler('error_handler');
+set_exception_handler('exception_handler');
 $settings = new settings(array(
 		'Cache' => true,
 		'Default Game' => 'black 2',
@@ -142,8 +157,13 @@ if (file_exists('otherpages/'.$game.'.php')) {
 					break;
 				}
 			}
-			if ($nmod === false)
-				throw new Exception(sprintf('Mod %s not found', $mod));
+			if ($nmod === false) {
+				$mod = $settings['Default Mod'];
+				$lang = $settings['Default Language'];
+				$argv = array($game,$mod);
+				$gamemod = new $mname($game,$lang);
+			}
+				//throw new Exception(sprintf('Mod %s not found', $mod));
 		}
 	}
 
@@ -157,26 +177,17 @@ if (file_exists('otherpages/'.$game.'.php')) {
 		ini_set('xdebug.var_display_max_data', -1);
 		ini_set('xdebug.var_display_max_depth', -1);
 	}
+	debugmessage(sprintf('took %f seconds', microtime(true)-$init), 'info');
+	debugmessage(sprintf('Cache hits: %d/%d', $cachehits, $cachehits+$cachemisses), 'info');
+	debugmessage(sprintf('Memory used: %1.2fMB', memory_get_peak_usage()/1024/1024), 'info');
 	switch($format) {
 		case 'html':
-			require_once 'Twig/Autoloader.php';
-			Twig_Autoloader::register();
-			require_once 'libs/twigext.php';
-			header('Content-Type: text/html; charset=utf-8');
-			$loader = new Twig_Loader_Filesystem('templates');
-			$twig = new Twig_Environment($loader, array('debug' => $settings['Debug'] > 1));
-			$twig->addExtension(new Twig_Extension_Debug());
-			$twig->addExtension(new Twig_Extension_Sandbox(new Twig_Sandbox_SecurityPolicy()));
-			$twig->addExtension(new Penguin_Twig_Extensions());
 			$outputstuff = array('game' => $gameinfo['Title'], 'mod' => $mod, 'gameid' => $game, 'gamelang' => $lang, 'games' => $games, 'mods' => $mods, 'deflang' => $settings['Default Language'], 'showmenu' => $settings['Show Game Menu'] && (count($games) > 1), 'generation' => 'gen'.$gameinfo['Generation'], $mod => $data);
 			$wants = $datamod->getHTMLDependencies();
 			foreach ($wants as $what=>$ids)
 				foreach ($ids as $id)
 					$outputstuff[$what][$id] = $gamemod->getData($what,$id);
-			debugmessage(sprintf('took %f seconds', microtime(true)-$init), 'info');
-			debugmessage(sprintf('Cache hits: %d/%d', $cachehits, $cachehits+$cachemisses), 'info');
-			debugmessage(sprintf('Memory used: %1.2fMB', memory_get_peak_usage()/1024/1024), 'info');
-			echo $twig->render($datamod->getMode().'.tpl', $outputstuff); break;
+			echo render_html($datamod->getMode(), $outputstuff); break;
 		case 'json':
 			header('Content-Type: application/json; charset=utf-8');
 			echo json_encode($data, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE | JSON_FORCE_OBJECT); break;

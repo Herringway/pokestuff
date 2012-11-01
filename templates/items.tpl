@@ -26,8 +26,8 @@
 			<tbody>
 {%for item in items %}
 				<tr>
-					<td><a href="/{{gameid}}/items/{{item.name}}">{{item.id}}</a></td>
-					<td><img src="/static/images/items/{{item.name|lower|replace({' ':'-', '.':'', 'é':'e','’':'\'', '?':''})}}.png" alt="{{item.name}}"/><a href="/{{gameid}}/items/{{item.name}}">{{item.name}}</a></td>
+					<td><a href="/{{gameid}}/items/{{item.id}}">{{item.id}}</a></td>
+					<td><a href="/{{gameid}}/items/{{item.name}}">{{item.name}}</a></td>
 					<td>{{item.value}}</td>
 					<td>{{item.description}}</td>
 				</tr>
