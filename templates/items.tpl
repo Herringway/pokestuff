@@ -36,8 +36,8 @@
 		</table>{%else%}
 {%for item in items%}
 <table style="width: 500px;">
-<tr><th colspan="5"><img src="/static/images/items/{{item.name|lower|replace({' ':'-', '.':'', 'é':'e','’':'\'','?':''})}}.png" alt="{{item.name}}"/>{{item.name}}</th></tr>
-<tr><td colspan="5" style="height: 60px;">{{item.description}}</td></tr>
+<tr><th><img src="/static/images/items/{{item.name|lower|replace({' ':'-', '.':'', 'é':'e','’':'\'','?':''})}}.png" alt="{{item.name}}"/>{{item.name}}</th><th>Value</th></tr>
+<tr><td style="height: 60px;">{{item.description}}</td><td>{{item.value}}</td></tr>
 </table>
 {%endfor%}
 {%endif%}
