@@ -1,7 +1,8 @@
 <?php
-class trainers {
+class trainers extends datamod {
 	private $wants = array();
 	const name = 'Trainers';
+	const show = false;
 	function execute() {
 		global $gamemod, $argv, $cache;
 		$output = array();

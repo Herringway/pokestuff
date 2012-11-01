@@ -6,9 +6,11 @@ class gen5 extends basegame {
 	private $storyTextFiles;
 	private $narcs;
 	private $stats = array('systemtextloads' => 0, 'storytextloads' => 0);
-	private $rom;
-	const generation = 'gen5';
 
+	function loadRom() {
+		if ($this->rom == null)
+			$this->rom = new ndsrom('data/'.$this->lang.'/'.$this->gameid.'.nds');
+	}
 	function listTables($dirname = null) {
 		$this->loadRom();
 		$this->rom->autoNARC();
@@ -70,10 +72,6 @@ class gen5 extends basegame {
 	}
 	function getExecutionStats() {
 		return $this->stats;
-	}
-	function loadRom() {
-		if ($this->rom == null)
-			$this->rom = new ndsrom('games/'.$this->lang.'/'.$this->gameid.'.nds');
 	}
 	function getBaseID($id) {
 		if (isset($GLOBALS['gamecfg']['Original Forms'][$id]))
@@ -188,7 +186,7 @@ class gen5 extends basegame {
 	}
 	function getMove($id) {
 		global $gamecfg;
-		static $flags = array('MAKES_CONTACT', 'POWER_HERB', 'HYPER_BEAM', 'BRIGHTPOWDER', 'MAGIC_COAT', 'IS_SNATCHABLE', 'UNKNOWN', 'IS_PUNCH', 'IS_SOUND', 'FAILS_IN_GRAVITY', 'DETHAWS_USER', 'CAN_HIT_NON-ADJACENT', 'HEALS', 'UNKNOWN2', 'UNKNOWN3', 'UNKNOWN4');
+		static $flags = array('Makes Contact', 'Affected by Power Herb', 'Is a Hyper Beam', 'Affected by Brightpowder', 'Reflected by Magic Coat', 'Is Snatchable', 'Unknown', 'Is Punch', 'Is Sound', 'Fails in Gravity', 'Dethaws User', 'Can Hit Non-adjacent', 'Heals', 'Unknown 2', 'Unknown 3', 'Unknown 4');
 		$output = unpack('Ctype/Cinternal_category/Ccategory/Cpower/Caccuracy/Cpp/cpriority/Chits/Cstatus/Cunknown/Ceffectchance/Cunknown2/Cunknown3/Cunknown4/Ccritlevel/Cflinchchance/veffect/cdrain_percentage/cheal_percentage/Cunknown5/C3stat/c3statdelta/C3stat_chance/C2always_83/vflags/C2null', $this->getFile('movedata', $id, true));
 		$output['type'] = $gamecfg['Types'][$output['type']];
 		for ($i = 0; $i < count($flags); $i++)

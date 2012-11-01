@@ -26,13 +26,19 @@
 			<tbody>
 {%for item in items %}
 				<tr>
-					<td><a href="/{{gameid}}/items/{{item.id}}">{{item.id}}</a></td>
-					<td><a href="/{{gameid}}/items/{{item.id}}">{{item.name}}</a></td>
+					<td><a href="/{{gameid}}/items/{{item.name}}">{{item.id}}</a></td>
+					<td><img src="/static/images/items/{{item.name|lower|replace({' ':'-', '.':'', 'é':'e','’':'\'', '?':''})}}.png" alt="{{item.name}}"/><a href="/{{gameid}}/items/{{item.name}}">{{item.name}}</a></td>
 					<td>{{item.value}}</td>
 					<td>{{item.description}}</td>
 				</tr>
 {%endfor%}
 		</tbody>
 		</table>{%else%}
-{{dump(items)}}{%endif%}
+{%for item in items%}
+<table style="width: 500px;">
+<tr><th colspan="5"><img src="/static/images/items/{{item.name|lower|replace({' ':'-', '.':'', 'é':'e','’':'\'','?':''})}}.png" alt="{{item.name}}"/>{{item.name}}</th></tr>
+<tr><td colspan="5" style="height: 60px;">{{item.description}}</td></tr>
+</table>
+{%endfor%}
+{%endif%}
 {%endblock%}

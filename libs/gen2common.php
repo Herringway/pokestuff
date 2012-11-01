@@ -1,10 +1,9 @@
 <?php
 class gen2 extends basegame {
-	private $file;
 	
 	function loadRom() {
-		if ($this->file === null)
-			$this->file = fopen('games/'.$this->lang.'/'.$this->gameid.'.gbc','r');
+		if ($this->rom === null)
+			$this->rom = fopen('data/'.$this->lang.'/'.$this->gameid.'.gbc','r');
 	}
 	public function getCount($what) {
 		switch ($what) {
@@ -19,7 +18,7 @@ class gen2 extends basegame {
 		global $gamecfg;
 		if ($size == -1)
 			$size = 0x1000;
-		fseek($this->file, $offset);
+		fseek($this->rom, $offset);
 		$output = '';
 		for ($i = 0; $i < $size; $i++) {
 			$val = $this->readByte();
@@ -36,7 +35,7 @@ class gen2 extends basegame {
 		$this->loadRom();
 		global $gamecfg;
 		$size = 0x1000;
-		fseek($this->file, $offset);
+		fseek($this->rom, $offset);
 		$count = intval($count);
 		while ($count-- >= 0) {
 			$output = '';
@@ -63,20 +62,20 @@ class gen2 extends basegame {
 	}
 	function readByte($offset = -1) {
 		if ($offset > -1)
-			fseek($this->file, $offset);
-		return ord(fgetc($this->file));
+			fseek($this->rom, $offset);
+		return ord(fgetc($this->rom));
 	}
 	function readShort($offset = -1) {
 		if ($offset > -1)
-			fseek($this->file, $offset);
-		$v = unpack('v', fread($this->file, 2));
+			fseek($this->rom, $offset);
+		$v = unpack('v', fread($this->rom, 2));
 		return $v[1];
 	}
 	public function getMove($id) {
 		global $gamecfg;
 		$this->loadRom();
-		fseek($this->file, $gamecfg['Move Data Offset'] + $id * 7);
-		$data = fread($this->file, 7);
+		fseek($this->rom, $gamecfg['Move Data Offset'] + $id * 7);
+		$data = fread($this->rom, 7);
 		$output = unpack('Crid/Ceffect/Cpower/Ctypeid/Caccuracy/Cpp/C*unknown', $data);
 		$output['type'] = $gamecfg['Types'][$output['typeid']]['Name'];
 		$output['accuracy'] =  intval(100 * $output['accuracy'] / 256);
@@ -87,8 +86,8 @@ class gen2 extends basegame {
 	public function getStats($id) {
 		global $gamecfg;
 		$this->loadRom();
-		fseek($this->file, $gamecfg['Pokemon Stats Offset'] + $id*32);
-		$data = unpack('Cid/Chp/Catk/Cdef/Cspeed/Csatk/Csdef/C2type/Ccapturerate/Cxprate/C13unknown', fread($this->file, 0x20));
+		fseek($this->rom, $gamecfg['Pokemon Stats Offset'] + $id*32);
+		$data = unpack('Cid/Chp/Catk/Cdef/Cspeed/Csatk/Csdef/C2type/Ccapturerate/Cxprate/C13unknown', fread($this->rom, 0x20));
 		for ($i = 1; $i <= 2; $i++) {
 			if (isset($gamecfg['Types'][$data['type'.$i]]['Name']))
 				$data['type'.$i] = $gamecfg['Types'][$data['type'.$i]]['Name'];

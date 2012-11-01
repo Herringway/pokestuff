@@ -1,10 +1,9 @@
 <?php
 class gen3 extends basegame {
-	private $file;
 	
 	function loadRom() {
-		if ($this->file === null)
-			$this->file = fopen('games/'.$this->lang.'/'.$this->gameid.'.gba','r');
+		if ($this->rom === null)
+			$this->rom = fopen('data/'.$this->lang.'/'.$this->gameid.'.gba','r');
 	}
 	function getCount($what) {
 		global $gamecfg;
@@ -25,13 +24,13 @@ class gen3 extends basegame {
 	}
 	function readByte($offset = -1) {
 		if ($offset > -1)
-			fseek($this->file, $offset);
-		return ord(fgetc($this->file));
+			fseek($this->rom, $offset);
+		return ord(fgetc($this->rom));
 	}
 	function readShort($offset = -1) {
 		if ($offset > -1)
-			fseek($this->file, $offset);
-		$v = unpack('v', fread($this->file, 2));
+			fseek($this->rom, $offset);
+		$v = unpack('v', fread($this->rom, 2));
 		return $v[1];
 	}
 	function readText($offset, $size = -1) {
@@ -39,7 +38,7 @@ class gen3 extends basegame {
 		global $gamecfg;
 		if ($size == -1)
 			$size = 0x1000;
-		fseek($this->file, $offset);
+		fseek($this->rom, $offset);
 		$output = '';
 		for ($i = 0; $i < $size; $i++) {
 			$val = $this->readByte();
@@ -57,14 +56,14 @@ class gen3 extends basegame {
 		global $gamecfg;
 		if (!isset($gamecfg['Tables'][$what]))
 			throw new Exception('Table not found');
-		fseek($this->file, $gamecfg['Tables'][$what]['Offset'] + $gamecfg['Tables'][$what]['Entry Size'] * $which);
-		return unpack(implode('/', $gamecfg['Tables'][$what]['Format']), fread($this->file, $gamecfg['Tables'][$what]['Entry Size']));
+		fseek($this->rom, $gamecfg['Tables'][$what]['Offset'] + $gamecfg['Tables'][$what]['Entry Size'] * $which);
+		return unpack(implode('/', $gamecfg['Tables'][$what]['Format']), fread($this->rom, $gamecfg['Tables'][$what]['Entry Size']));
 	}
 	function getRawDataEntry($what, $which) {
 		$this->loadRom();
 		global $gamecfg;
-		fseek($this->file, $gamecfg['Tables'][$what]['Offset'] + $gamecfg['Tables'][$what]['Entry Size'] * $which);
-		return unpack('C*', fread($this->file, $gamecfg['Tables'][$what]['Entry Size']));
+		fseek($this->rom, $gamecfg['Tables'][$what]['Offset'] + $gamecfg['Tables'][$what]['Entry Size'] * $which);
+		return unpack('C*', fread($this->rom, $gamecfg['Tables'][$what]['Entry Size']));
 	}
 	function getTextEntry($what, $which) {
 		global $gamecfg;
@@ -155,10 +154,10 @@ class gen3 extends basegame {
 				$output['TM'][] = array('Learned' => ($k < 50) ? sprintf('TM%02d',$k+1) : sprintf('HM%02d',$k-49), 'id' => $this->getFixedDataEntry('tmmap', $k)[1]);
 		
 		$levelupptr = $this->getFixedDataEntry('levelupmoves', $id);
-		fseek($this->file, $levelupptr['Pointer']-0x8000000);
+		fseek($this->rom, $levelupptr['Pointer']-0x8000000);
 		while (($move = $this->readShort()) != 65535)
 			$output['Levelup'][] = array('id' => $move&0x1FF, 'Learned' => 'Level '.($move>>9));
-		fseek($this->file, $gamecfg['eggmoves']);
+		fseek($this->rom, $gamecfg['eggmoves']);
 		$childid = $id;
 		while (($b = $this->readEggEntry()) != null)
 			if ($b['id'] == $childid) {
@@ -177,7 +176,7 @@ class gen3 extends basegame {
 		$moves = array();
 		while (($v = $this->readShort()) < 20000)
 			$moves[] = $v;
-		fseek($this->file, -2, SEEK_CUR);
+		fseek($this->rom, -2, SEEK_CUR);
 		return array('id' => $id-20000, 'moves' => $moves);
 	}
 }

@@ -1,5 +1,5 @@
 <?php
-class text {
+class text extends datamod {
 	const name = 'Text';
 	const show = false;
 	function execute() {

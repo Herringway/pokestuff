@@ -75,7 +75,6 @@
 				} ).fnSetFilteringDelay();
 			});
 		</script>
-{{dump()}}
 {% for poke in stats%}
 		<table>
 			<thead>

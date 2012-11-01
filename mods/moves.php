@@ -1,5 +1,5 @@
 <?php
-class moves {
+class moves extends datamod {
 	const name = 'Move List';
 	function execute() {
 		global $gamemod, $argv, $cache;

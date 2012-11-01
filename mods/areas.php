@@ -1,5 +1,5 @@
 <?php
-class areas {
+class areas extends datamod {
 	private $wants = array();
 	const name = 'Areas';
 	function execute() {

@@ -35,10 +35,10 @@ class GDDraw {
 				case 'jpeg':
 				case 'jpg': $fromimg = imagecreatefromjpg($filename); break;
 				case 'png': $fromimg = imagecreatefrompng($filename); break;
-				default: $fromimg = imagecreatefrompng('images/missing.png');
+				default: $fromimg = imagecreatefrompng('static/images/missing.png');
 			}
 		} else
-			$fromimg = imagecreatefrompng('images/missing.png');
+			$fromimg = imagecreatefrompng('static/images/missing.png');
 		$fromx = imagesx($fromimg);
 		$fromy = imagesy($fromimg);
 		if ($centered) {

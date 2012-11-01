@@ -1,5 +1,5 @@
 <?php
-class stats {
+class stats extends datamod {
 	private $wants = array();
 	const name = 'Stats';
 	function execute() {
@@ -39,7 +39,7 @@ class stats {
 		return $this->wants;
 	}
 	function getOptions() {
-		return array('Sprite Size' => 96, 'Font Size' => 10, 'Image Border Colour' => 0x000000, 'Image Size' => array('x' => 300, 'y' => 200), 'Font' => 'togoshi-monago.ttf');
+		return array('Sprite Size' => 96, 'Font Size' => 10, 'Image Border Colour' => 0x000000, 'Stat Polygon Colour' => 0x007FFF, 'Image Size' => array('x' => 300, 'y' => 200), 'Font' => 'togoshi-monago.ttf');
 	}
 	function genImage($data, &$canvas) {
 		global $settings;
@@ -55,18 +55,18 @@ class stats {
 		$fontsize = 10;
 		$canvas->setSize($settings['stats']['Image Size']['x'],$settings['stats']['Image Size']['y']);
 		$borderpadding = min($canvas->getX(),$canvas->getY())/100;
-		$canvas->drawRectangle($borderpadding, $borderpadding, $canvas->getX()-$borderpadding*2, $canvas->getY()-$borderpadding*2, $settings['typecolours'][$data['stats'][0]['type1']], $settings['imagebordercolour'], 10);
-		$canvas->drawRectangle($hbound/2 - $imagesize/2, 8, $imagesize, $imagesize, $settings['typecolours'][$data['stats'][0]['type1']], $settings['imagebordercolour'], 10);
-		$sprite = sprintf('images/%s/%s/pokemon/%d.png', $data['generation'], $data['gameid'], $data['stats'][0]['imgid']);
+		$canvas->drawRectangle($borderpadding, $borderpadding, $canvas->getX()-$borderpadding*2, $canvas->getY()-$borderpadding*2, $settings['Type Colours'][$data['stats'][0]['type1']], $settings['stats']['Image Border Colour'], 10);
+		$canvas->drawRectangle($hbound/2 - $imagesize/2, 8, $imagesize, $imagesize, $settings['Type Colours'][$data['stats'][0]['type1']], $settings['stats']['Image Border Colour'], 10);
+		$sprite = sprintf('%s/%s/%s/pokemon/%d.png', $settings['Base Image Path'], $data['generation'], $data['gameid'], $data['stats'][0]['imgid']);
 		$canvas->copyImageScaled($sprite, $hbound/2, $imagesize/2+8, $imagesize/96, true);
 		$canvas->drawTextCenteredShadowed($data['stats'][0]['name'], $fontsize, 64, $imagesize+$fontsize*1.6+8, $textcolor, $textshadowcolor, $settings['stats']['Font']);
 		if ($data['stats'][0]['type1'] == $data['stats'][0]['type2']) {
-			$sprite = sprintf('images/types/%s.png', $data['stats'][0]['type1']);
+			$sprite = sprintf('%s/types/%s.png', $settings['Base Image Path'], $data['stats'][0]['type1']);
 			$canvas->copyImage($sprite, $hbound/2, $imagesize+$fontsize*1.6+24, true);
 		} else {
-			$sprite = sprintf('images/types/%s.png', $data['stats'][0]['type1']);
+			$sprite = sprintf('%s/types/%s.png', $settings['Base Image Path'], $data['stats'][0]['type1']);
 			$canvas->copyImage($sprite, $hbound/2+16, $imagesize+$fontsize*1.6+24, true);
-			$sprite = sprintf('images/types/%s.png', $data['stats'][0]['type2']);
+			$sprite = sprintf('%s/types/%s.png', $settings['Base Image Path'], $data['stats'][0]['type2']);
 			$canvas->copyImage($sprite, $hbound/2-16, $imagesize+$fontsize*1.6+24, true);
 		}
 		if (isset($data['stats'][0]['abilities'])) {
@@ -105,14 +105,14 @@ class stats {
 		list($spdx,$spdy)   = $this->scaleXY($centx-$x, $centy-$y, $ax, $dy, $this->statScale($data['stats'][0]['speed']));
 		list($satkx,$satky) = $this->scaleXY($centx-$x, $centy-$y, $cx, $cy, $this->statScale($data['stats'][0]['satk']));
 		list($atkx,$atky)   = $this->scaleXY($centx-$x, $centy-$y, $cx, $by, $this->statScale($data['stats'][0]['atk']));
-		$canvas->drawPolygon(array($ax+$x, $ay+$y, $bx+$x, $by+$y, $bx+$x, $cy+$y, $ax+$x, $dy+$y, $cx+$x, $cy+$y, $cx+$x, $by+$y), $settings['imagebordercolour']);
-		$canvas->drawFilledPolygon(array($hpx+$x, $hpy+$y, $defx+$x, $defy+$y, $sdefx+$x, $sdefy+$y, $spdx+$x, $spdy+$y, $satkx+$x, $satky+$y, $atkx+$x, $atky+$y), $settings['Stat Polygon Colour'], $settings['imagebordercolour']);
-		$canvas->drawLine($ax+$x, $ay+$y, $centx, $centy, $settings['imagebordercolour']);
-		$canvas->drawLine($bx+$x, $cy+$y, $centx, $centy, $settings['imagebordercolour']);
-		$canvas->drawLine($bx+$x, $by+$y, $centx, $centy, $settings['imagebordercolour']);
-		$canvas->drawLine($cx+$x, $by+$y, $centx, $centy, $settings['imagebordercolour']);
-		$canvas->drawLine($cx+$x, $cy+$y, $centx, $centy, $settings['imagebordercolour']);
-		$canvas->drawLine($ax+$x, $dy+$y, $centx, $centy, $settings['imagebordercolour']);
+		$canvas->drawPolygon(array($ax+$x, $ay+$y, $bx+$x, $by+$y, $bx+$x, $cy+$y, $ax+$x, $dy+$y, $cx+$x, $cy+$y, $cx+$x, $by+$y), $settings['stats']['Image Border Colour']);
+		$canvas->drawFilledPolygon(array($hpx+$x, $hpy+$y, $defx+$x, $defy+$y, $sdefx+$x, $sdefy+$y, $spdx+$x, $spdy+$y, $satkx+$x, $satky+$y, $atkx+$x, $atky+$y), $settings['stats']['Stat Polygon Colour'], $settings['stats']['Image Border Colour']);
+		$canvas->drawLine($ax+$x, $ay+$y, $centx, $centy, $settings['stats']['Image Border Colour']);
+		$canvas->drawLine($bx+$x, $cy+$y, $centx, $centy, $settings['stats']['Image Border Colour']);
+		$canvas->drawLine($bx+$x, $by+$y, $centx, $centy, $settings['stats']['Image Border Colour']);
+		$canvas->drawLine($cx+$x, $by+$y, $centx, $centy, $settings['stats']['Image Border Colour']);
+		$canvas->drawLine($cx+$x, $cy+$y, $centx, $centy, $settings['stats']['Image Border Colour']);
+		$canvas->drawLine($ax+$x, $dy+$y, $centx, $centy, $settings['stats']['Image Border Colour']);
 		$canvas->drawTextCenteredShadowed('HP',   10, $ax+$x, $ay+$y, 0x000000, 0x0000EF, $settings['stats']['Font']);
 		$canvas->drawTextCenteredShadowed('ATK',  10, $cx+$x, $by+$y-5, 0x000000, 0xEF0000, $settings['stats']['Font']);
 		$canvas->drawTextCenteredShadowed('DEF',  10, $bx+$x, $by+$y-5, 0x000000, 0x0000EF, $settings['stats']['Font']);

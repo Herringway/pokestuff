@@ -1,7 +1,6 @@
 {%extends "base.tpl"%}
 {%block title%}Random Team Generator{%endblock%}
 {%block data%}
-{{dump()}}
 		<table>
 			<tr>
 			{%for poke in randteam%}

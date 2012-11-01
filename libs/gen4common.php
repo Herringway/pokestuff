@@ -4,8 +4,11 @@ require_once 'libs/gen4text.php';
 class gen4 extends basegame {
 	private $textdata;
 	private $narcs;
-	private $rom;
 	
+	private function loadRom() {
+		if ($this->rom == null)
+			$this->rom = new ndsrom('data/'.$this->lang.'/'.$this->gameid.'.nds');
+	}
 	function listTables() {
 		$this->loadRom();
 		$this->rom->autoNARC();
@@ -73,10 +76,6 @@ class gen4 extends basegame {
 			return sprintf('Invalid entry %d', $id);
 		}
 		return sprintf('Warning: %s not found', $type);
-	}
-	function loadRom() {
-		if ($this->rom == null)
-			$this->rom = new ndsrom('games/'.$this->lang.'/'.$this->gameid.'.nds');
 	}
 	function loadNarc($name) {
 		global $gamecfg;

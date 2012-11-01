@@ -1,40 +1,35 @@
 <?php
 class gen1 extends basegame {
-	private $file;
-	private $internalIDs;
 	
-	function __construct($id, $lang) {
-		global $settings;
-		$this->gameid = $id;
-		$this->lang = $lang;
-		$this->internalIDs = $settings['Generation 1 Internal IDs'];
-	}
 	private function loadRom() {
-		if ($this->file === null)
-			$this->file = fopen('games/'.$this->lang.'/'.$this->gameid.'.gb','r');
+		if ($this->rom === null)
+			$this->rom = fopen('data/'.$this->lang.'/'.$this->gameid.'.gb','r');
+	}
+	public function getOptions() {
+		return array('Generation 1 Internal IDs' => true);
 	}
 	public function getTextEntry($what, $where) {
 		$this->loadRom();
-		global $gamecfg;
+		global $gamecfg, $settings;
 		if ($what == 'Move Names') {
 			return $this->readTextT($gamecfg['Move Name Offset'], $where);
 		} else if ($what == 'Pokemon Names') {
-			if ($this->internalIDs)
+			if ($settings['gen1']['Generation 1 Internal IDs'])
 				return $this->readText($gamecfg['Pokemon Name Offset']+$where*10,10);
 			return $this->readText($gamecfg['Pokemon Name Offset']+$this->getIntID($where-1)*10,10);
 		} else if ($what == 'Species Names') {
-			if ($this->internalIDs)
+			if ($settings['gen1']['Generation 1 Internal IDs'])
 				$ptr = $this->readShort($gamecfg['Pokedex Data Offset'] + $where*2) - 0x4000 + ($gamecfg['Pokedex Data Offset']&0xFF0000);
 			else
 				$ptr = $this->readShort($gamecfg['Pokedex Data Offset'] + $this->getIntID($where-1)*2) - 0x4000 + ($gamecfg['Pokedex Data Offset']&0xFF0000);
 			return $this->readText($ptr).' Pokemon';
 		} else if ($what == 'Pokedex Entries') {
-			if ($this->internalIDs)
+			if ($settings['gen1']['Generation 1 Internal IDs'])
 				$ptr = $this->readShort($gamecfg['Pokedex Data Offset'] + $where*2) - 0x4000 + ($gamecfg['Pokedex Data Offset']&0xFF0000);
 			else
 				$ptr = $this->readShort($gamecfg['Pokedex Data Offset'] + $this->getIntID($where-1)*2) - 0x4000 + ($gamecfg['Pokedex Data Offset']&0xFF0000);
 			$this->readText($ptr);
-			fseek($this->file, 5, SEEK_CUR);
+			fseek($this->rom, 5, SEEK_CUR);
 			$ptr = $this->readShort()-0x4000 + ($this->readByte()<<14);
 			return $this->readText($ptr);
 		} else if ($what == 'Item Names') {
@@ -48,13 +43,13 @@ class gen1 extends basegame {
 	}
 	function readByte($offset = -1) {
 		if ($offset > -1)
-			fseek($this->file, $offset);
-		return ord(fgetc($this->file));
+			fseek($this->rom, $offset);
+		return ord(fgetc($this->rom));
 	}
 	function readShort($offset = -1) {
 		if ($offset > -1)
-			fseek($this->file, $offset);
-		$v = unpack('v', fread($this->file, 2));
+			fseek($this->rom, $offset);
+		$v = unpack('v', fread($this->rom, 2));
 		return $v[1];
 	}
 	private function readText($offset, $size = -1) {
@@ -62,7 +57,7 @@ class gen1 extends basegame {
 		global $gamecfg;
 		if ($size == -1)
 			$size = 0x1000;
-		fseek($this->file, $offset);
+		fseek($this->rom, $offset);
 		$output = '';
 		for ($i = 0; $i < $size; $i++) {
 			$val = $this->readByte();
@@ -80,7 +75,7 @@ class gen1 extends basegame {
 		$this->loadRom();
 		global $gamecfg;
 		$size = 0x1000;
-		fseek($this->file, $offset);
+		fseek($this->rom, $offset);
 		$count = intval($count);
 		while ($count-- >= 0) {
 			$output = '';
@@ -97,9 +92,10 @@ class gen1 extends basegame {
 		return $output;
 	}
 	public function getCount($what) {
+		global $settings;
 		switch ($what) {
 			case 'movedata': return 165;
-			case 'stats': return $this->internalIDs ? 256 : 152;
+			case 'stats': return $settings['gen1']['Generation 1 Internal IDs'] ? 256 : 152;
 			case 'itemdata': return 83;
 			case 'trainerdata': return 2;
 		}
@@ -113,8 +109,8 @@ class gen1 extends basegame {
 	public function getMove($id) {
 		global $gamecfg;
 		$this->loadRom();
-		fseek($this->file, $gamecfg['Move Data Table'] + $id * 6);
-		$data = fread($this->file, 6);
+		fseek($this->rom, $gamecfg['Move Data Table'] + $id * 6);
+		$data = fread($this->rom, 6);
 		$output = unpack('Crid/Ceffect/Cpower/Ctypeid/Caccuracy/Cpp', $data);
 		$output['type'] = isset($gamecfg['Types'][$output['typeid']]['Name']) ? $gamecfg['Types'][$output['typeid']]['Name'] : 'Unknown';
 		$output['accuracy'] =  intval(100 * $output['accuracy'] / 256);
@@ -123,9 +119,9 @@ class gen1 extends basegame {
 		return $output;
 	}
 	public function getStats($id) {
-		global $gamecfg;
+		global $gamecfg, $settings;
 		$this->loadRom();
-		if (!$this->internalIDs) {
+		if (!$settings['gen1']['Generation 1 Internal IDs']) {
 			$cid = $id;
 			$intid = $this->getIntID($cid);
 			if ($id == 0)
@@ -136,11 +132,11 @@ class gen1 extends basegame {
 		}
 		//printf('[i:%d,c:%d]<br />', $intid, $cid);
 		if (isset($gamecfg['Pokemon Stats Offsets'][$cid]))
-			fseek($this->file, $gamecfg['Pokemon Stats Offsets'][$cid]);
+			fseek($this->rom, $gamecfg['Pokemon Stats Offsets'][$cid]);
 		else
-			fseek($this->file, $gamecfg['Pokemon Stats Offsets']['default'] + (($cid-1)&0xFF) * 0x1C);
-		//echo ftell($this->file);
-		$data = fread($this->file, 0x1C);
+			fseek($this->rom, $gamecfg['Pokemon Stats Offsets']['default'] + (($cid-1)&0xFF) * 0x1C);
+		//echo ftell($this->rom);
+		$data = fread($this->rom, 0x1C);
 		$output = unpack('Cid/Chp/Catk/Cdef/Cspeed/Csatk/C2type/Ccapturerate/Cxprate/Cspritedimension/vFrontSpritePtr/vBackSpritePtr/C4wildmoves/Cgrowthrate', $data);
 		for ($i = 1; $i <= 2; $i++) {
 			if (isset($gamecfg['Types'][$output['type'.$i]]['Name']))
@@ -184,8 +180,8 @@ class gen1 extends basegame {
 		return $output;
 	}
 	function getMoveList($id, $level = -1) {
-		global $gamecfg;
-		if ($this->internalIDs)
+		global $gamecfg, $settings;
+		if ($settings['gen1']['Generation 1 Internal IDs'])
 			$id = $this->internalToCanonical($id);
 		$this->loadRom();
 		$output = array();

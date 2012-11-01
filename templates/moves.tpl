@@ -45,6 +45,33 @@
 {%endfor%}
 			</tbody>
 		</table>{%else%}
-{{dump(moves)}}
+{%for move in moves%}
+<table style="width: 500px;">
+<tr><th colspan="5">{{move.name}}</th></tr>
+<tr><td colspan="5" style="height: 60px;">{{move.description}}</td></tr>
+<tr>
+	<th>Type</th>
+	<th>Power</th>
+	<th>PP</th>
+	<th>Accuracy</th>
+	<th>Priority</th>
+</tr>
+<tr>
+	<td style="text-align: center;">{{macros.typeimage(move.type)}}{{macros.categoryimage(move.category)}}</td>
+	<td>{{move.power}}</td>
+	<td>{{move.pp}}</td>
+	<td>{{move.accuracy}}</td>
+	<td>{{move.priority}}</td>
+</tr>
+<tr><td colspan="4">{%for flag,value in move.Flags%}
+{{flag}}<br />
+{%endfor%}
+</td><td>
+{%for flag,value in move.Flags%}
+<input type="checkbox" {%if value%}checked="checked"{%endif%} disabled="true"/><br />
+{%endfor%}
+</td></tr>
+</table>
+{%endfor%}
 {%endif%}
 {%endblock%}

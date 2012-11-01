@@ -1,6 +1,7 @@
 <?php
-class completion {
+class completion extends datamod {
 	const name = 'Module Completion';
+	const show = false;
 	function execute() {
 		global $gamemod;
 		try {

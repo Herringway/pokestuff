@@ -1,4 +1,4 @@
-body		{background: #DDDDDD; }
+body		{background: #DDDDDD; margin: 30px 0px 0px 7px; }
 table		{border: none; empty-cells: hide; border-spacing: 0;}
 td,th		{border: 1px solid black; padding: 0px; margin:0px;}
 tr		{padding: 0px; background: #FFFFFF;}
@@ -50,7 +50,8 @@ a:visited	{color: #000080; text-decoration: underline; }
 .paginate_button	{background: white; text-decoration: underline; cursor: pointer; }
 .paginate_button, .paginate_active	{display: inline; margin-right: 5px; }
 .dataTables_paginate .last		{margin: 0px; }
-.sorting_asc 	{ background: url('/img/sort_asc.png')  no-repeat center right; }
-.sorting_desc 	{ background: url('/img/sort_desc.png') no-repeat center right; }
-.sorting 		{ background: url('/img/sort_both.png') no-repeat center right; }
+.sorting_asc 	{ background: url('/static/images/sort_asc.png')  no-repeat center right; }
+.sorting_desc 	{ background: url('/static/images/sort_desc.png') no-repeat center right; }
+.sorting 		{ background: url('/static/images/sort_both.png') no-repeat center right; }
 .tooltip { display:none; background-color:#ffa; border:1px solid #cc9; padding:3px; font-size:13px; -moz-box-shadow: 2px 2px 11px #666; box-shadow: 2px 2px 11px #666; }
+.menubar { background: #BBBBBB; position: fixed; left: 0px; top: 0px; width: 100%;}

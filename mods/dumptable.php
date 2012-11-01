@@ -1,10 +1,10 @@
 <?php
-class dumptable {
+class dumptable extends datamod {
+	const name = 'Table Dumper';
+	const show = false;
 	private $list = true;
 	private $show = true;
 	private $listtables = false;
-	const name = 'Table Dumper';
-	const show = false;
 	function execute() {
 		global $gamemod, $argv, $cache;
 		$this->show = isset($argv[2]);

@@ -2,6 +2,7 @@
 class basegame {
 	protected $gameid;
 	protected $lang;
+	protected $rom;
 	public function getData($what, $id) {
 		$id = intval($id);
 		global $cache,$cachehits,$cachemisses;
@@ -122,6 +123,11 @@ class basegame {
 		$this->lang = $lang;
 	}
 }
+class datamod {
+	function getOptions() {
+		return array();
+	}
+}
 function kimplode($array, $glue = ': ', $separator = ', ') {
 	if (!is_array($array))
 		return $array;
@@ -169,7 +175,7 @@ function debugmessage($message, $level = 'error') {
 	if ($limit-- > 0) {
 		if ($level === 'error')
 			ChromePhp::error($message);
-		else if ($settings['debug'] && ($level === 'devfatal')) {
+		else if ($settings['Debug'] && ($level === 'devfatal')) {
 			ChromePhp::error($message);
 			die($message);
 		} else if ($level === 'warn')
