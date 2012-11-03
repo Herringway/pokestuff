@@ -88,14 +88,15 @@
 						{{macros.typeimage(poke.type1)}}{%if poke.type1 != poke.type2%}{{macros.typeimage(poke.type2)}}{%endif%}<br />
 						{{poke.species}}<br />
 						{{poke.pokedex|nl2br}}<br />
-						<audio controls="controls"><source src="/static/audio/cries/{{poke.id}}.ogg" type="audio/ogg" /></audio><br />
 						{%for ability in poke.abilities%}{%if loop.first != true%}{%if ability%}/{%endif%}{%endif%}<a title="{{abilities[ability].description|nl2br|replace({"\n": ' '})}}">{{abilities[ability].name}}</a>{%endfor%}<br />
 {%for evo in poke.evolutions%}
-						Evolves into <a href="/{{gameid}}:{{gamelang}}/stats/{{evo.Target}}">{{evo.name}}</a> ({{evo.Argument}})<br />
+						Evolves into <a href="/{{gameid}}:{{gamelang}}/{{textPokemonNames[evo.Target]}}">{{textPokemonNames[evo.Target]}}</a> {%if evo.Item%}with <img src="/static/images/items/{{items[evo.Item].name|lower|replace({' ':'-', '.':'', 'é':'e','’':'\'','?':''})}}.png" alt="{{items[evo.Item].name}}" title="{{items[evo.Item].name}}" />{%endif%}{%if evo.Level%}at Level {{evo.Level}}{%endif%}{%if evo.Move%} once <a href="/{{gameid}}:{{gamelang}}/{{moves[evo.Move].name}}">{{moves[evo.Move].name}}</a> is learned{%endif%}{%if evo.With%} if <a href="/{{gameid}}:{{gamelang}}/{{textPokemonNames[evo.With]}}">{{textPokemonNames[evo.With]}}</a> is in party{%endif%}{%if evo.Condition%} {{evo.Condition}}{%endif%}<br />
 {%endfor%}
 						{%if poke.EVs%}EVs: {% for key, val in poke.EVs%}{{key}}: {{val}}{%if loop.last != true%}, {%endif%}{%endfor%}<br />{%endif%}
 						{%if poke.formnames%}Forms:{%endif%}
-{%for formname in poke.formnames%}{{formname}}{%if loop.last != true%}, {%endif%}{%endfor%}</td></tr><tr><th>HP</th><th>Attack</th><th>Defense</th><th>Special Attack</th><th>Special Defense</th><th>Speed</th><th>Total</th>
+{%for formname in poke.formnames%}{{formname}}{%if loop.last != true%}, {%endif%}{%endfor%}
+						<audio style="width: 100%;" controls="controls"><source src="/static/audio/cries/{{poke.id}}.ogg" type="audio/ogg" /></audio><br />
+						</td></tr><tr><th>HP</th><th>Attack</th><th>Defense</th><th>Special Attack</th><th>Special Defense</th><th>Speed</th><th>Total</th>
 				</tr>
 			</thead>
 			<tbody>

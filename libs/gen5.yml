@@ -388,6 +388,53 @@ Move Effects:
   321: Raises [STAT1] [STAT1DELTA] stages
   322: Raises user's [STAT1] [STAT1DELTA] stages, [STAT2] [STAT2DELTA] stages, and [STAT3] [STAT3DELTA] stages
   332: Charges for one turn, [EFFECTCHANCE]% chance to inflict [STATUS]
+Evolution:
+  Uses Item:
+    6: y
+    8: y
+    17: y
+    18: y
+    19: y
+    20: y
+  Levelup:
+    4: y
+    9: y
+    10: y
+    11: y
+    12: y
+    13: y
+    14: y
+    15: y
+    23: y
+    24: y
+  With:
+    22: y
+  Move:
+    21: y
+  Conditions:
+    1: if happiness is maxed
+    2: if levelled up with maxed happiness at daytime
+    3: if levelled up with maxed happiness at nighttime
+    5: if traded
+    6: if traded
+    7: if traded for specific pokemon
+    9: if attack > defense
+    10: if attack = defense
+    11: if attack < defense
+    12: if personality < 5
+    13: if personality > 4
+    14: and
+    15: if space free in party
+    16: if beauty > 170
+    17: if male
+    18: if female
+    19: if levelled up at daytime
+    20: if levelled up at nighttime
+    23: if male
+    24: if female
+    25: if at chargestone cave
+    26: if levelled up at mossy rock
+    27: if levelled up at ice rock
 Evolution Types:
   0: 'None'
   1: 'Happiness'

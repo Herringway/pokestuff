@@ -14,7 +14,7 @@ class moves extends datamod {
 				$floor = $ceiling = $gamemod->moveNameToID(urldecode($argv[2]));
 		}
 		for ($moveid = $floor; $moveid <= $ceiling; $moveid++)
-			$output[] = $gamemod->getData('moves', $moveid);
+			$output[] = $gamemod->getDataNew('moves/'.$moveid);
 				
 		return $output;
 	}

@@ -5,6 +5,8 @@ class GDDraw {
 	private $x;
 	private $y;
 	function setSize($w, $h) {
+		if (($w == null) || ($h == null))
+			throw new Exception('Cannot create an image with null dimensions!');
 		$this->canvas = imagecreatetruecolor($w, $h);
 		$pink = imagecolorallocatealpha($this->canvas, 255, 255, 255, 127);
 		imagefill($this->canvas, 0, 0, $pink);

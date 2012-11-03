@@ -15,7 +15,7 @@ class stats extends datamod {
 		}
 		$output = array();
 		for ($pkmnid = $floor; $pkmnid <= $ceiling; $pkmnid++) {
-			$tmp = $gamemod->getData('stats', $pkmnid);
+			$tmp = $gamemod->getDataNew('stats/'.$pkmnid);
 			$output[] = $tmp;
 			if (isset($tmp['abilities']))
 				foreach ($tmp['abilities'] as $abil)
@@ -29,6 +29,16 @@ class stats extends datamod {
 				foreach ($tmp['moves'] as $mvtype)
 					foreach ($mvtype as $move)
 							$this->wants['moves'][] = $move['id'];
+			if (isset($tmp['evolutions']))
+				foreach ($tmp['evolutions'] as $evo) {
+					$this->wants['text/Pokemon Names'][] = $evo['Target'];
+					if (isset($evo['Item']))
+						$this->wants['items'][] = $evo['Item'];
+					if (isset($evo['Move']))
+						$this->wants['moves'][] = $evo['Move'];
+					if (isset($evo['With']))
+						$this->wants['text/Pokemon Names'][] = $evo['With'];
+				}
 		}
 		return $output;
 	}
@@ -39,7 +49,7 @@ class stats extends datamod {
 		return $this->wants;
 	}
 	function getOptions() {
-		return array('Sprite Size' => 96, 'Font Size' => 10, 'Image Border Colour' => 0x000000, 'Stat Polygon Colour' => 0x007FFF, 'Image Size' => array('x' => 300, 'y' => 200), 'Font' => 'togoshi-monago.ttf');
+		return array('Sprite Size' => 96, 'Font Size' => 10, 'Image Border Colour' => 0x000000, 'Stat Polygon Colour' => 0x007FFF, 'Image Size' => array('x' => 300, 'y' => 200), 'Font' => 'togoshi-monago.ttf', 'Stat Scale Factor' => 0.75);
 	}
 	function genImage($data, &$canvas) {
 		global $settings;
@@ -128,8 +138,8 @@ class stats extends datamod {
 		return array($x, $y);
 	}
 	private function statScale($stat) {
-		//return 0.5;
-		return pow($stat/255,0.75);
+		global $settings;
+		return pow($stat/255,$settings['stats']['Stat Scale Factor']);
 	}
 }
 ?>

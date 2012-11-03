@@ -18,6 +18,7 @@ class settings implements arrayaccess {
 			file_put_contents($this->writefile, yaml_emit($this->settings));
 	}
 	public function addSetting($key, $value) {
+	var_dump($this->defaults);
 		if (isset($this->defaults[$key]))
 			throw new Exception(sprintf('Setting already exists: %s', $key));
 		$this->defaults[$key] = $value;

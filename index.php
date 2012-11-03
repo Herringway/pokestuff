@@ -1,4 +1,5 @@
 <?php
+ob_start();
 function render_html($template, $outputstuff) {
 	global $settings;
 	require_once 'Twig/Autoloader.php';
@@ -187,7 +188,7 @@ if (file_exists('otherpages/'.$game.'.php')) {
 			$wants = $datamod->getHTMLDependencies();
 			foreach ($wants as $what=>$ids)
 				foreach ($ids as $id)
-					$outputstuff[$what][$id] = $gamemod->getData($what,$id);
+					$outputstuff[str_replace(array(' ', '/'), '', $what)][$id] = $gamemod->getDataNew($what.'/'.$id);
 			echo render_html($datamod->getMode(), $outputstuff); break;
 		case 'json':
 			header('Content-Type: application/json; charset=utf-8');
@@ -202,7 +203,7 @@ if (file_exists('otherpages/'.$game.'.php')) {
 			$wants = $datamod->getHTMLDependencies();
 			foreach ($wants as $what=>$ids)
 				foreach ($ids as $id)
-					$outputstuff[$what][$id] = $gamemod->getData($what,$id);
+					$outputstuff[str_replace(array(' ', '/'), '', $what)][$id] = $gamemod->getDataNew($what.'/'.$id);
 			$canvas = new GDDraw();
 			$datamod->genImage($outputstuff, $canvas);
 			ob_end_clean();
@@ -216,7 +217,7 @@ if (file_exists('otherpages/'.$game.'.php')) {
 			$wants = $datamod->getHTMLDependencies();
 			foreach ($wants as $what=>$ids)
 				foreach ($ids as $id)
-					$outputstuff[$what][$id] = $gamemod->getData($what,$id);
+					$outputstuff[$what][$id] = $gamemod->getDataNew($what.'/'.$id);
 			$canvas = new GDDraw();
 			$datamod->genImage($outputstuff, $canvas);
 			break;
@@ -250,5 +251,8 @@ if (file_exists('otherpages/'.$game.'.php')) {
 			break;
 	}
 }
+ob_end_flush();
+if (function_exists('fastcgi_finish_request'))
+	fastcgi_finish_request();
 unset($settings);
 ?>

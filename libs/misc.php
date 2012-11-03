@@ -3,7 +3,8 @@ class basegame {
 	protected $gameid;
 	protected $lang;
 	protected $rom;
-	public function getData($what, $id) {
+	/*public function getData($what, $id) {
+		deprecated();
 		$id = intval($id);
 		global $cache,$cachehits,$cachemisses;
 		if (isset($cache[sprintf('%s (%s)/%s/%d', $this->gameid, $this->lang, $what, $id)])) {
@@ -20,6 +21,27 @@ class basegame {
 			default: throw new Exception('Unknown data requested');
 		}
 		$cache[sprintf('%s (%s)/%s/%d', $this->gameid, $this->lang, $what, $id)] = $data;
+		$cachemisses++;
+		return $data;
+	}*/
+	public function getDataNew($what) {
+		global $cache, $cachehits, $cachemisses;
+		$split = explode('/', $what);
+		if (isset($cache[sprintf('%s (%s)/%s', $this->gameid, $this->lang, $what)])) {
+			$cachehits++;
+			return $cache[sprintf('%s (%s)/%s', $this->gameid, $this->lang, $what)];
+		}
+		switch($split[0]) {
+			case 'moves':		$data = $this->getMoveCached(intval($split[1])); break;
+			case 'stats':		$data = $this->getStatsCached(intval($split[1])); break;
+			case 'trainers':	$data = $this->getTrainerCached(intval($split[1])); break;
+			case 'items':		$data = $this->getItemCached(intval($split[1])); break;
+			case 'areas':		$data = $this->getAreaCached(intval($split[1])); break;
+			case 'abilities':	$data = $this->getAbilityCached(intval($split[1])); break;
+			case 'text':		$data = $this->getTextEntry($split[1], intval($split[2])); break;
+			default: throw new Exception('Unknown data requested');
+		}
+		$cache[sprintf('%s (%s)/%s', $this->gameid, $this->lang, $what)] = $data;
 		$cachemisses++;
 		return $data;
 	}
@@ -80,16 +102,13 @@ class basegame {
 		$data['id'] = $id;
 		return $data;
 	}
-	protected function getTextEntryCached($name, $id) {
-		return $this->getTextEntry($name, $id);
-	}
 	public function getCount($what) {
 		return 0;
 	}
 	private function _nameToID($tablename, $textfile, $name) {
 		$id = false;
 		for ($i = 0; $i < $this->getCount($tablename); $i++) {
-			$tmpnam = $this->getTextEntryCached($textfile, $i);
+			$tmpnam = $this->getTextEntry($textfile, $i);
 			if (strtolower($tmpnam) == strtolower($name)) {
 				$id = $i;
 				break;
@@ -177,7 +196,7 @@ function debugmessage($message, $level = 'error') {
 			ChromePhp::error($message);
 		else if ($settings['Debug'] && ($level === 'devfatal')) {
 			ChromePhp::error($message);
-			die($message);
+			trigger_error($message);
 		} else if ($level === 'warn')
 			ChromePhp::warn($message);
 		else
@@ -187,12 +206,15 @@ function debugmessage($message, $level = 'error') {
 function deprecated() {
 	global $settings;
 	if ($settings['Debug']) {
-		var_dump(debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS, 3));
-		debugmessage(sprintf('Deprecated function %s called (%s:%d)', (isset($d[1]['class']) ? $d[1]['class'].$d[1]['type'] : '').$d[1]['function'], str_replace(str_replace('libs', '', dirname(__FILE__)), '', $d[0]['file']), $d[0]['line']), 'devfatal');
+		$d = debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS, 3);
+		//var_dump($d);
+		debugmessage(sprintf('Deprecated function %s called (%s:%d)', (isset($d[1]['class']) ? $d[1]['class'].$d[1]['type'] : '').$d[1]['function'], str_replace(str_replace('libs', '', dirname(__FILE__)), '', $d[1]['file']), $d[1]['line']), 'devfatal');
 	}
 }
 function error_handler($errno, $errstr, $errfile, $errline, $errcontext) {
 	global $settings;
+	if ($settings['Debug'])
+		$errstr .= sprintf(' at %s: %d', $errfile, $errline);
 	echo render_html('error', array('error' => $errstr));
 	if (!$settings['Debug'])
 		die();

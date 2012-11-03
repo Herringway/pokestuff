@@ -142,6 +142,16 @@ class gen5 extends basegame {
 		for ($i = 0; $i < 7; $i++) {
 			$tmp = unpack('CType/Cunknown/vArgument/vTarget', substr($data, $i*6, 6));
 			if ($tmp['Type'] != 0) {
+				if (isset($gamecfg['Evolution']['Uses Item'][$tmp['Type']]))
+					$tmp['Item'] = $tmp['Argument'];
+				if (isset($gamecfg['Evolution']['Levelup'][$tmp['Type']]))
+					$tmp['Level'] = $tmp['Argument'];
+				if (isset($gamecfg['Evolution']['Move'][$tmp['Type']]))
+					$tmp['Move'] = $tmp['Argument'];
+				if (isset($gamecfg['Evolution']['With'][$tmp['Type']]))
+					$tmp['With'] = $tmp['Argument'];
+				if (isset($gamecfg['Evolution']['Conditions'][$tmp['Type']]))
+					$tmp['Condition'] = $gamecfg['Evolution']['Conditions'][$tmp['Type']];
 				$tmp['Type'] = $gamecfg['Evolution Types'][$tmp['Type']];
 				$output[] = $tmp;
 			}

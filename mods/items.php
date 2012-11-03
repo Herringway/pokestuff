@@ -14,7 +14,7 @@ class items extends datamod {
 				$floor = $ceiling = $gamemod->itemNameToID(urldecode($argv[2]));
 		}
 		for ($moveid = $floor; $moveid <= $ceiling; $moveid++)
-			$output[] = $gamemod->getData('items',$moveid);
+			$output[] = $gamemod->getDataNew('items/'.$moveid);
 				
 		return $output;
 	}
