@@ -2,10 +2,9 @@
 class completion extends datamod {
 	const name = 'Module Completion';
 	const show = false;
-	function execute() {
-		global $gamemod;
+	function execute($argv) {
 		try {
-			$data = $gamemod->getData('stats',1);
+			$data = $this->gamemod->getData('stats',1);
 			$unknowns = 0;
 			foreach ($data as $k=>$v)
 				if (substr($k, 0, 7) == 'unknown')
@@ -24,7 +23,7 @@ class completion extends datamod {
 		$output['Stats Data'] = array('status' => $status, 'mod' => 'stats');
 		$status = array();
 		try {
-			$data = $gamemod->getData('moves',1);
+			$data = $this->gamemod->getData('moves',1);
 			$unknowns = 0;
 			foreach ($data as $k=>$v)
 				if (substr($k, 0, 7) == 'unknown')
@@ -39,7 +38,7 @@ class completion extends datamod {
 		$output['Move Data'] = array('status' => $status, 'mod' => 'moves');
 		$status = array();
 		try {
-			$data = $gamemod->getData('items',1);
+			$data = $this->gamemod->getData('items',1);
 			$unknowns = 0;
 			foreach ($data as $k=>$v)
 				if (substr($k, 0, 7) == 'unknown')
@@ -54,7 +53,7 @@ class completion extends datamod {
 		$output['Item Data'] = array('status' => $status, 'mod' => 'items');
 		$status = array();
 		try {
-			$data = $gamemod->getData('trainers',1);
+			$data = $this->gamemod->getData('trainers',1);
 			$unknowns = 0;
 			foreach ($data as $k=>$v)
 				if (substr($k, 0, 7) == 'unknown')
@@ -69,7 +68,7 @@ class completion extends datamod {
 		$output['Trainer Data'] = array('status' => $status, 'mod' => 'trainers');
 		$status = array();
 		try {
-			$data = $gamemod->getData('areas',1);
+			$data = $this->gamemod->getData('areas',1);
 			$unknowns = 0;
 			foreach ($data as $k=>$v)
 				if (substr($k, 0, 7) == 'unknown')
@@ -84,7 +83,7 @@ class completion extends datamod {
 		$output['Area Data'] = array('status' => $status, 'mod' => 'areas');
 		$status = array();
 		/*try {
-			$data = $gamemod->getText();
+			$data = $this->gamemod->getText();
 			if (!isset($output['Text Data']))
 				$status[] = 'Completed';
 		} catch(Exception $e) {

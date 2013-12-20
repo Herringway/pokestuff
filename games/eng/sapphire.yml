@@ -2,6 +2,7 @@
 Title: Sapphire
 Release: America
 Generation: 3
+Sprite Series: rs
 ...
 ---
 Text Offsets:
@@ -124,7 +125,7 @@ Tables:
       - vArgument
       - vTarget
       - C2Unknown
-    Offset: 0x203AE0
+    Offset: 0x203AF8
     Entries: 2060
     Entry Size: 0x8
   tmcompatibility:

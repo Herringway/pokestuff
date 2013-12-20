@@ -1,20 +1,19 @@
 <?php
 class items extends datamod {
 	const name = 'Item List';
-	function execute() {
-		global $gamemod, $argv, $cache;
+	function execute($argv) {
 		$output = array();
 		$floor = 0;
-		$limit = $gamemod->getCount('itemdata')-1;
+		$limit = $this->gamemod->getCount('itemdata')-1;
 		$ceiling = $limit;
 		if (isset($argv[2])) {
 			if (is_numeric(str_replace(array('.','$'), '', $argv[2])))
 				list($floor,$ceiling) = rangeStringToRange($argv[2],0,$limit);
 			else
-				$floor = $ceiling = $gamemod->itemNameToID(urldecode($argv[2]));
+				$floor = $ceiling = $this->gamemod->itemNameToID(urldecode($argv[2]));
 		}
 		for ($moveid = $floor; $moveid <= $ceiling; $moveid++)
-			$output[] = $gamemod->getDataNew('items/'.$moveid);
+			$output[] = $this->gamemod->getDataNew('items/'.$moveid);
 				
 		return $output;
 	}

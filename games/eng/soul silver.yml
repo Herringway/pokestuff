@@ -1,7 +1,8 @@
 ---
-Title: Heart Gold
+Title: Soul Silver
 Release: America
 Generation: 4
+Sprite Series: hgss
 ...
 ---
 text:
@@ -19,7 +20,7 @@ text:
     Move Descriptions: 749
     Move Names: 750
     Capitalized Move Names: 751
-    Pokedex Entries: 803
+    Pokedex Entries: 804
     Species Names: 823
   Unlisted Pokemon:
     - Unknown
@@ -57,7 +58,7 @@ narcs:
   trainerpokemon: a/0/5/6
   eggmoves: data/kowaza.narc
   children: poketool/personal/pms.narc
-  areadata: a/0/3/7
+  areadata: a/1/3/6
   minlevels: 2/2/7
 eggmoves: narc
 Area Data:

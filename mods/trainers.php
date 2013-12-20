@@ -3,17 +3,16 @@ class trainers extends datamod {
 	private $wants = array();
 	const name = 'Trainers';
 	const show = false;
-	function execute() {
-		global $gamemod, $argv, $cache;
+	function execute($argv) {
 		$output = array();
 		$floor = 0;
-		$limit = $gamemod->getCount('trainerdata');
+		$limit = $this->gamemod->getCount('trainerdata');
 		$ceiling = $limit;
 		if (isset($argv[2]))
 			list($floor,$ceiling) = rangeStringToRange($argv[2],0,$limit);
 			
 		for ($id = $floor; $id <= $ceiling; $id++) {
-			$data = $gamemod->getData('trainers', $id);
+			$data = $this->gamemod->getDataNew('trainers/'.$id);
 			$output[] = $data;
 			if (isset($data['items']))
 				foreach ($data['items'] as $item)

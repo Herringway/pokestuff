@@ -17,7 +17,7 @@
 				<td style="vertical-align: top; text-align: center;">
 {%for pokeid,poke in enc%}
 					<div style="display: inline-block; text-align: center;">
-						<a href="/{{gameid}}/stats/{{pokeid}}">{{macros.pokemonsprite(generation,gameid,pokeid)}}<br />{{stats[pokeid].name}}</a><br />
+						<a href="/{{gameid}}/stats/{{pokeid}}">{{macros.pokemonsprite(generation,spriteseries,pokeid)}}<br />{{stats[pokeid].name}}</a><br />
 						<a title="{{flags|join(', ')}}">L{{poke.minlevel}} - {{poke.maxlevel}}</a>
 					</div>
 {%if loop.index0 % 2 == 1%}
@@ -46,7 +46,7 @@
 				<td style="vertical-align: top; text-align: center;">
 {%for pokeid,poke in enc%}
 					<div style="display: inline-block; text-align: center;">
-						<a href="/{{gameid}}/stats/{{pokeid}}">{{macros.pokemonsprite(generation,gameid,pokeid)}}<br />{{stats[pokeid].name}}</a><br />
+						<a href="/{{gameid}}/stats/{{pokeid}}">{{macros.pokemonsprite(generation,spriteseries,pokeid)}}<br />{{stats[pokeid].name}}</a><br />
 						<a title="{{flags|join(', ')}}">L{{poke.minlevel}} - {{poke.maxlevel}}</a>
 					</div>
 {%if loop.index0 % 2 == 1%}

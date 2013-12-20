@@ -12,7 +12,7 @@ class areas extends datamod {
 			list($floor,$ceiling) = rangeStringToRange($argv[2],0,$limit);
 		
 		for ($moveid = $floor; $moveid <= $ceiling; $moveid++) {
-			$d = $gamemod->getData('areas', $moveid);
+			$d = $gamemod->getDataNew('areas/'.$moveid);
 			foreach ($d['Encounters'] as $subarea)
 				foreach ($subarea as $id => $encounter)
 					$this->wants['stats'][] = $id;

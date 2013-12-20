@@ -7,6 +7,7 @@
 				$("a[title]").tooltip({ position: 'center right'});
 				$('#pokemon').dataTable( {
 				"bPaginate": false,
+				"bJQueryUI": true,
 				"sPaginationType": "full_numbers",
 				"bStateSave": true,
 				"aoColumns": [null, null, null, null, null, null, null, null, null, { "sType": "title-string" }, { "sType": "title-string" }, { "sType": "percent" }{%for v in stats.0.items%}, null{%endfor%}{%for v in stats.0.abilities%}, null{%endfor%}{%for v in stats.0.egggroups%}, null{%endfor%}]
@@ -16,7 +17,7 @@
 			});
 
 		</script>
-		<table id="pokemon">
+		<table id="pokemon" width="100%">
 			<thead>
 				<tr>
 					<th>ID</th>
@@ -69,9 +70,10 @@
 				$('#movelist').dataTable( {
 				"bPaginate": false,
 				"bFilter": false,
+				"bJQueryUI": true,
 				"bInfo": false,
 				"bStateSave": false,
-				"aoColumns": [{ "sType": "title-string" }, null, null, null, null, null, null, null]
+				"aoColumns": [{ "sType": "title-numeric" }, null, null, null, null, null, { "sType": "title-string" }, { "sType": "title-string" }]
 				} ).fnSetFilteringDelay();
 			});
 		</script>
@@ -79,9 +81,9 @@
 		<table>
 			<thead>
 				<tr>
-					<th rowspan="2" height="256" width="192" class="{{poke.type1}}">
-						{{macros.pokemonsprite(generation,spriteseries,poke.imgid, poke.name,false,false)}}{%if generation != 'gen1'%}{{macros.pokemonsprite(generation,spriteseries,poke.imgid, poke.name,false,true)}}{%endif%}<br />
-						{{macros.pokemonsprite(generation,spriteseries,poke.imgid, poke.name,true,false)}}{%if generation != 'gen1'%}{{macros.pokemonsprite(generation,spriteseries,poke.imgid, poke.name,true,true)}}{%endif%}
+					<th rowspan="2" class="{{poke.type1}}">
+						{{macros.pokemonsprite(gameid,gamelang,poke.imgid, poke.name,false,false)}}{%if generation != 'gen1'%}{{macros.pokemonsprite(gameid,gamelang,poke.imgid, poke.name,false,true)}}{%endif%}<br />
+						{{macros.pokemonsprite(gameid,gamelang,poke.imgid, poke.name,true,false)}}{%if generation != 'gen1'%}{{macros.pokemonsprite(gameid,gamelang,poke.imgid, poke.name,true,true)}}{%endif%}
 					</th>
 					<td colspan="7" class="{{poke.type1}}">
 						{{poke.name}}<br />
@@ -90,7 +92,7 @@
 						{{poke.pokedex|nl2br}}<br />
 						{%for ability in poke.abilities%}{%if loop.first != true%}{%if ability%}/{%endif%}{%endif%}<a title="{{abilities[ability].description|nl2br|replace({"\n": ' '})}}">{{abilities[ability].name}}</a>{%endfor%}<br />
 {%for evo in poke.evolutions%}
-						Evolves into <a href="/{{gameid}}:{{gamelang}}/{{textPokemonNames[evo.Target]}}">{{textPokemonNames[evo.Target]}}</a> {%if evo.Item%}with <img src="/static/images/items/{{items[evo.Item].name|lower|replace({' ':'-', '.':'', 'é':'e','’':'\'','?':''})}}.png" alt="{{items[evo.Item].name}}" title="{{items[evo.Item].name}}" />{%endif%}{%if evo.Level%}at Level {{evo.Level}}{%endif%}{%if evo.Move%} once <a href="/{{gameid}}:{{gamelang}}/{{moves[evo.Move].name}}">{{moves[evo.Move].name}}</a> is learned{%endif%}{%if evo.With%} if <a href="/{{gameid}}:{{gamelang}}/{{textPokemonNames[evo.With]}}">{{textPokemonNames[evo.With]}}</a> is in party{%endif%}{%if evo.Condition%} {{evo.Condition}}{%endif%}<br />
+						Evolves into <a href="/{{gameid}}:{{gamelang}}/{{textPokemonNames[evo.Target]}}">{{textPokemonNames[evo.Target]}}</a> {%if evo.Item%}with <a href="/{{gameid}}:{{gamelang}}/{{items[evo.Item].name}}"><img src="/static/images/items/{{items[evo.Item].name|lower|replace({' ':'-', '.':'', 'é':'e','’':'\'','?':''})}}.png" alt="{{items[evo.Item].name}}" title="{{items[evo.Item].name}}" /></a>{%endif%}{%if evo.Level%}at Level {{evo.Level}}{%endif%}{%if evo.Move%} once <a href="/{{gameid}}:{{gamelang}}/{{moves[evo.Move].name}}">{{moves[evo.Move].name}}</a> is learned{%endif%}{%if evo.With%} if <a href="/{{gameid}}:{{gamelang}}/{{textPokemonNames[evo.With]}}">{{textPokemonNames[evo.With]}}</a> is in party{%endif%}{%if evo.Condition%} {{evo.Condition}}{%endif%}<br />
 {%endfor%}
 						{%if poke.EVs%}EVs: {% for key, val in poke.EVs%}{{key}}: {{val}}{%if loop.last != true%}, {%endif%}{%endfor%}<br />{%endif%}
 						{%if poke.formnames%}Forms:{%endif%}
@@ -132,7 +134,8 @@
 				</tr>
 			</tbody>
 		</table>
-		<table id="movelist">
+		<div style="max-width: 1150px; min-width:800px;">
+		<table id="movelist" width="100%">
 			<thead>
 				<tr>
 					<th>Learned</th>
@@ -144,13 +147,13 @@
 					<th>Type</th>
 					<th>Cat.</th>
 				</tr>
-			</thead>{%set counter = -1 %}
+			</thead>{%set counter = 0 %}
 			
 			<tbody>{%for movecategory in poke.moves%}{%for move in movecategory%}{%set counter = counter + 1 %}
 			
 				<tr>
-					<td><span title="{{counter}}">{{move.Learned}}</span></td>
-					<td><a href="/{{gameid}}:{{gamelang}}/moves/{{moves[move.id].name}}">{{moves[move.id].name}}</a></td>
+					<td><span title="{{counter}}"></span>{{move.Learned}}</td>
+					<td><a href="/{{gameid}}:{{gamelang}}/moves/{{moves[move.id].name|replace({' ':'%20'})}}">{{moves[move.id].name}}</a></td>
 					<td>{%if moves[move.id].power == 0%}-{%else%}{{moves[move.id].power}}{%endif%}</td>
 					<td>{%if moves[move.id].accuracy == 101%}-{%else%}{{moves[move.id].accuracy}}%{%endif%}</td>
 					<td>{{moves[move.id].priority}}</td>
@@ -161,5 +164,6 @@
 {%endfor%}{%endfor%}
 			</tbody>
 		</table>
+		</div>
 {%endfor%}{%endif%}
 {%endblock%}

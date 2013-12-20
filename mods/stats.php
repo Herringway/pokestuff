@@ -2,20 +2,19 @@
 class stats extends datamod {
 	private $wants = array();
 	const name = 'Stats';
-	function execute() {
-		global $gamemod, $argv, $cache,$game;
+	function execute($argv) {
 		$floor = 0;
-		$limit = $gamemod->getCount('stats')-1;
+		$limit = $this->gamemod->getCount('stats')-1;
 		$ceiling = $limit;
 		if (isset($argv[2])) {
 			if (is_numeric(str_replace(array('.','$'), '', $argv[2])))
 				list($floor,$ceiling) = rangeStringToRange($argv[2],0,$limit);
 			else
-				$floor = $ceiling = $gamemod->pokemonNameToID(urldecode($argv[2]));
+				$floor = $ceiling = $this->gamemod->pokemonNameToID(urldecode($argv[2]));
 		}
 		$output = array();
 		for ($pkmnid = $floor; $pkmnid <= $ceiling; $pkmnid++) {
-			$tmp = $gamemod->getDataNew('stats/'.$pkmnid);
+			$tmp = $this->gamemod->getDataNew('stats/'.$pkmnid);
 			$output[] = $tmp;
 			if (isset($tmp['abilities']))
 				foreach ($tmp['abilities'] as $abil)

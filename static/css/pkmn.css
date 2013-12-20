@@ -1,0 +1,52 @@
+body		{background: #DDDDDD; margin: 30px 6px 0px 6px; }
+table		{border-spacing: 0;}
+img		{border: none; }
+a:link		{color: #000080; text-decoration: underline; }
+a:hover		{color: #D0D0D0; text-decoration: underline; }
+a:active	{color: #0000D0; text-decoration: underline; }
+a:visited	{color: #000080; text-decoration: underline; }
+.translation{border-bottom: 1px dotted black; }
+.atk		{background: #FF90A0; }
+.def		{background: #90A0FF; }
+.NE > .atk	{background: #FF7080; }
+.NE > .def	{background: #7080FF; }
+.NE > .tot	{background: #70FF70; }
+.spec		{background: #D0D0D0; }
+.images		{background: #FFFFFF; width: 80px; border: 1px solid black; }
+.FE			{background: #DDDDDD; }
+.NE			{background: #FFFFFF; }
+.row1		{background: #FFFFFF; }
+.row2		{background: #DDDDDD; }
+.Fighting, .Flying, .Poison, .Rock, .Bug, .Ghost, .Fire, .Water, .Grass, .Psychic, .Dragon, .Dark	{color: #FFFFFF; };
+.Steel, .Ice, .Normal,.Electric		{color:#000000; }
+.Normal		{background: #A8A878; }
+.Fighting	{background: #C03028; }
+.Flying		{background: #A890F0; }
+.Poison		{background: #A040A0; }
+.Ground		{background: #E0C068; }
+.Rock		{background: #B8A038; }
+.Bug		{background: #A8B820; }
+.Ghost		{background: #705898; }
+.Steel		{background: #B8B8D0; }
+.Fire		{background: #F08030; }
+.Water		{background: #6890F0; }
+.Grass		{background: #78C850; }
+.Electric	{background: #F8D030; }
+.Psychic	{background: #F85888; }
+.Ice		{background: #98D8D8; }
+.Dragon		{background: #7038F8; }
+.Dark		{background: #705848; }
+.randpoke th { border-radius: 10px 10px 0px 0px; border: 1px solid #aaaaaa; background: #cccccc url(/static/css/smoothness/images/ui-bg_highlight-soft_75_cccccc_1x100.png) 50% 50% repeat-x; color: #222222; font-weight: bold; }
+.randpoke td:nth-child(odd)	{background: #EEEEEE; }
+.randpoke td {background: white; border-bottom: 1px solid #AAAAAA;}
+.randpoke td:nth-child(1)	{border-left: 1px solid #AAA; }
+.randpoke td:nth-child(6)	{border-right: 1px solid #AAA; }
+.pokemove		{text-align: center; }
+.pokemove td, .pokemove th	{ background: white; }
+.pokemove thead th { border-radius: 10px 10px 0px 0px; border: 1px solid #aaaaaa; background: #cccccc url(/static/css/smoothness/images/ui-bg_highlight-soft_75_cccccc_1x100.png) 50% 50% repeat-x; color: #222222; font-weight: bold; }
+.pokemove td:nth-child(1),.pokemove th:nth-child(1)	{  border-left: 1px solid #aaa;}
+.pokemove td:nth-last-child(1),.pokemove th:nth-last-child(1)	{  border-right: 1px solid #aaa;}
+.pokemove tr:nth-last-child(1) td:nth-child(1)	{ border-radius: 0px 0px 0px 10px; border-bottom: 1px solid #AAA; }
+.pokemove tr:nth-last-child(1) td:nth-last-child(1)	{ border-radius: 0px 0px 10px 0px; border-bottom: 1px solid #AAA; }
+.tooltip { display:none; background-color:#ffa; border:1px solid #cc9; padding:3px; font-size:13px; -moz-box-shadow: 2px 2px 11px #666; box-shadow: 2px 2px 11px #666; }
+.menubar { position: fixed; left: 0px; top: 0px; width: 100%;}

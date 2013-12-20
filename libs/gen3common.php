@@ -62,8 +62,9 @@ class gen3 extends basegame {
 	function getRawDataEntry($what, $which) {
 		$this->loadRom();
 		global $gamecfg;
-		fseek($this->rom, $gamecfg['Tables'][$what]['Offset'] + $gamecfg['Tables'][$what]['Entry Size'] * $which);
-		return unpack('C*', fread($this->rom, $gamecfg['Tables'][$what]['Entry Size']));
+		return $this->getFixedDataEntry($what, $which);
+		//fseek($this->rom, $gamecfg['Tables'][$what]['Offset'] + $gamecfg['Tables'][$what]['Entry Size'] * $which);
+		//return unpack('C*', fread($this->rom, $gamecfg['Tables'][$what]['Entry Size']));
 	}
 	function getTextEntry($what, $which) {
 		global $gamecfg;
@@ -115,6 +116,7 @@ class gen3 extends basegame {
 			$vals['type'.$i] = $gamecfg['Types'][$vals['type'.$i]]['Name'];
 		}
 		$dexdata = $this->getFixedDataEntry('dexdata', $this->getBaseID($id));
+		$vals['dex'] = $dexdata;
 		$vals['height'] = ($dexdata['Height']/10).'m';
 		$vals['weight'] = ($dexdata['Weight']/10).'kg';
 		$vals['hatchsteps']++;

@@ -3,6 +3,7 @@ class basegame {
 	protected $gameid;
 	protected $lang;
 	protected $rom;
+	protected $gameinfo;
 	/*public function getData($what, $id) {
 		deprecated();
 		$id = intval($id);
@@ -137,12 +138,24 @@ class basegame {
 			return 'items';
 		return false;
 	}
-	function __construct($id,$lang) {
+	public function getSpriteSeries() {
+		return $this->gameinfo['Sprite Series'];
+	}
+	public function getGeneration() {
+		return $this->gameinfo['Generation'];
+	}
+	function __construct($id,$lang, $gameinfo) {
 		$this->gameid = $id;
 		$this->lang = $lang;
+		debugvar($gameinfo, 'game info for mod');
+		$this->gameinfo = $gameinfo;
 	}
 }
 class datamod {
+	protected $gamemod;
+	function __construct($gamemod) {
+		$this->gamemod = $gamemod;
+	}
 	function getOptions() {
 		return array();
 	}
@@ -158,7 +171,7 @@ function kimplode($array, $glue = ': ', $separator = ', ') {
 function clean_array($input) {
 	return (($input !== NULL) && ($input !== ''));
 }
-function rangeStringToRange($input, $min, $max) {	
+function rangeStringToRange($input, $min, $max) {
 	if (strpos($input, '..') !== false) {
 		$range = explode('..', $input);
 		$floor   = max($min, min($max, intval(str_replace('$', $max, $range[0]))));

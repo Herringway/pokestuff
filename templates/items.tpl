@@ -8,13 +8,14 @@
 			$(document).ready(function() {
 				$('#pokemoves').dataTable( {
 				"bPaginate": false,
+				"bJQueryUI": true,
 				"bStateSave": true,
-				"aoColumns": [{ "sType": "num-html" }, null, { "sType": "title-string" }, { "sType": "title-string" }, null, null, null, null, null]
+				"aoColumns": [{ "sType": "num-html" }, null, { "sType": "title-string" }, { "sType": "title-string" }]
 				} );
 			} );
 		</script>
 
-		<table id="pokemoves">
+		<table id="pokemoves" width="100%">
 			<thead>
 				<tr>
 					<th>ID</th>

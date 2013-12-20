@@ -21,6 +21,21 @@ jQuery.extend( jQuery.fn.dataTableExt.oSort, {
         return ((a < b) ? 1 : ((a > b) ? -1 : 0));
     }
 } );
+jQuery.extend( jQuery.fn.dataTableExt.oSort, {
+    "title-numeric-pre": function ( a ) {
+        var x = a.match(/title="*(-?[0-9\.]+)/);
+		if (x != null)
+			return parseFloat( x[1] );
+    },
+ 
+    "title-numeric-asc": function ( a, b ) {
+        return ((a < b) ? -1 : ((a > b) ? 1 : 0));
+    },
+ 
+    "title-numeric-desc": function ( a, b ) {
+        return ((a < b) ? 1 : ((a > b) ? -1 : 0));
+    }
+} );
 jQuery.fn.dataTableExt.oApi.fnSetFilteringDelay = function ( oSettings, iDelay ) {
     var _that = this;
     if ( iDelay === undefined ) {

@@ -7,7 +7,7 @@ function render_html($template, $outputstuff) {
 	require_once 'libs/twigext.php';
 	header('Content-Type: text/html; charset=utf-8');
 	$loader = new Twig_Loader_Filesystem('templates');
-	$twig = new Twig_Environment($loader, array('debug' => $settings['Debug'] > 1));
+	$twig = new Twig_Environment($loader, array('debug' => $settings['Debug']));
 	$twig->addExtension(new Twig_Extension_Debug());
 	$twig->addExtension(new Twig_Extension_Sandbox(new Twig_Sandbox_SecurityPolicy()));
 	$twig->addExtension(new Penguin_Twig_Extensions());
@@ -137,7 +137,7 @@ if (file_exists('otherpages/'.$game.'.php')) {
 	$argv[0] = $game;
 	$gamecfg = (file_exists('libs/gen'.$gameinfo['Generation'].'.yml') ? yaml_parse_file('libs/gen'.$gameinfo['Generation'].'.yml') : array()) + yaml_parse_file('games/'.$lang.'/'.$game.'.yml',1);
 	$mname = 'gen'.$gameinfo['Generation'];
-	$gamemod = new $mname($game,$lang);
+	$gamemod = new $mname($game,$lang,$gameinfo);
 	$settings->addSetting($mname, $gamemod->getOptions());
 	debugvar($game, 'game');
 	debugvar($lang, 'language');
@@ -151,8 +151,8 @@ if (file_exists('otherpages/'.$game.'.php')) {
 			foreach ($settings['Available Languages'] as $lang) {
 				if ($lang == $settings['Default Language'])
 					continue;
-				$gamemod = new $mname($game, $lang);
-				$settings->addSetting($mname, $gamemod->getOptions());
+				$gamemod = new $mname($game, $lang, $gameinfo);
+				//$settings->addSetting($mname, $gamemod->getOptions());
 				if (($nmod = $gamemod->findAppropriateMod(urldecode($mod))) !== false) {
 					$mod = $nmod;
 					array_splice($argv, 1, 0, $mod);
@@ -170,10 +170,10 @@ if (file_exists('otherpages/'.$game.'.php')) {
 	}
 
 	$argv[1] = $mod;
-	$datamod = new $mod();
+	$datamod = new $mod($gamemod);
 	$settings->addSetting($mod, $datamod->getOptions());
 	debugvar($settings, 'settings');
-	$data = $datamod->execute();
+	$data = $datamod->execute($argv);
 	if ($settings['Debug']) {
 		ini_set('xdebug.var_display_max_children', -1);
 		ini_set('xdebug.var_display_max_data', -1);
@@ -186,17 +186,18 @@ if (file_exists('otherpages/'.$game.'.php')) {
 		ob_clean();
 	switch($format) {
 		case 'html':
-			$outputstuff = array('game' => $gameinfo['Title'], 'spriteseries' => $gameinfo['Sprite Series'], 'mod' => $mod, 'gameid' => $game, 'gamelang' => $lang, 'games' => $games, 'mods' => $mods, 'deflang' => $settings['Default Language'], 'showmenu' => $settings['Show Game Menu'] && (count($games) > 1), 'generation' => 'gen'.$gameinfo['Generation'], $mod => $data);
+			$mime = 'text/html';
+			$outputstuff = array('game' => $gameinfo['Title'], 'mod' => $mod, 'gameid' => $game, 'gamelang' => $lang, 'games' => $games, 'mods' => $mods, 'deflang' => $settings['Default Language'], 'showmenu' => $settings['Show Game Menu'] && (count($games) > 1), 'generation' => 'gen'.$gameinfo['Generation'], $mod => $data);
 			$wants = $datamod->getHTMLDependencies();
 			foreach ($wants as $what=>$ids)
 				foreach ($ids as $id)
 					$outputstuff[str_replace(array(' ', '/'), '', $what)][$id] = $gamemod->getDataNew($what.'/'.$id);
 			echo render_html($datamod->getMode(), $outputstuff); break;
 		case 'json':
-			header('Content-Type: application/json; charset=utf-8');
+			$mime = 'application/json';
 			echo json_encode($data, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE | JSON_FORCE_OBJECT); break;
 		case 'yml':
-			header('Content-Type: text/plain; charset=utf-8');
+			$mime = 'text/plain';
 			echo yaml_emit($data, YAML_UTF8_ENCODING, YAML_ANY_BREAK); break;
 		case 'png':
 			ob_start();
@@ -209,11 +210,11 @@ if (file_exists('otherpages/'.$game.'.php')) {
 			$canvas = new GDDraw();
 			$datamod->genImage($outputstuff, $canvas);
 			ob_end_clean();
-			header ('Content-Type: image/png');
+			$mime = 'image/png';
 			$canvas->renderPNG();
 			break;
 		case 'devimg':
-			header('Content-Type: text/html');
+			$mime = 'text/html';
 			require 'libs/gddraw.php';
 			$outputstuff = array('game' => $gameinfo['Title'], 'spriteseries' => $gameinfo['Sprite Series'], 'mod' => $mod, 'gameid' => $game, 'games' => $games, 'mods' => $mods, 'generation' => 'gen'.$gameinfo['Generation'], $mod => $data);
 			$wants = $datamod->getHTMLDependencies();
@@ -234,7 +235,7 @@ if (file_exists('otherpages/'.$game.'.php')) {
 			$canvas = new GDDraw();
 			$datamod->genImage($outputstuff, $canvas);
 			ob_end_clean();
-			header('Content-Type: image/jpeg');
+			$mime = 'image/jpeg';
 			$canvas->renderJPG();
 			break;
 		case 'gif':
@@ -248,11 +249,12 @@ if (file_exists('otherpages/'.$game.'.php')) {
 			$canvas = new GDDraw();
 			$datamod->genImage($outputstuff, $canvas);
 			ob_end_clean();
-			header('Content-Type: image/gif');
+			$mime = 'image/gif';
 			$canvas->renderGIF();
 			break;
 	}
 }
+header('Content-Type: '.$mime.'; charset=utf-8');
 ob_end_flush();
 if (function_exists('fastcgi_finish_request'))
 	fastcgi_finish_request();

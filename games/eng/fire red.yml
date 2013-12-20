@@ -2,6 +2,7 @@
 Title: Fire Red
 Release: America
 Generation: 3
+Sprite Series: frlg
 ...
 ---
 Text Offsets:
@@ -124,7 +125,7 @@ Tables:
       - vArgument
       - vTarget
       - C2Unknown
-    Offset: 0x25973c
+    Offset: 0x259754
     Entries: 2060
     Entry Size: 0x8
   tmcompatibility:
